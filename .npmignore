@@ -1,0 +1,21 @@
+# Source files
+src/
+scripts/
+worldcities.xlsx
+
+# Config files
+tsconfig.json
+tsup.config.ts
+*.config.ts
+*.config.js
+
+# Dev files
+node_modules/
+.git/
+.gitignore
+.npmignore
+prompt.md
+
+# IDE
+.vscode/
+.idea/

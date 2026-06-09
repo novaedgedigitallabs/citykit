@@ -1,0 +1,13 @@
+{
+  "city": 0,
+  "city_ascii": 1,
+  "lat": 2,
+  "lng": 3,
+  "country": 4,
+  "iso2": 5,
+  "iso3": 6,
+  "admin_name": 7,
+  "capital": 8,
+  "population": 9,
+  "id": 10
+}
