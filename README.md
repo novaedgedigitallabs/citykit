@@ -1,6 +1,6 @@
 # @novaedgedigitallabs/citykit
 
-> World cities search, distance, and geo utilities — **49,992 cities** across **241 countries**.
+> World cities search, distance, and geo utilities — **49,992 cities** across **242 countries**.
 
 A zero-dependency utility library for searching cities, calculating distances using the Haversine formula, finding nearest locations, and querying country/capital data. Ships with a full dataset and a lightweight variant.
 
@@ -213,8 +213,127 @@ const countries = listCountries();
 // → [
 //   { country: "Afghanistan", iso2: "AF", iso3: "AFG", count: 73 },
 //   { country: "Albania", iso2: "AL", iso3: "ALB", count: 44 },
-//   ...241 countries
+//   ...242 countries
 // ]
+```
+
+---
+
+### `byPopulation(options)`
+
+Filter cities by a population range. Results are sorted by population descending by default.
+
+```ts
+byPopulation(options: PopulationOptions): City[]
+```
+
+**Options:**
+
+| Option  | Type              | Default  | Description                         |
+| ------- | ----------------- | -------- | ----------------------------------- |
+| `min`   | `number`          | —        | Minimum population (inclusive)      |
+| `max`   | `number`          | —        | Maximum population (inclusive)      |
+| `sort`  | `'asc' \| 'desc'` | `'desc'` | Sort order                          |
+| `limit` | `number`          | —        | Maximum results to return           |
+
+```js
+import { byPopulation } from '@novaedgedigitallabs/citykit';
+
+// Get top 5 largest cities with at least 10M population
+const majorCities = byPopulation({ min: 10000000, limit: 5 });
+// → [{ city: "Tokyo", population: 37785000, ... }, ...]
+```
+
+---
+
+### `byContinent(continent)`
+
+Get all cities located in a given continent (case-insensitive).
+
+```ts
+byContinent(continent: string): City[]
+```
+
+```js
+import { byContinent } from '@novaedgedigitallabs/citykit';
+
+const asianCities = byContinent('Asia');
+// → Array of cities in Asia
+```
+
+---
+
+### `fuzzySearch(query, options?)`
+
+Fuzzy search cities by name using Levenshtein distance to handle typos. Results are sorted by distance (ascending) and then by population (descending).
+
+```ts
+fuzzySearch(query: string, options?: FuzzySearchOptions): City[]
+```
+
+**Options:**
+
+| Option      | Type     | Default | Description                         |
+| ----------- | -------- | ------- | ----------------------------------- |
+| `country`   | `string` | —       | Filter by ISO2 code (e.g. `"US"`)   |
+| `limit`     | `number` | `10`    | Maximum results to return           |
+| `threshold` | `number` | `3`     | Max Levenshtein distance allowed    |
+
+```js
+import { fuzzySearch } from '@novaedgedigitallabs/citykit';
+
+// Typo correction for "bangalor"
+const results = fuzzySearch('bangalor');
+// → [{ city: "Bangalore", city_ascii: "Bangalore", ... }]
+```
+
+---
+
+### `random(options?)`
+
+Retrieve a random city from the dataset, optionally filtered by country or continent.
+
+```ts
+random(options?: RandomOptions): City | null
+```
+
+**Options:**
+
+| Option      | Type     | Default | Description                         |
+| ----------- | -------- | ------- | ----------------------------- |
+| `country`   | `string` | —       | Filter by ISO2 code (e.g. `"FR"`)   |
+| `continent` | `string` | —       | Filter by continent name            |
+
+```js
+import { random } from '@novaedgedigitallabs/citykit';
+
+const city = random({ continent: 'Europe' });
+// → { city: "Paris", country: "France", ... }
+```
+
+---
+
+### `stats()`
+
+Get aggregated dataset statistics, including city count, country count, national capitals count, and population statistics.
+
+```ts
+stats(): DatasetStats
+```
+
+```js
+import { stats } from '@novaedgedigitallabs/citykit';
+
+const summary = stats();
+// → {
+//     totalCities: 49992,
+//     totalCountries: 242,
+//     totalCapitals: 242,
+//     largestCity: { city: "Tokyo", ... },
+//     smallestCity: { city: "Adamstown", ... },
+//     averagePopulation: 111352.45,
+//     totalPopulation: 4561848912
+//   }
 ```
 
 ---
@@ -245,7 +364,15 @@ search('london');
 CityKit is written in TypeScript and ships with full type declarations.
 
 ```ts
-import type { City, SearchOptions, DistanceResult } from '@novaedgedigitallabs/citykit';
+import type {
+  City,
+  SearchOptions,
+  DistanceResult,
+  PopulationOptions,
+  FuzzySearchOptions,
+  RandomOptions,
+  DatasetStats,
+} from '@novaedgedigitallabs/citykit';
 ```
 
 ### Key Types
@@ -269,6 +396,34 @@ interface DistanceResult {
   km: number;
   miles: number;
 }
+
+interface PopulationOptions {
+  min: number;
+  max?: number;
+  sort?: 'asc' | 'desc';
+  limit?: number;
+}
+
+interface FuzzySearchOptions {
+  country?: string;
+  limit?: number;
+  threshold?: number;
+}
+
+interface RandomOptions {
+  country?: string;
+  continent?: string;
+}
+
+interface DatasetStats {
+  totalCities: number;
+  totalCountries: number;
+  totalCapitals: number;
+  largestCity: City;
+  smallestCity: City;
+  averagePopulation: number;
+  totalPopulation: number;
+}
 ```
 
 ---
@@ -282,3 +437,4 @@ City data sourced from the [SimpleMaps World Cities Database](https://simplemaps
 ## License
 
 MIT © [NovaEdge Digital Labs](https://novaedgedigitallabs.in)
+
