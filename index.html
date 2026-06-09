@@ -1311,6 +1311,784 @@
       white-space: nowrap;
       z-index: 0;
     }
+
+    /* ================================================================
+       DOCS VIEW — Three-Column Documentation Layout
+       ================================================================ */
+
+    /* Nav enhancements for docs links */
+    .nav-links-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-text-link {
+      color: var(--text-2);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      transition: color 0.2s ease, background 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .nav-text-link:hover {
+      color: var(--lime);
+      background: rgba(232, 255, 71, 0.05);
+    }
+
+    .nav-text-link.active {
+      color: var(--lime);
+      background: var(--lime-dim);
+    }
+
+    .nav-separator {
+      color: var(--text-3);
+      font-size: 10px;
+      user-select: none;
+    }
+
+    @media (max-width: 640px) {
+      .nav-text-link {
+        font-size: 11px;
+        padding: 4px 8px;
+      }
+    }
+
+    /* Docs Grid Container */
+    #docs-view {
+      display: none;
+      grid-template-columns: 260px 1fr 200px;
+      min-height: calc(100vh - 64px);
+      position: relative;
+    }
+
+    #docs-view.visible {
+      display: grid;
+    }
+
+    @media (max-width: 1100px) {
+      #docs-view {
+        grid-template-columns: 240px 1fr;
+      }
+      .docs-toc {
+        display: none !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      #docs-view {
+        grid-template-columns: 1fr;
+      }
+      .docs-sidebar {
+        display: none;
+      }
+      .docs-sidebar.mobile-open {
+        display: block;
+        position: fixed;
+        top: 64px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 900;
+        background: var(--bg);
+        overflow-y: auto;
+      }
+    }
+
+    /* Mobile sidebar toggle */
+    .docs-mobile-toggle {
+      display: none;
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 999;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--lime);
+      border: none;
+      cursor: pointer;
+      color: #000;
+      font-size: 20px;
+      box-shadow: 0 4px 20px rgba(232, 255, 71, 0.4);
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease;
+    }
+
+    .docs-mobile-toggle:hover {
+      transform: scale(1.1);
+    }
+
+    @media (max-width: 768px) {
+      .docs-mobile-toggle {
+        display: flex;
+      }
+    }
+
+    /* === LEFT SIDEBAR === */
+    .docs-sidebar {
+      border-right: 1px solid var(--border);
+      padding: 24px 0;
+      overflow-y: auto;
+      height: calc(100vh - 64px);
+      position: sticky;
+      top: 64px;
+      background: var(--bg);
+    }
+
+    .docs-sidebar-header {
+      padding: 0 20px 20px 20px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+
+    .docs-sidebar-title {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--lime);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .docs-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--green);
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .docs-sidebar-section {
+      margin-bottom: 8px;
+    }
+
+    .docs-sidebar-category {
+      font-family: var(--font-display);
+      font-size: 11px;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 8px 20px 4px 20px;
+      user-select: none;
+    }
+
+    .docs-sidebar-link {
+      display: block;
+      padding: 7px 20px 7px 24px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-2);
+      text-decoration: none;
+      border-left: 2px solid transparent;
+      transition: all 0.15s ease;
+    }
+
+    .docs-sidebar-link:hover {
+      color: var(--text-1);
+      background: rgba(232, 255, 71, 0.03);
+    }
+
+    .docs-sidebar-link.active {
+      color: var(--lime);
+      border-left-color: var(--lime);
+      background: rgba(232, 255, 71, 0.05);
+    }
+
+    .docs-sidebar-link .fn-badge {
+      font-size: 10px;
+      color: var(--text-3);
+      margin-left: 4px;
+    }
+
+    /* === MAIN CONTENT PANE === */
+    .docs-content {
+      padding: 40px 48px 80px 48px;
+      overflow-y: auto;
+      max-width: 100%;
+      min-width: 0;
+    }
+
+    @media (max-width: 768px) {
+      .docs-content {
+        padding: 24px 16px 80px 16px;
+      }
+    }
+
+    .docs-breadcrumb {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-3);
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .docs-breadcrumb a {
+      color: var(--text-3);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .docs-breadcrumb a:hover {
+      color: var(--lime);
+    }
+
+    .docs-page-title {
+      font-family: var(--font-display);
+      font-size: 42px;
+      color: var(--text-1);
+      margin-bottom: 8px;
+      letter-spacing: 0.04em;
+    }
+
+    .docs-page-subtitle {
+      font-family: var(--font-sans);
+      font-size: 15px;
+      color: var(--text-2);
+      margin-bottom: 40px;
+      line-height: 1.6;
+      max-width: 640px;
+    }
+
+    .docs-section {
+      margin-bottom: 48px;
+    }
+
+    .docs-section-title {
+      font-family: var(--font-display);
+      font-size: 24px;
+      color: var(--text-1);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      letter-spacing: 0.04em;
+    }
+
+    .docs-text {
+      font-family: var(--font-sans);
+      font-size: 14px;
+      color: var(--text-2);
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    .docs-text code {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      background: rgba(232, 255, 71, 0.06);
+      color: var(--lime);
+      padding: 2px 6px;
+      border-radius: 3px;
+      border: 1px solid rgba(232, 255, 71, 0.1);
+    }
+
+    .docs-code-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 16px rgba(0, 0, 0, 0.4);
+    }
+
+    .docs-code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 16px;
+      background: var(--surface-2);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .docs-code-lang {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-3);
+      text-transform: uppercase;
+    }
+
+    .docs-code-body {
+      padding: 16px 20px;
+      overflow-x: auto;
+    }
+
+    .docs-code-body pre {
+      margin: 0;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-1);
+    }
+
+    /* Parameter Table */
+    .docs-param-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 24px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .docs-param-table thead {
+      background: var(--surface-2);
+    }
+
+    .docs-param-table th {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 10px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .docs-param-table td {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    .docs-param-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .docs-param-table tbody tr {
+      background: var(--surface);
+      transition: background 0.15s;
+    }
+
+    .docs-param-table tbody tr:hover {
+      background: var(--surface-2);
+    }
+
+    .param-name {
+      color: var(--lime);
+      font-weight: 600;
+    }
+
+    .param-type {
+      font-size: 10px;
+      color: #5ce6e6;
+      background: rgba(92, 230, 230, 0.06);
+      padding: 2px 6px;
+      border-radius: 3px;
+      border: 1px solid rgba(92, 230, 230, 0.1);
+    }
+
+    .param-desc {
+      color: var(--text-2);
+      font-family: var(--font-sans);
+      font-size: 12px;
+    }
+
+    .param-required {
+      font-size: 9px;
+      color: #ef4444;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-weight: 700;
+    }
+
+    .param-optional {
+      font-size: 9px;
+      color: var(--text-3);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+
+    /* Returns block */
+    .docs-returns-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--lime);
+      border-radius: 0 8px 8px 0;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+    }
+
+    .docs-returns-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--lime);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+
+    .docs-returns-type {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: #5ce6e6;
+    }
+
+    /* Function signature */
+    .docs-fn-signature {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .docs-fn-signature .fn-name {
+      color: var(--lime);
+      font-weight: 700;
+    }
+
+    .docs-fn-signature .fn-params {
+      color: #5ce6e6;
+    }
+
+    .docs-fn-signature .fn-type {
+      color: var(--text-3);
+    }
+
+    /* Divider */
+    .docs-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 40px 0;
+    }
+
+    /* === API SANDBOX === */
+    .sandbox-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 32px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .sandbox-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 20px;
+      background: var(--surface-2);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sandbox-endpoint {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sandbox-method {
+      background: rgba(232, 255, 71, 0.1);
+      color: var(--lime);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(232, 255, 71, 0.2);
+    }
+
+    .sandbox-url {
+      color: var(--text-2);
+    }
+
+    .sandbox-tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sandbox-tab {
+      padding: 10px 20px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-3);
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .sandbox-tab:hover {
+      color: var(--text-1);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .sandbox-tab.active {
+      color: var(--lime);
+      border-bottom-color: var(--lime);
+    }
+
+    .sandbox-body {
+      padding: 20px;
+    }
+
+    .sandbox-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    @media (max-width: 640px) {
+      .sandbox-inputs {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .sandbox-input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .sandbox-input-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-3);
+      text-transform: uppercase;
+    }
+
+    .sandbox-input {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 12px;
+      color: #ffffff;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .sandbox-input:focus {
+      border-color: var(--lime);
+    }
+
+    .sandbox-code-preview {
+      background: #020202;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px;
+      overflow-x: auto;
+      margin-bottom: 16px;
+    }
+
+    .sandbox-code-preview pre {
+      margin: 0;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--text-1);
+    }
+
+    .sandbox-execute-btn {
+      background: var(--lime);
+      border: none;
+      color: #000;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 10px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .sandbox-execute-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 15px rgba(232, 255, 71, 0.4);
+    }
+
+    .sandbox-execute-btn:active {
+      transform: translateY(0);
+    }
+
+    .sandbox-execute-btn.loading {
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .sandbox-output {
+      margin-top: 16px;
+      background: #020202;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .sandbox-output-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      background: var(--surface-2);
+      border-bottom: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-3);
+      text-transform: uppercase;
+    }
+
+    .sandbox-output-body {
+      padding: 16px;
+      overflow-x: auto;
+      min-height: 80px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .sandbox-output-body pre {
+      margin: 0;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    /* === RIGHT TOC COLUMN === */
+    .docs-toc {
+      border-left: 1px solid var(--border);
+      padding: 24px 16px;
+      overflow-y: auto;
+      height: calc(100vh - 64px);
+      position: sticky;
+      top: 64px;
+    }
+
+    .docs-toc-title {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+    }
+
+    .docs-toc-link {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-3);
+      text-decoration: none;
+      padding: 4px 0 4px 12px;
+      border-left: 1px solid var(--border);
+      transition: all 0.15s;
+    }
+
+    .docs-toc-link:hover {
+      color: var(--text-1);
+    }
+
+    .docs-toc-link.active {
+      color: var(--lime);
+      border-left-color: var(--lime);
+    }
+
+    /* Docs info callout */
+    .docs-callout {
+      background: rgba(232, 255, 71, 0.03);
+      border: 1px solid rgba(232, 255, 71, 0.1);
+      border-left: 3px solid var(--lime);
+      border-radius: 0 8px 8px 0;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+    }
+
+    .docs-callout-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--lime);
+      font-weight: 700;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .docs-callout-text {
+      font-family: var(--font-sans);
+      font-size: 13px;
+      color: var(--text-2);
+      line-height: 1.6;
+    }
+
+    /* Quick cards grid for API overview */
+    .docs-fn-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .docs-fn-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .docs-fn-card:hover {
+      border-color: var(--lime);
+      box-shadow: 0 0 15px rgba(232, 255, 71, 0.08);
+      transform: translateY(-1px);
+    }
+
+    .docs-fn-card-name {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--lime);
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .docs-fn-card-desc {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--text-3);
+      line-height: 1.4;
+    }
+
+    /* Hidden class utility */
+    .view-hidden {
+      display: none !important;
+    }
   </style>
 </head>
 <body>
@@ -1327,8 +2105,13 @@
 
   <!-- Fixed Navbar -->
   <nav>
-    <a href="#" class="nav-logo">citykit<span class="cursor">_</span></a>
+    <a href="#" class="nav-logo" onclick="navigateTo('landing');return false;">citykit<span class="cursor">_</span></a>
     <div class="nav-actions">
+      <div class="nav-links-group">
+        <a href="#docs" class="nav-text-link" id="nav-docs-link" onclick="navigateTo('docs');return false;">Docs</a>
+        <span class="nav-separator">/</span>
+        <a href="#api" class="nav-text-link" id="nav-api-link" onclick="navigateTo('api-overview');return false;">API</a>
+      </div>
       <span class="version-badge">v1.1.1</span>
       <a href="https://github.com/novaedgedigitallabs/citykit" target="_blank" rel="noopener" class="nav-link" aria-label="GitHub Repository">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
@@ -1338,6 +2121,9 @@
       </a>
     </div>
   </nav>
+
+  <!-- ================ LANDING VIEW ================ -->
+  <div id="landing-view">
 
   <!-- Hero Section -->
   <header id="hero" class="reveal-section">
@@ -1738,6 +2524,65 @@ import {
       <a href="https://www.npmjs.com/package/@novaedgedigitallabs/citykit" target="_blank" rel="noopener" class="footer-link">npm</a>
     </div>
   </footer>
+
+  </div><!-- /landing-view -->
+
+  <!-- ================ DOCS VIEW ================ -->
+  <div id="docs-view">
+    <!-- Left Sidebar -->
+    <aside class="docs-sidebar" id="docs-sidebar">
+      <div class="docs-sidebar-header">
+        <div class="docs-sidebar-title">📚 CityKit Docs</div>
+        <div class="docs-status-pill"><span class="status-dot"></span> v1.1.1 — Stable</div>
+      </div>
+
+      <div class="docs-sidebar-section">
+        <div class="docs-sidebar-category">Getting Started</div>
+        <a href="#docs" class="docs-sidebar-link" data-doc="docs" onclick="navigateTo('docs');return false;">Introduction</a>
+        <a href="#installation" class="docs-sidebar-link" data-doc="installation" onclick="navigateTo('installation');return false;">Installation</a>
+        <a href="#quickstart" class="docs-sidebar-link" data-doc="quickstart" onclick="navigateTo('quickstart');return false;">Quick Start</a>
+      </div>
+
+      <div class="docs-sidebar-section">
+        <div class="docs-sidebar-category">Core Concepts</div>
+        <a href="#city-object" class="docs-sidebar-link" data-doc="city-object" onclick="navigateTo('city-object');return false;">City Object</a>
+        <a href="#search-options" class="docs-sidebar-link" data-doc="search-options" onclick="navigateTo('search-options');return false;">Search Options</a>
+      </div>
+
+      <div class="docs-sidebar-section">
+        <div class="docs-sidebar-category">API Reference</div>
+        <a href="#api-overview" class="docs-sidebar-link" data-doc="api-overview" onclick="navigateTo('api-overview');return false;">Overview</a>
+        <a href="#api-search" class="docs-sidebar-link" data-doc="api-search" onclick="navigateTo('api-search');return false;">search() <span class="fn-badge">fn</span></a>
+        <a href="#api-getCity" class="docs-sidebar-link" data-doc="api-getCity" onclick="navigateTo('api-getCity');return false;">getCity() <span class="fn-badge">fn</span></a>
+        <a href="#api-byCountry" class="docs-sidebar-link" data-doc="api-byCountry" onclick="navigateTo('api-byCountry');return false;">byCountry() <span class="fn-badge">fn</span></a>
+        <a href="#api-capitals" class="docs-sidebar-link" data-doc="api-capitals" onclick="navigateTo('api-capitals');return false;">capitals() <span class="fn-badge">fn</span></a>
+        <a href="#api-nearest" class="docs-sidebar-link" data-doc="api-nearest" onclick="navigateTo('api-nearest');return false;">nearest() <span class="fn-badge">fn</span></a>
+        <a href="#api-distance" class="docs-sidebar-link" data-doc="api-distance" onclick="navigateTo('api-distance');return false;">distance() <span class="fn-badge">fn</span></a>
+        <a href="#api-byPopulation" class="docs-sidebar-link" data-doc="api-byPopulation" onclick="navigateTo('api-byPopulation');return false;">byPopulation() <span class="fn-badge">fn</span></a>
+        <a href="#api-byContinent" class="docs-sidebar-link" data-doc="api-byContinent" onclick="navigateTo('api-byContinent');return false;">byContinent() <span class="fn-badge">fn</span></a>
+        <a href="#api-fuzzySearch" class="docs-sidebar-link" data-doc="api-fuzzySearch" onclick="navigateTo('api-fuzzySearch');return false;">fuzzySearch() <span class="fn-badge">fn</span></a>
+        <a href="#api-random" class="docs-sidebar-link" data-doc="api-random" onclick="navigateTo('api-random');return false;">random() <span class="fn-badge">fn</span></a>
+        <a href="#api-listCountries" class="docs-sidebar-link" data-doc="api-listCountries" onclick="navigateTo('api-listCountries');return false;">listCountries() <span class="fn-badge">fn</span></a>
+        <a href="#api-getByIso2" class="docs-sidebar-link" data-doc="api-getByIso2" onclick="navigateTo('api-getByIso2');return false;">getByIso2() <span class="fn-badge">fn</span></a>
+        <a href="#api-stats" class="docs-sidebar-link" data-doc="api-stats" onclick="navigateTo('api-stats');return false;">stats() <span class="fn-badge">fn</span></a>
+      </div>
+    </aside>
+
+    <!-- Main Content Pane -->
+    <main class="docs-content" id="docs-content">
+      <!-- Content dynamically rendered by JS router -->
+    </main>
+
+    <!-- Right TOC -->
+    <aside class="docs-toc" id="docs-toc">
+      <div class="docs-toc-title">On This Page</div>
+      <!-- TOC links dynamically rendered -->
+    </aside>
+  </div><!-- /docs-view -->
+
+  <!-- Mobile sidebar toggle -->
+  <button class="docs-mobile-toggle" id="docs-mobile-toggle" onclick="toggleDocsSidebar()" aria-label="Toggle docs menu">☰</button>
+
 
   <script>
     // -------------------------------------------------------------
