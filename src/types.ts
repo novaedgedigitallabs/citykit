@@ -49,6 +49,50 @@ export interface CountryListItem {
   count: number;
 }
 
+export interface PopulationOptions {
+  /** Minimum population (inclusive) */
+  min: number;
+  /** Maximum population (inclusive). If omitted, no upper limit. */
+  max?: number;
+  /** Sort order: 'asc' or 'desc' (default: 'desc') */
+  sort?: 'asc' | 'desc';
+  /** Maximum results to return */
+  limit?: number;
+}
+
+export interface FuzzySearchOptions {
+  /** ISO2 country code filter */
+  country?: string;
+  /** Maximum results to return (default: 10) */
+  limit?: number;
+  /** Maximum Levenshtein distance threshold (default: 3) */
+  threshold?: number;
+}
+
+export interface RandomOptions {
+  /** ISO2 country code filter */
+  country?: string;
+  /** Filter by continent name */
+  continent?: string;
+}
+
+export interface DatasetStats {
+  /** Total number of cities in the dataset */
+  totalCities: number;
+  /** Number of unique countries */
+  totalCountries: number;
+  /** Number of national capitals */
+  totalCapitals: number;
+  /** Largest city by population */
+  largestCity: City;
+  /** Smallest city by population (with non-null population) */
+  smallestCity: City;
+  /** Average population across cities with known population */
+  averagePopulation: number;
+  /** Total world population represented in the dataset */
+  totalPopulation: number;
+}
+
 /** Column index map for array-format city data */
 export interface ColumnMap {
   city: number;

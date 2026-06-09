@@ -1,6 +1,6 @@
 {
   "name": "@novaedgedigitallabs/citykit",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "World cities search, distance, and geo utilities — 49,992 cities across 242 countries",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -25,6 +25,7 @@
     "convert": "node scripts/convert.mjs",
     "build": "tsup",
     "dev": "tsup --watch",
+    "test": "vitest run",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
@@ -52,6 +53,7 @@
     "tsup": "^8.0.0",
     "typescript": "^5.4.0",
     "@types/node": "^20.0.0",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "vitest": "^1.6.0"
   }
 }

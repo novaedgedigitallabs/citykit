@@ -1,5 +1,7 @@
 import { getCities } from './data.js';
 import { haversine } from './haversine.js';
+import { levenshtein } from './levenshtein.js';
+import { getContinentCodes } from './continents.js';
 import type {
   City,
   SearchOptions,
@@ -7,6 +9,10 @@ import type {
   DistanceResult,
   CountryInfo,
   CountryListItem,
+  PopulationOptions,
+  FuzzySearchOptions,
+  RandomOptions,
+  DatasetStats,
 } from './types.js';
 
 // Re-export types for consumers
@@ -17,7 +23,12 @@ export type {
   DistanceResult,
   CountryInfo,
   CountryListItem,
+  PopulationOptions,
+  FuzzySearchOptions,
+  RandomOptions,
+  DatasetStats,
 };
+
 
 /**
  * Search cities by name.
@@ -239,3 +250,175 @@ export function listCountries(): CountryListItem[] {
     a.country.localeCompare(b.country)
   );
 }
+
+/**
+ * Get cities filtered by population range.
+ *
+ * @param options - Population filter options (min, max, sort, limit)
+ * @returns Filtered and sorted cities
+ */
+export function byPopulation(options: PopulationOptions): City[] {
+  const { min, max, sort = 'desc', limit } = options;
+  const cities = getCities();
+
+  const filtered = cities.filter((c) => {
+    if (c.population === null) return false;
+    if (c.population < min) return false;
+    if (max !== undefined && c.population > max) return false;
+    return true;
+  });
+
+  filtered.sort((a, b) => {
+    const popA = a.population ?? 0;
+    const popB = b.population ?? 0;
+    return sort === 'asc' ? popA - popB : popB - popA;
+  });
+
+  if (limit !== undefined) {
+    return filtered.slice(0, limit);
+  }
+  return filtered;
+}
+
+/**
+ * Get cities by continent name (case-insensitive).
+ *
+ * @param continent - Continent name (e.g. "Asia", "Europe")
+ * @returns Array of cities in the continent
+ */
+export function byContinent(continent: string): City[] {
+  const codes = getContinentCodes(continent);
+  if (!codes) return [];
+  return getCities().filter((c) => codes.has(c.iso2.toUpperCase()));
+}
+
+/**
+ * Fuzzy search cities by name using Levenshtein distance.
+ *
+ * Case-insensitive search on `city_ascii`. Results are sorted by Levenshtein distance
+ * (ascending), then by population (descending).
+ *
+ * @param query - Typo-prone city name query
+ * @param options - Fuzzy search options (country, limit, threshold)
+ * @returns Array of matches within threshold
+ */
+export function fuzzySearch(query: string, options: FuzzySearchOptions = {}): City[] {
+  const { country, limit = 10, threshold = 3 } = options;
+  const cities = getCities();
+  const q = query.toLowerCase().trim();
+  const countryFilter = country?.toUpperCase();
+
+  if (!q) return [];
+
+  const results: { city: City; dist: number }[] = [];
+
+  for (const c of cities) {
+    if (countryFilter && c.iso2.toUpperCase() !== countryFilter) continue;
+
+    const cityLower = c.city_ascii.toLowerCase();
+    const dist = levenshtein(q, cityLower);
+
+    if (dist <= threshold) {
+      results.push({ city: c, dist });
+    }
+  }
+
+  // Sort by distance (asc), then population (desc)
+  results.sort((a, b) => {
+    if (a.dist !== b.dist) return a.dist - b.dist;
+    const popA = a.city.population ?? 0;
+    const popB = b.city.population ?? 0;
+    return popB - popA;
+  });
+
+  return results.slice(0, limit).map((r) => r.city);
+}
+
+/**
+ * Get a random city from the dataset, optionally filtered by country or continent.
+ *
+ * @param options - Filter options
+ * @returns A random city, or null if no cities match filters
+ */
+export function random(options: RandomOptions = {}): City | null {
+  const { country, continent } = options;
+  let pool = getCities();
+
+  if (country) {
+    const code = country.toUpperCase();
+    pool = pool.filter((c) => c.iso2.toUpperCase() === code);
+  }
+
+  if (continent) {
+    const codes = getContinentCodes(continent);
+    if (!codes) return null;
+    pool = pool.filter((c) => codes.has(c.iso2.toUpperCase()));
+  }
+
+  if (pool.length === 0) return null;
+
+  const index = Math.floor(Math.random() * pool.length);
+  return pool[index];
+}
+
+/**
+ * Get aggregated dataset statistics.
+ *
+ * @returns Statistics of the dataset
+ */
+export function stats(): DatasetStats {
+  const cities = getCities();
+
+  const totalCities = cities.length;
+  const countriesSet = new Set<string>();
+  let totalCapitals = 0;
+  let largestCity: City | null = null;
+  let smallestCity: City | null = null;
+  let totalPopulation = 0;
+  let validPopulationCount = 0;
+
+  for (const c of cities) {
+    countriesSet.add(c.iso2.toUpperCase());
+    if (c.capital === 'primary') {
+      totalCapitals++;
+    }
+
+    if (c.population !== null) {
+      totalPopulation += c.population;
+      validPopulationCount++;
+
+      if (!largestCity || c.population > (largestCity.population ?? 0)) {
+        largestCity = c;
+      }
+      if (!smallestCity || c.population < (smallestCity.population ?? Infinity)) {
+        smallestCity = c;
+      }
+    }
+  }
+
+  // Fallback in case of empty or all-null dataset
+  const defaultCity: City = cities[0] || {
+    city: '',
+    city_ascii: '',
+    lat: 0,
+    lng: 0,
+    country: '',
+    iso2: '',
+    iso3: '',
+    admin_name: '',
+    capital: null,
+    population: null,
+    id: 0,
+  };
+
+  return {
+    totalCities,
+    totalCountries: countriesSet.size,
+    totalCapitals,
+    largestCity: largestCity ?? defaultCity,
+    smallestCity: smallestCity ?? defaultCity,
+    averagePopulation: validPopulationCount > 0 ? totalPopulation / validPopulationCount : 0,
+    totalPopulation,
+  };
+}
+
