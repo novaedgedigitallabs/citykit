@@ -44,6 +44,10 @@
     "type": "git",
     "url": "https://github.com/novaedgedigitallabs/citykit"
   },
+  "homepage": "https://github.com/novaedgedigitallabs/citykit#readme",
+  "bugs": {
+    "url": "https://github.com/novaedgedigitallabs/citykit/issues"
+  },
   "devDependencies": {
     "tsup": "^8.0.0",
     "typescript": "^5.4.0",
