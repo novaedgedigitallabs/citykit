@@ -367,7 +367,10 @@ CityKit is written in TypeScript and ships with full type declarations.
 import type {
   City,
   SearchOptions,
+  NearestOptions,
   DistanceResult,
+  CountryInfo,
+  CountryListItem,
   PopulationOptions,
   FuzzySearchOptions,
   RandomOptions,
@@ -392,9 +395,34 @@ interface City {
   id: number;
 }
 
+interface SearchOptions {
+  country?: string;
+  limit?: number;
+  exact?: boolean;
+}
+
+interface NearestOptions {
+  limit?: number;
+  country?: string;
+}
+
 interface DistanceResult {
   km: number;
   miles: number;
+}
+
+interface CountryInfo {
+  country: string;
+  iso2: string;
+  iso3: string;
+  cities: City[];
+}
+
+interface CountryListItem {
+  country: string;
+  iso2: string;
+  iso3: string;
+  count: number;
 }
 
 interface PopulationOptions {
