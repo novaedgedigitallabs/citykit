@@ -1,6 +1,6 @@
 {
   "name": "@novaedgedigitallabs/citykit",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "World cities search, distance, and geo utilities — 49,992 cities across 242 countries",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
