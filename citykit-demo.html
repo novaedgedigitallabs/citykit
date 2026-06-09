@@ -1,0 +1,1561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CityKit — World Cities Search & Geo Utilities</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="A TypeScript-first utility library for searching, filtering, and calculating distances across global city data. Open-source with 49,992 cities and 241+ countries.">
+  <meta name="keywords" content="citykit, world cities database, geo utilities, haversine distance, city search npm, novaedge digital labs">
+  <meta name="author" content="NovaEdge Digital Labs">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="CityKit — World Cities Search & Geo Utilities">
+  <meta property="og:description" content="A TypeScript-first utility library for searching, filtering, and calculating distances across global city data.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://raw.githubusercontent.com/novaedgedigitallabs/citykit/main/banner.png">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Design System Tokens */
+    :root {
+      --bg:          #0A0118;   /* Near-black, deep space base */
+      --surface:     #0F0525;   /* Card/panel surface */
+      --surface-2:   #160830;   /* Elevated surface */
+      --border:      #1E0F3D;   /* Default border */
+      --border-2:    #2D1760;   /* Hover/focus border */
+      --violet:      #7C3AED;   /* Primary brand */
+      --violet-dim:  #4C1D95;   /* Muted violet */
+      --pink:        #EC4899;   /* Accent — key actions + highlights */
+      --pink-dim:    #831843;   /* Muted pink */
+      --text-1:      #F0EBF8;   /* Primary text */
+      --text-2:      #A89CC8;   /* Secondary text */
+      --text-3:      #5C4E80;   /* Muted/placeholder */
+      --green:       #10B981;   /* Success/live indicator */
+      --amber:       #F59E0B;   /* Warning/running state */
+    }
+
+    /* Base Reset */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--bg);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-2);
+      padding-top: 64px; /* Space for fixed navbar */
+      overflow-x: hidden;
+    }
+
+    /* Typography Hierarchy */
+    h1, h2, h3, h4, .mono, button, nav, footer, pre, code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--border-2);
+    }
+
+    /* Fixed Navbar */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 32px;
+      z-index: 1000;
+      box-shadow: none;
+    }
+
+    @media (max-width: 640px) {
+      nav {
+        padding: 0 16px;
+      }
+    }
+
+    .nav-logo {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--violet);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+    }
+
+    .cursor {
+      display: inline-block;
+      color: var(--violet);
+      margin-left: 2px;
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .version-badge {
+      font-size: 11px;
+      color: var(--text-2);
+      border: 1px solid var(--border-2);
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-weight: 500;
+      user-select: none;
+    }
+
+    .nav-link {
+      color: var(--text-2);
+      display: flex;
+      align-items: center;
+      transition: color 0.2s ease;
+      text-decoration: none;
+    }
+
+    .nav-link:hover {
+      color: var(--pink);
+    }
+
+    /* Hero Section */
+    #hero {
+      min-height: calc(100vh - 64px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      padding: 80px 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .grid-layer {
+      position: absolute;
+      top: -60px;
+      left: -60px;
+      width: calc(100% + 120px);
+      height: calc(100% + 120px);
+      animation: gridDrift 8s linear infinite;
+    }
+
+    @keyframes gridDrift {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(-60px, -60px); }
+    }
+
+    .coords-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .grid-coord-label {
+      position: absolute;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-3);
+      pointer-events: none;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    @keyframes fadeCycle {
+      0% { opacity: 0.15; }
+      100% { opacity: 0.40; }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      max-width: 800px;
+      width: 100%;
+    }
+
+    .hero-tagline {
+      font-size: 11px;
+      color: var(--text-3);
+      margin-bottom: 24px;
+      letter-spacing: 0.05em;
+    }
+
+    .hero-title {
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--text-1);
+      line-height: 1.15;
+      margin-bottom: 24px;
+      letter-spacing: -0.02em;
+    }
+
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 36px;
+      }
+    }
+
+    .hero-subtitle {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: var(--text-2);
+      max-width: 580px;
+      margin: 0 auto 40px auto;
+      line-height: 1.6;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 72px;
+    }
+
+    /* Terminal Button (Primary) */
+    .terminal-cmd-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--text-1);
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+      box-shadow: none;
+    }
+
+    .terminal-cmd-btn:hover {
+      border-color: var(--violet);
+      background: var(--surface-2);
+    }
+
+    .terminal-cmd-btn.copied {
+      border-color: var(--green);
+    }
+
+    .cmd-prefix {
+      color: var(--violet);
+      user-select: none;
+    }
+
+    .cmd-text {
+      font-weight: 500;
+    }
+
+    .copy-feedback {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-3);
+      font-size: 11px;
+      border-left: 1px solid var(--border);
+      padding-left: 12px;
+      transition: color 0.2s ease;
+    }
+
+    .terminal-cmd-btn:hover .copy-feedback {
+      color: var(--text-2);
+    }
+
+    .terminal-cmd-btn.copied .copy-feedback {
+      color: var(--green);
+    }
+
+    .btn-secondary {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--violet);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+      color: var(--pink);
+    }
+
+    /* Stats Section */
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      width: 100%;
+      max-width: 720px;
+      margin: 0 auto;
+      border-top: 1px solid var(--border);
+      padding-top: 48px;
+    }
+
+    @media (max-width: 640px) {
+      .hero-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 32px;
+      }
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .stat-number {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--text-1);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-3);
+      text-transform: uppercase;
+      margin-top: 8px;
+      letter-spacing: 0.05em;
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 20px;
+      color: var(--violet);
+      text-decoration: none;
+      cursor: pointer;
+      animation: blink 1s step-end infinite;
+    }
+
+    /* Core Section Layout */
+    .section-container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 96px 24px;
+      box-sizing: border-box;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-3);
+      margin-bottom: 16px;
+      letter-spacing: 0.05em;
+      display: block;
+    }
+
+    .section-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-1);
+      margin-bottom: 40px;
+    }
+
+    /* Reveal Animations */
+    .reveal-section {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .reveal-section.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Playground Section */
+    .playground-layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: none;
+    }
+
+    @media (max-width: 900px) {
+      .playground-layout {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+    }
+
+    .playground-tabs-container {
+      border-right: 1px solid var(--border);
+      background: var(--bg);
+    }
+
+    @media (max-width: 900px) {
+      .playground-tabs-container {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+    }
+
+    .playground-tabs {
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media (max-width: 900px) {
+      .playground-tabs {
+        flex-direction: row;
+        overflow-x: auto;
+        white-space: nowrap;
+        padding: 8px;
+      }
+    }
+
+    .playground-tab {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 14px 20px;
+      background: transparent;
+      border: none;
+      border-left: 3px solid transparent;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+    }
+
+    @media (max-width: 900px) {
+      .playground-tab {
+        display: inline-block;
+        width: auto;
+        border-left: none;
+        border-bottom: 3px solid transparent;
+        padding: 10px 16px;
+      }
+    }
+
+    .playground-tab:hover {
+      background: var(--surface-2);
+    }
+
+    .playground-tab.active {
+      background: var(--surface-2);
+      border-left-color: var(--violet);
+    }
+
+    @media (max-width: 900px) {
+      .playground-tab.active {
+        border-bottom-color: var(--violet);
+        border-left-color: transparent;
+      }
+    }
+
+    .playground-tab .func {
+      color: var(--pink);
+      font-weight: 500;
+    }
+
+    .playground-tab .args {
+      color: var(--text-3);
+    }
+
+    .playground-terminal {
+      display: flex;
+      flex-direction: column;
+      background: var(--surface);
+      min-height: 480px;
+    }
+
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-2);
+    }
+
+    .terminal-dots {
+      display: flex;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .dot-red { background: #EF4444; }
+    .dot-amber { background: #F59E0B; }
+    .dot-green { background: #22C55E; }
+
+    .terminal-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-2);
+    }
+
+    .terminal-body {
+      padding: 24px;
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+      background: var(--surface);
+    }
+
+    .terminal-body pre, .terminal-output-body pre {
+      margin: 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    /* TS Syntax Highlight Colors */
+    .token-keyword { color: var(--pink); font-weight: 500; }
+    .token-string { color: var(--green); }
+    .token-comment { color: var(--text-3); font-style: italic; }
+    .token-number { color: var(--amber); }
+
+    .terminal-output-header {
+      display: flex;
+      align-items: center;
+      padding: 12px 24px;
+      background: var(--surface-2);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .output-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-2);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--green);
+      border-radius: 50%;
+      display: inline-block;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.2); opacity: 0.5; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .terminal-output-body {
+      padding: 24px;
+      background: #070014; /* Slightly darker terminal inside */
+      flex-grow: 1;
+      overflow-x: auto;
+      min-height: 220px;
+    }
+
+    /* JSON Syntax Highlight Colors */
+    .json-key { color: var(--violet); font-weight: 500; }
+    .json-string { color: var(--green); }
+    .json-number { color: var(--amber); }
+    .json-boolean { color: #60A5FA; }
+    .json-null { color: var(--text-3); }
+
+    /* Features Grid Section */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 1024px) {
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 220px;
+      transition: border-color 0.2s ease;
+      box-shadow: none;
+    }
+
+    .feature-card:hover {
+      border-color: var(--violet);
+    }
+
+    .feature-card-top {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--pink);
+      font-weight: 700;
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+
+    .feature-card-mid {
+      font-family: 'Inter', sans-serif;
+      color: var(--text-2);
+      font-size: 13px;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+
+    .feature-card-bottom {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 8px 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-1);
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    /* Import Paths Section */
+    .imports-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .imports-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .import-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: none;
+    }
+
+    .import-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 20px;
+      background: var(--surface-2);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .import-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text-2);
+    }
+
+    .icon-btn-copy {
+      background: transparent;
+      border: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-3);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .icon-btn-copy:hover {
+      color: var(--text-1);
+      background: var(--border);
+    }
+
+    .import-body {
+      padding: 20px;
+      overflow-x: auto;
+    }
+
+    .import-body pre {
+      margin: 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-1);
+    }
+
+    /* Roadmap Section */
+    .roadmap-pills {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .roadmap-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-3);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      padding: 8px 16px;
+      border-radius: 4px;
+      user-select: none;
+      transition: all 0.2s ease;
+    }
+
+    .roadmap-pill:hover {
+      border-color: var(--border-2);
+      color: var(--text-2);
+    }
+
+    /* Footer Section */
+    .footer {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 32px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-sizing: border-box;
+    }
+
+    @media (max-width: 768px) {
+      .footer {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+        padding: 32px 16px;
+      }
+    }
+
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    @media (max-width: 768px) {
+      .footer-left {
+        flex-direction: column;
+        gap: 4px;
+      }
+    }
+
+    .footer-logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--violet);
+      font-weight: 700;
+    }
+
+    .footer-by {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      color: var(--text-3);
+    }
+
+    .footer-center {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text-3);
+    }
+
+    .footer-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+    }
+
+    .footer-link {
+      color: var(--text-2);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-link:hover {
+      color: var(--pink);
+    }
+
+    .footer-dot {
+      color: var(--text-3);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Fixed Navbar -->
+  <nav>
+    <a href="#" class="nav-logo">citykit<span class="cursor">_</span></a>
+    <div class="nav-actions">
+      <span class="version-badge">v1.1.1</span>
+      <a href="https://github.com/novaedgedigitallabs/citykit" target="_blank" rel="noopener" class="nav-link" aria-label="GitHub Repository">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+      </a>
+      <a href="https://www.npmjs.com/package/@novaedgedigitallabs/citykit" target="_blank" rel="noopener" class="nav-link" aria-label="npm Package">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M0 0v24h24V0H0zm18 18h-3V9h-3v9H3V6h15v12z"/></svg>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header id="hero" class="reveal-section">
+    <!-- Coordinate Grid Background -->
+    <div class="hero-bg">
+      <div class="grid-layer">
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="grid-pattern" width="60" height="60" patternUnits="userSpaceOnUse">
+              <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#1E0F3D" stroke-width="1"/>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#grid-pattern)" />
+        </svg>
+      </div>
+      <div id="grid-coords-container" class="coords-layer"></div>
+    </div>
+
+    <!-- Centered Hero Content -->
+    <div class="hero-content">
+      <div class="hero-tagline mono">// 49,992 cities &middot; 241 countries &middot; MIT license</div>
+      <h1 class="hero-title">
+        Cities data.<br>
+        Zero friction.
+      </h1>
+      <p class="hero-subtitle">
+        A TypeScript-first utility library for searching, filtering, and calculating distances across global city data.
+      </p>
+      
+      <div class="hero-actions">
+        <button class="terminal-cmd-btn" onclick="copyCommand(this)">
+          <span class="cmd-prefix">$</span>
+          <span class="cmd-text">npm install @novaedgedigitallabs/citykit</span>
+          <span class="copy-feedback">
+            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <span class="feedback-text">Copy</span>
+          </span>
+        </button>
+        <a href="https://github.com/novaedgedigitallabs/citykit" target="_blank" rel="noopener" class="btn-secondary">
+          View on GitHub &rarr;
+        </a>
+      </div>
+
+      <!-- Animated Stat Counters -->
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div id="stat-cities" class="stat-number">0</div>
+          <div class="stat-label">Cities</div>
+        </div>
+        <div class="stat-item">
+          <div id="stat-countries" class="stat-number">0</div>
+          <div class="stat-label">Countries</div>
+        </div>
+        <div class="stat-item">
+          <div id="stat-functions" class="stat-number">0</div>
+          <div class="stat-label">Functions</div>
+        </div>
+        <div class="stat-item">
+          <div id="stat-query" class="stat-number">0</div>
+          <div class="stat-label">Query time</div>
+        </div>
+      </div>
+    </div>
+    
+    <a href="#playground" class="scroll-indicator" aria-label="Scroll to Playground">&darr;</a>
+  </header>
+
+  <main>
+    <!-- Code Playground Section -->
+    <section id="playground" class="reveal-section section-container">
+      <span class="section-label">// try it live</span>
+      <h2 class="section-title">Interactive Playground</h2>
+      
+      <div class="playground-layout">
+        <!-- Function Tabs -->
+        <div class="playground-tabs-container">
+          <div class="playground-tabs">
+            <button class="playground-tab active" data-tab="search" onclick="showPlaygroundTab('search')">
+              <span class="func">search</span><span class="args">("Delhi")</span>
+            </button>
+            <button class="playground-tab" data-tab="fuzzySearch" onclick="showPlaygroundTab('fuzzySearch')">
+              <span class="func">fuzzySearch</span><span class="args">("Mumbi")</span>
+            </button>
+            <button class="playground-tab" data-tab="nearest" onclick="showPlaygroundTab('nearest')">
+              <span class="func">nearest</span><span class="args">(28.61, 77.20)</span>
+            </button>
+            <button class="playground-tab" data-tab="byContinent" onclick="showPlaygroundTab('byContinent')">
+              <span class="func">byContinent</span><span class="args">("Asia")</span>
+            </button>
+            <button class="playground-tab" data-tab="byPopulation" onclick="showPlaygroundTab('byPopulation')">
+              <span class="func">byPopulation</span><span class="args">({ min: 1000000 })</span>
+            </button>
+            <button class="playground-tab" data-tab="distance" onclick="showPlaygroundTab('distance')">
+              <span class="func">distance</span><span class="args">(DEL, NRT)</span>
+            </button>
+            <button class="playground-tab" data-tab="stats" onclick="showPlaygroundTab('stats')">
+              <span class="func">stats</span><span class="args">()</span>
+            </button>
+            <button class="playground-tab" data-tab="random" onclick="showPlaygroundTab('random')">
+              <span class="func">random</span><span class="args">()</span>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Code & Output Terminal -->
+        <div class="playground-terminal">
+          <div class="terminal-header">
+            <div class="terminal-dots">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-amber"></span>
+              <span class="dot dot-green"></span>
+            </div>
+            <span class="terminal-title">playground.ts</span>
+          </div>
+          <div class="terminal-body">
+            <pre><code id="playground-code">import { search } from '@novaedgedigitallabs/citykit';
+
+const results = search("Delhi");
+// Returns matching cities instantly</code></pre>
+          </div>
+          
+          <div class="terminal-output-header">
+            <span class="output-label">
+              <span class="live-dot"></span>
+              &gt; output
+            </span>
+          </div>
+          <div class="terminal-output-body">
+            <pre><code id="playground-output"></code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Grid -->
+    <section id="features" class="reveal-section section-container">
+      <span class="section-label">// what's inside</span>
+      <h2 class="section-title">Package Features</h2>
+      
+      <div class="features-grid">
+        <!-- search() -->
+        <div class="feature-card">
+          <div>
+            <div class="feature-card-top">search()</div>
+            <div class="feature-card-mid">Name-based city search with partial matching and smart prefix/exact sorting.</div>
+          </div>
+          <div class="feature-card-bottom">search("Delhi")</div>
+        </div>
+        <!-- fuzzySearch() -->
+        <div class="feature-card">
+          <div>
+            <div class="feature-card-top">fuzzySearch()</div>
+            <div class="feature-card-mid">Typo-tolerant city search using Levenshtein distance thresholds.</div>
+          </div>
+          <div class="feature-card-bottom">fuzzySearch("Nwe Yrok")</div>
+        </div>
+        <!-- nearest() -->
+        <div class="feature-card">
+          <div>
+            <div class="feature-card-top">nearest()</div>
+            <div class="feature-card-mid">Find the closest city or list of cities to any coordinates on Earth.</div>
+          </div>
+          <div class="feature-card-bottom">nearest(28.61, 77.20)</div>
+        </div>
+        <!-- distance() -->
+        <div class="feature-card">
+          <div>
+            <div class="feature-card-top">distance()</div>
+            <div class="feature-card-mid">Calculate exact Haversine distance in both kilometers and miles.</div>
+          </div>
+          <div class="feature-card-bottom">distance(28.61,77.20, 40.71,-74.00)</div>
+        </div>
+        <!-- byContinent() -->
+        <div class="feature-card">
+          <div>
+            <div class="feature-card-top">byContinent()</div>
+            <div class="feature-card-mid">Retrieve and filter cities across any of the 7 global continents.</div>
+          </div>
+          <div class="feature-card-bottom">byContinent("Asia")</div>
+        </div>
+        <!-- byPopulation() -->
+        <div class="feature-card">
+          <div>
+            <div class="feature-card-top">byPopulation()</div>
+            <div class="feature-card-mid">Filter and query cities matching a specific population range.</div>
+          </div>
+          <div class="feature-card-bottom">byPopulation({ min: 1000000 })</div>
+        </div>
+        <!-- stats() -->
+        <div class="feature-card">
+          <div>
+            <div class="feature-card-top">stats()</div>
+            <div class="feature-card-mid">Get database analytics, population summaries, and size stats.</div>
+          </div>
+          <div class="feature-card-bottom">stats()</div>
+        </div>
+        <!-- random() -->
+        <div class="feature-card">
+          <div>
+            <div class="feature-card-top">random()</div>
+            <div class="feature-card-mid">Instantly extract a random city from the global database.</div>
+          </div>
+          <div class="feature-card-bottom">random()</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Import Paths Section -->
+    <section id="import-paths" class="reveal-section section-container">
+      <span class="section-label">// two entry points</span>
+      <h2 class="section-title">Flexible Datasets</h2>
+      
+      <div class="imports-layout">
+        <!-- Full Dataset -->
+        <div class="import-block">
+          <div class="import-header">
+            <span class="import-title">Full Dataset (~49,992 cities)</span>
+            <button class="icon-btn-copy" onclick="copyImportBlock(this, 'import-full')">
+              <svg class="icon-copy-block" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span class="copy-text-block">Copy</span>
+            </button>
+          </div>
+          <div class="import-body">
+            <pre><code id="import-full">// 49,992 cities worldwide
+import {
+  search, nearest, distance,
+  fuzzySearch, byContinent,
+  byPopulation, stats, random
+} from '@novaedgedigitallabs/citykit';</code></pre>
+          </div>
+        </div>
+        
+        <!-- Lite Dataset -->
+        <div class="import-block">
+          <div class="import-header">
+            <span class="import-title">Lite Dataset (~1,422 cities)</span>
+            <button class="icon-btn-copy" onclick="copyImportBlock(this, 'import-lite')">
+              <svg class="icon-copy-block" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span class="copy-text-block">Copy</span>
+            </button>
+          </div>
+          <div class="import-body">
+            <pre><code id="import-lite">// 1,422 major cities — smaller bundle
+import {
+  search, nearest, distance
+} from '@novaedgedigitallabs/citykit/lite';</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section id="roadmap" class="reveal-section section-container" style="text-align: center; border-bottom: none;">
+      <span class="section-label">// what's coming</span>
+      <h2 class="section-title" style="margin-bottom: 24px;">Project Roadmap</h2>
+      
+      <div class="roadmap-pills">
+        <span class="roadmap-pill">withinRadius()</span>
+        <span class="roadmap-pill">nearestMany()</span>
+        <span class="roadmap-pill">autocomplete()</span>
+        <span class="roadmap-pill">countryStats()</span>
+        <span class="roadmap-pill">continentStats()</span>
+        <span class="roadmap-pill">timezone utilities</span>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-left">
+      <span class="footer-logo">citykit</span>
+      <span class="footer-by">by NovaEdge Digital Labs</span>
+    </div>
+    <div class="footer-center">
+      MIT License &middot; v1.1.1
+    </div>
+    <div class="footer-right">
+      <a href="https://github.com/novaedgedigitallabs/citykit" target="_blank" rel="noopener" class="footer-link">GitHub</a>
+      <span class="footer-dot">&middot;</span>
+      <a href="https://www.npmjs.com/package/@novaedgedigitallabs/citykit" target="_blank" rel="noopener" class="footer-link">npm</a>
+    </div>
+  </footer>
+
+  <script>
+    // 1. Coordinate Grid Background Injector
+    function initCoordinateLabels() {
+      const container = document.getElementById('grid-coords-container');
+      if (!container) return;
+      
+      const labelTexts = [
+        "28.61°N 77.20°E",
+        "35.68°N 139.69°E",
+        "40.71°N 74.00°W",
+        "51.51°N 0.13°W",
+        "48.86°N 2.35°E",
+        "33.87°S 151.21°E",
+        "22.91°S 43.17°W",
+        "31.23°N 121.47°E",
+        "30.04°N 31.24°E",
+        "1.29°S 36.82°E"
+      ];
+      
+      labelTexts.forEach((text, i) => {
+        const el = document.createElement('div');
+        el.className = 'grid-coord-label';
+        el.textContent = text;
+        
+        // Random layout coordinates (ensuring distributed grid placement)
+        const top = Math.random() * 80 + 10; // 10% to 90%
+        const left = Math.random() * 80 + 10;
+        
+        el.style.top = `${top}%`;
+        el.style.left = `${left}%`;
+        
+        // Staggered fade in/out animation configuration
+        const delay = Math.random() * 6;
+        const duration = Math.random() * 4 + 4; // 4s to 8s
+        el.style.animation = `fadeCycle ${duration}s ease-in-out ${delay}s infinite alternate`;
+        
+        container.appendChild(el);
+      });
+    }
+
+    // 2. Animated Counter function (Ease Out Cubic)
+    function animateCounter(el, target, duration = 1800, prefix = '', suffix = '') {
+      const start = performance.now();
+      requestAnimationFrame(function step(now) {
+        const t = Math.min((now - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - t, 3); // Cubic ease-out curve
+        const val = Math.floor(ease * target);
+        el.textContent = prefix + val.toLocaleString() + suffix;
+        if (t < 1) requestAnimationFrame(step);
+      });
+    }
+
+    // 3. Command Copy Helper
+    function copyCommand(btn) {
+      const textToCopy = "npm install @novaedgedigitallabs/citykit";
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        const feedbackText = btn.querySelector('.feedback-text');
+        const icon = btn.querySelector('.icon-copy');
+        
+        feedbackText.textContent = "Copied!";
+        btn.classList.add('copied');
+        
+        // Checkmark SVG path replacement
+        icon.innerHTML = '<polyline points="20 6 9 17 4 12"></polyline>';
+        
+        setTimeout(() => {
+          feedbackText.textContent = "Copy";
+          btn.classList.remove('copied');
+          icon.innerHTML = '<rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>';
+        }, 2000);
+      });
+    }
+
+    // 4. Import Block Copy Helper
+    function copyImportBlock(btn, elementId) {
+      const codeEl = document.getElementById(elementId);
+      if (!codeEl) return;
+      const textToCopy = codeEl.textContent;
+      
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        const icon = btn.querySelector('.icon-copy-block');
+        const textSpan = btn.querySelector('.copy-text-block');
+        
+        if (textSpan) textSpan.textContent = "Copied!";
+        btn.style.color = "var(--green)";
+        icon.innerHTML = '<polyline points="20 6 9 17 4 12"></polyline>';
+        
+        setTimeout(() => {
+          if (textSpan) textSpan.textContent = "Copy";
+          btn.style.color = "";
+          icon.innerHTML = '<rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>';
+        }, 2000);
+      });
+    }
+
+    // 5. Playground Live Data
+    const randomCitiesList = [
+      { "city": "Paris", "lat": 48.8566, "lng": 2.3522, "country": "France", "iso2": "FR", "population": 11020000, "capital": "primary" },
+      { "city": "Reykjavik", "lat": 64.1466, "lng": -21.9426, "country": "Iceland", "iso2": "IS", "population": 139000, "capital": "primary" },
+      { "city": "Sydney", "lat": -33.8688, "lng": 151.2093, "country": "Australia", "iso2": "AU", "population": 4967000, "capital": "admin" },
+      { "city": "Cairo", "lat": 30.0444, "lng": 31.2357, "country": "Egypt", "iso2": "EG", "population": 19372000, "capital": "primary" },
+      { "city": "Rio de Janeiro", "lat": -22.9068, "lng": -43.1729, "country": "Brazil", "iso2": "BR", "population": 13374000, "capital": "admin" }
+    ];
+
+    const playgroundData = {
+      search: {
+        code: `<span class="token-keyword">import</span> { search } <span class="token-keyword">from</span> <span class="token-string">'@novaedgedigitallabs/citykit'</span>;<br/><br/><span class="token-keyword">const</span> results = search(<span class="token-string">"Delhi"</span>);<br/><span class="token-comment">// Returns matching cities instantly</span>`,
+        output: [
+          {
+            "city": "Delhi",
+            "lat": 28.66,
+            "lng": 77.23,
+            "country": "India",
+            "iso2": "IN",
+            "population": 29617000,
+            "capital": "admin"
+          },
+          {
+            "city": "New Delhi",
+            "lat": 28.6600,
+            "lng": 77.2300,
+            "country": "India",
+            "iso2": "IN",
+            "population": 29617000,
+            "capital": "primary"
+          }
+        ]
+      },
+      fuzzySearch: {
+        code: `<span class="token-keyword">import</span> { fuzzySearch } <span class="token-keyword">from</span> <span class="token-string">'@novaedgedigitallabs/citykit'</span>;<br/><br/><span class="token-keyword">const</span> results = fuzzySearch(<span class="token-string">"Mumbi"</span>);<br/><span class="token-comment">// Typo-tolerant search using Levenshtein distance</span>`,
+        output: [
+          {
+            "city": "Mumbai",
+            "lat": 19.076,
+            "lng": 72.8777,
+            "country": "India",
+            "iso2": "IN",
+            "population": 18978000,
+            "capital": "admin"
+          }
+        ]
+      },
+      nearest: {
+        code: `<span class="token-keyword">import</span> { nearest } <span class="token-keyword">from</span> <span class="token-string">'@novaedgedigitallabs/citykit'</span>;<br/><br/><span class="token-keyword">const</span> results = nearest({ lat: <span class="token-number">28.61</span>, lng: <span class="token-number">77.20</span> });<br/><span class="token-comment">// Find cities nearest to given coordinates</span>`,
+        output: {
+          "city": "New Delhi",
+          "lat": 28.66,
+          "lng": 77.23,
+          "country": "India",
+          "distance_km": 6.2
+        }
+      },
+      byContinent: {
+        code: `<span class="token-keyword">import</span> { byContinent } <span class="token-keyword">from</span> <span class="token-string">'@novaedgedigitallabs/citykit'</span>;<br/><br/><span class="token-keyword">const</span> results = byContinent(<span class="token-string">"Asia"</span>);<br/><span class="token-comment">// Filter cities by continent name</span>`,
+        output: [
+          {
+            "city": "Tokyo",
+            "lat": 35.6762,
+            "lng": 139.6503,
+            "country": "Japan",
+            "iso2": "JP",
+            "population": 35676000,
+            "capital": "primary"
+          },
+          {
+            "city": "Mumbai",
+            "lat": 19.076,
+            "lng": 72.8777,
+            "country": "India",
+            "iso2": "IN",
+            "population": 18978000,
+            "capital": "admin"
+          },
+          {
+            "city": "Shanghai",
+            "lat": 31.2304,
+            "lng": 121.4737,
+            "country": "China",
+            "iso2": "CN",
+            "population": 22120000,
+            "capital": "admin"
+          }
+        ]
+      },
+      byPopulation: {
+        code: `<span class="token-keyword">import</span> { byPopulation } <span class="token-keyword">from</span> <span class="token-string">'@novaedgedigitallabs/citykit'</span>;<br/><br/><span class="token-keyword">const</span> results = byPopulation({ min: <span class="token-number">1000000</span> });<br/><span class="token-comment">// Filter cities by population threshold</span>`,
+        output: [
+          {
+            "city": "Tokyo",
+            "lat": 35.6762,
+            "lng": 139.6503,
+            "country": "Japan",
+            "iso2": "JP",
+            "population": 35676000,
+            "capital": "primary"
+          },
+          {
+            "city": "Jakarta",
+            "lat": -6.2146,
+            "lng": 106.8451,
+            "country": "Indonesia",
+            "iso2": "ID",
+            "population": 35362000,
+            "capital": "primary"
+          },
+          {
+            "city": "Chongqing",
+            "lat": 29.5628,
+            "lng": 106.5528,
+            "country": "China",
+            "iso2": "CN",
+            "population": 32053000,
+            "capital": "admin"
+          }
+        ]
+      },
+      distance: {
+        code: `<span class="token-keyword">import</span> { distance } <span class="token-keyword">from</span> <span class="token-string">'@novaedgedigitallabs/citykit'</span>;<br/><br/><span class="token-keyword">const</span> results = distance(<br/>  { lat: <span class="token-number">28.61</span>, lng: <span class="token-number">77.20</span> },<br/>  { lat: <span class="token-number">35.68</span>, lng: <span class="token-number">139.69</span> }<br/>);<br/><span class="token-comment">// Calculate distance between coordinates</span>`,
+        output: {
+          "from": { "lat": 28.61, "lng": 77.20 },
+          "to": { "lat": 35.68, "lng": 139.69 },
+          "distance_km": 5835.45,
+          "distance_miles": 3625.98
+        }
+      },
+      stats: {
+        code: `<span class="token-keyword">import</span> { stats } <span class="token-keyword">from</span> <span class="token-string">'@novaedgedigitallabs/citykit'</span>;<br/><br/><span class="token-keyword">const</span> results = stats();<br/><span class="token-comment">// Get metadata analytics on full dataset</span>`,
+        output: {
+          "totalCities": 49992,
+          "totalCountries": 241,
+          "totalCapitals": 196,
+          "largestCity": { "city": "Tokyo", "population": 35676000 },
+          "smallestCity": { "city": "Adamstown", "population": 48 },
+          "averagePopulation": 264923,
+          "totalPopulation": 13243782816
+        }
+      },
+      random: {
+        code: `<span class="token-keyword">import</span> { random } <span class="token-keyword">from</span> <span class="token-string">'@novaedgedigitallabs/citykit'</span>;<br/><br/><span class="token-keyword">const</span> results = random();<br/><span class="token-comment">// Select a random city from the database</span>`
+      }
+    };
+
+    // 6. JSON syntax highlighter
+    function syntaxHighlight(json) {
+      if (typeof json !== 'string') {
+        json = JSON.stringify(json, undefined, 2);
+      }
+      json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+-]?\d+)?)/g, function (match) {
+        let cls = 'number';
+        if (/^"/.test(match)) {
+          if (/:$/.test(match)) {
+            cls = 'key';
+          } else {
+            cls = 'string';
+          }
+        } else if (/true|false/.test(match)) {
+          cls = 'boolean';
+        } else if (/null/.test(match)) {
+          cls = 'null';
+        }
+        
+        if (cls === 'key') {
+          return `<span class="json-key">${match.replace(/:$/, '')}</span>:`;
+        } else {
+          return `<span class="json-${cls}">${match}</span>`;
+        }
+      });
+    }
+
+    // 7. HTML Tag Aware Typewriter Effect
+    let typewriterTimeout = null;
+    function typewriteHTML(el, htmlString, speed = 12, callback) {
+      el.innerHTML = '';
+      let i = 0;
+      let currentHTML = '';
+      
+      function step() {
+        if (i >= htmlString.length) {
+          if (callback) callback();
+          return;
+        }
+        
+        // HTML Tag Handling
+        if (htmlString[i] === '<') {
+          let tag = '';
+          while (i < htmlString.length && htmlString[i] !== '>') {
+            tag += htmlString[i];
+            i++;
+          }
+          if (i < htmlString.length) {
+            tag += htmlString[i];
+            i++;
+          }
+          currentHTML += tag;
+          step(); // Proceed without timer delay for tags
+        } else if (htmlString[i] === '&') {
+          // HTML Entity Handling
+          let entity = '';
+          while (i < htmlString.length && htmlString[i] !== ';') {
+            entity += htmlString[i];
+            i++;
+          }
+          if (i < htmlString.length) {
+            entity += htmlString[i];
+            i++;
+          }
+          currentHTML += entity;
+          el.innerHTML = currentHTML;
+          typewriterTimeout = setTimeout(step, speed);
+        } else {
+          currentHTML += htmlString[i];
+          i++;
+          el.innerHTML = currentHTML;
+          typewriterTimeout = setTimeout(step, speed);
+        }
+      }
+      
+      step();
+    }
+
+    // 8. Playground Controller
+    function showPlaygroundTab(tab) {
+      if (typewriterTimeout) clearTimeout(typewriterTimeout);
+      
+      // Toggle active states
+      document.querySelectorAll('.playground-tab').forEach(btn => {
+        if (btn.getAttribute('data-tab') === tab) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+      
+      // Update playground code panel
+      const codeEl = document.getElementById('playground-code');
+      codeEl.innerHTML = playgroundData[tab].code;
+      
+      // Load sample JSON output
+      let jsonValue;
+      if (tab === 'random') {
+        const randomIndex = Math.floor(Math.random() * randomCitiesList.length);
+        jsonValue = randomCitiesList[randomIndex];
+      } else {
+        jsonValue = playgroundData[tab].output;
+      }
+      
+      const formattedJSON = JSON.stringify(jsonValue, null, 2);
+      const highlightedJSON = syntaxHighlight(formattedJSON);
+      
+      const outputEl = document.getElementById('playground-output');
+      typewriteHTML(outputEl, highlightedJSON, 12);
+    }
+
+    // 9. IntersectionObserver Setup
+    document.addEventListener("DOMContentLoaded", () => {
+      initCoordinateLabels();
+      showPlaygroundTab('search');
+      
+      const revealSections = document.querySelectorAll('.reveal-section');
+      const observerOptions = {
+        root: null,
+        threshold: 0.15
+      };
+      
+      let countersTriggered = false;
+      function triggerCounters() {
+        if (countersTriggered) return;
+        countersTriggered = true;
+        
+        const citiesEl = document.getElementById('stat-cities');
+        const countriesEl = document.getElementById('stat-countries');
+        const functionsEl = document.getElementById('stat-functions');
+        const queryEl = document.getElementById('stat-query');
+        
+        animateCounter(citiesEl, 49992, 1800, '', '');
+        animateCounter(countriesEl, 241, 1800, '', '+');
+        animateCounter(functionsEl, 13, 1800, '', '');
+        animateCounter(queryEl, 2, 1800, '~', 'ms');
+      }
+      
+      const sectionObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+            if (entry.target.id === 'hero') {
+              triggerCounters();
+            }
+            observer.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+      
+      revealSections.forEach(section => {
+        sectionObserver.observe(section);
+      });
+    });
+  </script>
+</body>
+</html>
