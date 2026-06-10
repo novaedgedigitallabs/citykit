@@ -52,7 +52,7 @@ export function getContinentCodes(continent: string): Set<string> | null {
  * Get all valid continent names.
  */
 export function getContinentNames(): string[] {
-  return Object.keys(CONTINENT_MAP).map(
-    (k) => k.charAt(0).toUpperCase() + k.slice(1)
+  return Object.keys(CONTINENT_MAP).map((k) =>
+    k.split(' ').map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
   );
 }

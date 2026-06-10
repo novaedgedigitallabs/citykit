@@ -1,7 +1,21 @@
 import { getLiteCities } from './data.js';
-import { haversine } from './haversine.js';
-import { levenshtein } from './levenshtein.js';
-import { getContinentCodes } from './continents.js';
+import {
+  createSearch,
+  createByCountry,
+  createCapitals,
+  createNearest,
+  createDistance,
+  createGetByIso2,
+  createGetCity,
+  createListCountries,
+  createByPopulation,
+  createByContinent,
+  createFuzzySearch,
+  createRandom,
+  createStats,
+  createWithinRadius,
+  createByAdmin,
+} from './core.js';
 import type {
   City,
   SearchOptions,
@@ -13,6 +27,7 @@ import type {
   FuzzySearchOptions,
   RandomOptions,
   DatasetStats,
+  WithinRadiusOptions,
 } from './types.js';
 
 // Re-export types for consumers
@@ -27,342 +42,55 @@ export type {
   FuzzySearchOptions,
   RandomOptions,
   DatasetStats,
+  WithinRadiusOptions,
 };
 
+// Re-export getContinentNames for consumers
+export { getContinentNames } from './continents.js';
 
-/**
- * Search cities by name (lite dataset — cities with population >= 500,000).
- */
-export function search(query: string, options: SearchOptions = {}): City[] {
-  const { country, limit = 10, exact = false } = options;
-  const cities = getLiteCities();
-  const q = query.toLowerCase();
-  const countryFilter = country?.toUpperCase();
+// ── Bind all factory functions to the lite dataset ──
 
-  let results: City[];
+/** Search cities by name (lite dataset — population >= 500,000). */
+export const search = createSearch(getLiteCities);
 
-  if (exact) {
-    results = cities.filter((c) => {
-      if (countryFilter && c.iso2.toUpperCase() !== countryFilter) return false;
-      return c.city_ascii.toLowerCase() === q;
-    });
-  } else {
-    results = cities.filter((c) => {
-      if (countryFilter && c.iso2.toUpperCase() !== countryFilter) return false;
-      return c.city_ascii.toLowerCase().includes(q);
-    });
+/** Get all cities for a given country ISO2 code (lite). */
+export const byCountry = createByCountry(getLiteCities);
 
-    results.sort((a, b) => {
-      const aLower = a.city_ascii.toLowerCase();
-      const bLower = b.city_ascii.toLowerCase();
+/** Get capital cities (lite). */
+export const capitals = createCapitals(getLiteCities);
 
-      const aExact = aLower === q;
-      const bExact = bLower === q;
-      if (aExact && !bExact) return -1;
-      if (!aExact && bExact) return 1;
+/** Find nearest cities using Haversine formula (lite). */
+export const nearest = createNearest(getLiteCities);
 
-      const aStarts = aLower.startsWith(q);
-      const bStarts = bLower.startsWith(q);
-      if (aStarts && !bStarts) return -1;
-      if (!aStarts && bStarts) return 1;
+/** Calculate distance between two cities or coordinate pairs (lite). Picks highest-population city on name collision. */
+export const distance = createDistance(getLiteCities);
 
-      return 0;
-    });
-  }
+/** Get country info and all its cities by ISO2 code (lite). */
+export const getByIso2 = createGetByIso2(getLiteCities);
 
-  return results.slice(0, limit);
-}
+/** Get a single city by exact name (lite). */
+export const getCity = createGetCity(getLiteCities);
 
-/**
- * Get all cities for a given country ISO2 code (lite dataset).
- */
-export function byCountry(iso2: string): City[] {
-  const code = iso2.toUpperCase();
-  return getLiteCities().filter((c) => c.iso2.toUpperCase() === code);
-}
+/** List all unique countries with city counts (lite). */
+export const listCountries = createListCountries(getLiteCities);
 
-/**
- * Get capital cities (lite dataset).
- */
-export function capitals(iso2?: string): City[] {
-  const cities = getLiteCities();
+/** Get cities filtered by population range (lite). */
+export const byPopulation = createByPopulation(getLiteCities);
 
-  if (iso2) {
-    const code = iso2.toUpperCase();
-    return cities.filter(
-      (c) =>
-        c.iso2.toUpperCase() === code &&
-        (c.capital === 'primary' || c.capital === 'admin')
-    );
-  }
+/** Get cities by continent name (lite). */
+export const byContinent = createByContinent(getLiteCities);
 
-  return cities.filter((c) => c.capital === 'primary');
-}
+/** Fuzzy search cities by name using Levenshtein distance (lite). */
+export const fuzzySearch = createFuzzySearch(getLiteCities);
 
-/**
- * Find nearest cities using Haversine formula (lite dataset).
- */
-export function nearest(
-  coords: { lat: number; lng: number },
-  options: NearestOptions = {}
-): City[] {
-  const { limit = 1, country } = options;
-  const cities = getLiteCities();
-  const countryFilter = country?.toUpperCase();
+/** Get a random city (lite). */
+export const random = createRandom(getLiteCities);
 
-  let pool = cities;
-  if (countryFilter) {
-    pool = cities.filter((c) => c.iso2.toUpperCase() === countryFilter);
-  }
+/** Get aggregated dataset statistics (lite). */
+export const stats = createStats(getLiteCities);
 
-  const withDistance = pool.map((c) => ({
-    city: c,
-    dist: haversine(coords.lat, coords.lng, c.lat, c.lng),
-  }));
+/** Find all cities within a given radius (km) of coordinates (lite). */
+export const withinRadius = createWithinRadius(getLiteCities);
 
-  withDistance.sort((a, b) => a.dist - b.dist);
-
-  return withDistance.slice(0, limit).map((d) => d.city);
-}
-
-/**
- * Calculate distance between two cities or coordinate pairs (lite dataset).
- */
-export function distance(
-  from: string | { lat: number; lng: number },
-  to: string | { lat: number; lng: number }
-): DistanceResult | null {
-  const resolveCoords = (
-    input: string | { lat: number; lng: number }
-  ): { lat: number; lng: number } | null => {
-    if (typeof input === 'object') return input;
-    const city = getLiteCities().find(
-      (c) => c.city_ascii.toLowerCase() === input.toLowerCase()
-    );
-    return city ? { lat: city.lat, lng: city.lng } : null;
-  };
-
-  const fromCoords = resolveCoords(from);
-  const toCoords = resolveCoords(to);
-
-  if (!fromCoords || !toCoords) return null;
-
-  const km = haversine(fromCoords.lat, fromCoords.lng, toCoords.lat, toCoords.lng);
-  const miles = km * 0.621371;
-
-  return {
-    km: Math.round(km * 100) / 100,
-    miles: Math.round(miles * 100) / 100,
-  };
-}
-
-/**
- * Get country info and all its cities by ISO2 code (lite dataset).
- */
-export function getByIso2(iso2: string): CountryInfo | null {
-  const code = iso2.toUpperCase();
-  const cities = getLiteCities().filter((c) => c.iso2.toUpperCase() === code);
-
-  if (cities.length === 0) return null;
-
-  return {
-    country: cities[0].country,
-    iso2: cities[0].iso2,
-    iso3: cities[0].iso3,
-    cities,
-  };
-}
-
-/**
- * Get a single city by exact name (lite dataset).
- */
-export function getCity(name: string, iso2?: string): City | null {
-  const nameLower = name.toLowerCase();
-  const countryFilter = iso2?.toUpperCase();
-
-  const city = getLiteCities().find((c) => {
-    if (countryFilter && c.iso2.toUpperCase() !== countryFilter) return false;
-    return c.city_ascii.toLowerCase() === nameLower;
-  });
-
-  return city ?? null;
-}
-
-/**
- * List all unique countries with city counts (lite dataset).
- */
-export function listCountries(): CountryListItem[] {
-  const cities = getLiteCities();
-  const map = new Map<string, { country: string; iso2: string; iso3: string; count: number }>();
-
-  for (const c of cities) {
-    const key = c.iso2.toUpperCase();
-    const existing = map.get(key);
-    if (existing) {
-      existing.count++;
-    } else {
-      map.set(key, {
-        country: c.country,
-        iso2: c.iso2,
-        iso3: c.iso3,
-        count: 1,
-      });
-    }
-  }
-
-  return Array.from(map.values()).sort((a, b) =>
-    a.country.localeCompare(b.country)
-  );
-}
-
-/**
- * Get cities filtered by population range (lite dataset).
- */
-export function byPopulation(options: PopulationOptions): City[] {
-  const { min, max, sort = 'desc', limit } = options;
-  const cities = getLiteCities();
-
-  const filtered = cities.filter((c) => {
-    if (c.population === null) return false;
-    if (c.population < min) return false;
-    if (max !== undefined && c.population > max) return false;
-    return true;
-  });
-
-  filtered.sort((a, b) => {
-    const popA = a.population ?? 0;
-    const popB = b.population ?? 0;
-    return sort === 'asc' ? popA - popB : popB - popA;
-  });
-
-  if (limit !== undefined) {
-    return filtered.slice(0, limit);
-  }
-  return filtered;
-}
-
-/**
- * Get cities by continent name (case-insensitive) (lite dataset).
- */
-export function byContinent(continent: string): City[] {
-  const codes = getContinentCodes(continent);
-  if (!codes) return [];
-  return getLiteCities().filter((c) => codes.has(c.iso2.toUpperCase()));
-}
-
-/**
- * Fuzzy search cities by name using Levenshtein distance (lite dataset).
- */
-export function fuzzySearch(query: string, options: FuzzySearchOptions = {}): City[] {
-  const { country, limit = 10, threshold = 3 } = options;
-  const cities = getLiteCities();
-  const q = query.toLowerCase().trim();
-  const countryFilter = country?.toUpperCase();
-
-  if (!q) return [];
-
-  const results: { city: City; dist: number }[] = [];
-
-  for (const c of cities) {
-    if (countryFilter && c.iso2.toUpperCase() !== countryFilter) continue;
-
-    const cityLower = c.city_ascii.toLowerCase();
-    const dist = levenshtein(q, cityLower);
-
-    if (dist <= threshold) {
-      results.push({ city: c, dist });
-    }
-  }
-
-  results.sort((a, b) => {
-    if (a.dist !== b.dist) return a.dist - b.dist;
-    const popA = a.city.population ?? 0;
-    const popB = b.city.population ?? 0;
-    return popB - popA;
-  });
-
-  return results.slice(0, limit).map((r) => r.city);
-}
-
-/**
- * Get a random city from the lite dataset, optionally filtered by country or continent.
- */
-export function random(options: RandomOptions = {}): City | null {
-  const { country, continent } = options;
-  let pool = getLiteCities();
-
-  if (country) {
-    const code = country.toUpperCase();
-    pool = pool.filter((c) => c.iso2.toUpperCase() === code);
-  }
-
-  if (continent) {
-    const codes = getContinentCodes(continent);
-    if (!codes) return null;
-    pool = pool.filter((c) => codes.has(c.iso2.toUpperCase()));
-  }
-
-  if (pool.length === 0) return null;
-
-  const index = Math.floor(Math.random() * pool.length);
-  return pool[index];
-}
-
-/**
- * Get aggregated dataset statistics (lite dataset).
- */
-export function stats(): DatasetStats {
-  const cities = getLiteCities();
-
-  const totalCities = cities.length;
-  const countriesSet = new Set<string>();
-  let totalCapitals = 0;
-  let largestCity: City | null = null;
-  let smallestCity: City | null = null;
-  let totalPopulation = 0;
-  let validPopulationCount = 0;
-
-  for (const c of cities) {
-    countriesSet.add(c.iso2.toUpperCase());
-    if (c.capital === 'primary') {
-      totalCapitals++;
-    }
-
-    if (c.population !== null) {
-      totalPopulation += c.population;
-      validPopulationCount++;
-
-      if (!largestCity || c.population > (largestCity.population ?? 0)) {
-        largestCity = c;
-      }
-      if (!smallestCity || c.population < (smallestCity.population ?? Infinity)) {
-        smallestCity = c;
-      }
-    }
-  }
-
-  const defaultCity: City = cities[0] || {
-    city: '',
-    city_ascii: '',
-    lat: 0,
-    lng: 0,
-    country: '',
-    iso2: '',
-    iso3: '',
-    admin_name: '',
-    capital: null,
-    population: null,
-    id: 0,
-  };
-
-  return {
-    totalCities,
-    totalCountries: countriesSet.size,
-    totalCapitals,
-    largestCity: largestCity ?? defaultCity,
-    smallestCity: smallestCity ?? defaultCity,
-    averagePopulation: validPopulationCount > 0 ? totalPopulation / validPopulationCount : 0,
-    totalPopulation,
-  };
-}
-
+/** Filter cities by admin_name (state/province) (lite). */
+export const byAdmin = createByAdmin(getLiteCities);

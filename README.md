@@ -1,8 +1,8 @@
 # @novaedgedigitallabs/citykit
 
-> World cities search, distance, and geo utilities — **49,992 cities** across **242 countries**.
+> World cities search, distance, and geo utilities — **49,992 cities** across **242 countries** — **15 functions**.
 
-A zero-dependency utility library for searching cities, calculating distances using the Haversine formula, finding nearest locations, and querying country/capital data. Ships with a full dataset and a lightweight variant.
+A zero-dependency utility library for searching cities, calculating distances using the Haversine formula, finding nearest locations, querying country/capital data, and filtering by radius, state, or continent. Ships with a full dataset and a lightweight variant.
 
 [![npm version](https://img.shields.io/npm/v/@novaedgedigitallabs/citykit.svg)](https://www.npmjs.com/package/@novaedgedigitallabs/citykit)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
@@ -338,6 +338,76 @@ const summary = stats();
 
 ---
 
+### `withinRadius(coords, radiusKm, options?)`
+
+Find all cities within a given radius (in km) of coordinates. Results sorted by distance ascending (nearest first).
+
+```ts
+withinRadius(
+  coords: { lat: number; lng: number },
+  radiusKm: number,
+  options?: WithinRadiusOptions
+): City[]
+```
+
+**Options:**
+
+| Option    | Type     | Default | Description                   |
+| --------- | -------- | ------- | ----------------------------- |
+| `country` | `string` | —       | Filter within a country (ISO2)|
+| `limit`   | `number` | —       | Maximum results to return     |
+
+```js
+import { withinRadius } from '@novaedgedigitallabs/citykit';
+
+// All cities within 100km of Indore
+const nearby = withinRadius({ lat: 22.7196, lng: 75.8577 }, 100);
+// → [{ city: "Indore", ... }, { city: "Ujjain", ... }, ...]
+
+// With country filter
+const nearbyIN = withinRadius({ lat: 22.7196, lng: 75.8577 }, 100, { country: 'IN' });
+```
+
+---
+
+### `byAdmin(adminName, iso2?)`
+
+Filter cities by admin_name (state/province). Case-insensitive substring match. Sorted by population descending.
+
+```ts
+byAdmin(adminName: string, iso2?: string): City[]
+```
+
+```js
+import { byAdmin } from '@novaedgedigitallabs/citykit';
+
+// All cities in Maharashtra, India
+const maharashtra = byAdmin('Maharashtra', 'IN');
+// → [{ city: "Mumbai", population: 18978000, ... }, ...]
+
+// All cities in California (any country)
+const california = byAdmin('California');
+```
+
+---
+
+### `getContinentNames()`
+
+Get all valid continent names with proper capitalization.
+
+```ts
+getContinentNames(): string[]
+```
+
+```js
+import { getContinentNames } from '@novaedgedigitallabs/citykit';
+
+const continents = getContinentNames();
+// → ['Africa', 'Asia', 'Europe', 'North America', 'Oceania', 'South America']
+```
+
+---
+
 ## Lite Version
 
 For applications where bundle size matters, use the lite version — includes only cities with **population ≥ 500,000** (1,422 cities across 141 countries).
@@ -375,6 +445,7 @@ import type {
   FuzzySearchOptions,
   RandomOptions,
   DatasetStats,
+  WithinRadiusOptions,
 } from '@novaedgedigitallabs/citykit';
 ```
 
@@ -451,6 +522,11 @@ interface DatasetStats {
   smallestCity: City;
   averagePopulation: number;
   totalPopulation: number;
+}
+
+interface WithinRadiusOptions {
+  country?: string;
+  limit?: number;
 }
 ```
 

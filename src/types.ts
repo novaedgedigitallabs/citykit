@@ -93,6 +93,13 @@ export interface DatasetStats {
   totalPopulation: number;
 }
 
+export interface WithinRadiusOptions {
+  /** ISO2 country code filter */
+  country?: string;
+  /** Maximum results to return (default: no limit) */
+  limit?: number;
+}
+
 /** Column index map for array-format city data */
 export interface ColumnMap {
   city: number;

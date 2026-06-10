@@ -119,6 +119,54 @@ describe('CityKit Full Dataset', () => {
     expect(stats.totalCountries).toBeGreaterThan(200);
     expect(stats.largestCity.population).toBeGreaterThan(30000000);
   });
+
+  it('should return empty array for empty search string', () => {
+    expect(citykit.search('')).toEqual([]);
+    expect(citykit.search('  ')).toEqual([]);
+  });
+
+  it('should find cities within radius of Indore', () => {
+    const results = citykit.withinRadius({ lat: 22.7196, lng: 75.8577 }, 100);
+    expect(results.length).toBeGreaterThanOrEqual(1);
+    // Indore itself should be in results
+    expect(results.some((c) => c.city_ascii === 'Indore')).toBe(true);
+  });
+
+  it('should find cities within radius with country filter', () => {
+    const results = citykit.withinRadius(
+      { lat: 22.7196, lng: 75.8577 },
+      100,
+      { country: 'IN' }
+    );
+    expect(results.length).toBeGreaterThanOrEqual(1);
+    expect(results.every((c) => c.iso2 === 'IN')).toBe(true);
+  });
+
+  it('should filter by admin name with country', () => {
+    // Dataset uses diacritical form: Mahārāshtra
+    const results = citykit.byAdmin('Mahār', 'IN');
+    expect(results.length).toBeGreaterThan(0);
+    expect(results.some((c) => c.city_ascii === 'Mumbai')).toBe(true);
+    expect(results.every((c) => c.iso2 === 'IN')).toBe(true);
+  });
+
+  it('should filter by admin name without country', () => {
+    const results = citykit.byAdmin('California');
+    expect(results.length).toBeGreaterThan(0);
+    // Results should be sorted by population desc
+    const firstPop = results[0].population ?? 0;
+    const secondPop = results[1]?.population ?? 0;
+    expect(firstPop).toBeGreaterThanOrEqual(secondPop);
+  });
+
+  it('should export getContinentNames with correct capitalization', () => {
+    const names = citykit.getContinentNames();
+    expect(Array.isArray(names)).toBe(true);
+    expect(names).toContain('North America');
+    expect(names).toContain('South America');
+    expect(names).not.toContain('North america');
+    expect(names).not.toContain('South america');
+  });
 });
 
 describe('CityKit Lite Dataset', () => {
