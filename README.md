@@ -35,6 +35,13 @@ const [city] = nearest({ lat: 28.6139, lng: 77.209 });
 
 ---
 
+## Documentation
+
+Comprehensive documentation, including advanced usage, core concepts, and the complete API reference, is available in the [`docs.html`](./docs.html) file included in the repository.
+
+---
+
+
 ## API Reference
 
 ### `search(query, options?)`
