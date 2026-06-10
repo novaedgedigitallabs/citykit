@@ -2943,6 +2943,17 @@ import {
       const cx = gWidth / 2;
       const cy = gHeight / 2;
 
+      // Earth Glow
+      const glowGradient = globeCtx.createRadialGradient(cx, cy, sphereR * 0.6, cx, cy, sphereR * 1.4);
+      glowGradient.addColorStop(0, 'rgba(232, 255, 71, 0.01)');
+      glowGradient.addColorStop(0.7, 'rgba(232, 255, 71, 0.06)');
+      glowGradient.addColorStop(1, 'rgba(232, 255, 71, 0)');
+      
+      globeCtx.fillStyle = glowGradient;
+      globeCtx.beginPath();
+      globeCtx.arc(cx, cy, sphereR * 1.4, 0, Math.PI * 2);
+      globeCtx.fill();
+
       globeCtx.strokeStyle = 'rgba(232, 255, 71, 0.035)';
       globeCtx.lineWidth = 1;
 
