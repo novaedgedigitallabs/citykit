@@ -545,6 +545,10 @@ City data sourced from the [SimpleMaps World Cities Database](https://simplemaps
 
 ---
 
+## Support
+
+If citykit saved you time → [novaedgedigitallabs.tech/pay](https://www.novaedgedigitallabs.tech/pay)
+
 ## License
 
 MIT © [NovaEdge Digital Labs](https://novaedgedigitallabs.in)
