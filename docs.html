@@ -9,17 +9,19 @@
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #050505;
-      --surface: #0d0d0d;
-      --surface-2: #121212;
-      --border: rgba(255,255,255,0.06);
-      --lime: #e8ff47;
-      --lime-dim: rgba(232,255,71,0.1);
+      --bg: #05000a;
+      --surface: #0a0014;
+      --surface-2: #140028;
+      --border: rgba(255, 255, 255, 0.06);
+      --border-glow: rgba(176, 38, 255, 0.4);
+      --lime: #b026ff;
+      --lime-dim: rgba(176, 38, 255, 0.1);
       --text-1: #ffffff;
       --text-2: #a3a3a3;
       --text-3: #525252;
       --green: #10b981;
       --font-display: 'Bebas Neue', cursive;
+      --font-serif: 'Playfair Display', serif;
       --font-sans: 'DM Sans', sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
     }
@@ -89,7 +91,7 @@
     /* NAVBAR */
     .nav-logo { font-family: var(--font-display); font-size: 24px; color: var(--text-1); letter-spacing: 1px; }
     .nav-search {
-      display: flex; align-items: center; background: var(--surface);
+      position: relative; display: flex; align-items: center; background: var(--surface);
       border: 1px solid var(--border); border-radius: 4px; padding: 6px 12px;
       width: 280px; color: var(--text-2); font-family: var(--font-sans); font-size: 13px;
     }
@@ -98,6 +100,18 @@
       width: 100%; margin-left: 8px; font-family: var(--font-sans);
     }
     .nav-shortcut { font-family: var(--font-mono); font-size: 10px; background: var(--surface-2); padding: 2px 6px; border-radius: 4px; color: var(--text-3); }
+    .search-dropdown {
+      position: absolute; top: 100%; left: 0; width: 100%; max-height: 400px; overflow-y: auto;
+      background: var(--surface); border: 1px solid var(--border); border-top: none;
+      border-radius: 0 0 8px 8px; z-index: 1000; display: none; flex-direction: column;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .nav-search.active .search-dropdown { display: flex; }
+    .search-result-item { padding: 12px; border-bottom: 1px solid var(--border); text-decoration: none; cursor: pointer; }
+    .search-result-item:hover { background: var(--lime-dim); }
+    .search-result-item:last-child { border-bottom: none; }
+    .search-title { font-family: var(--font-mono); font-size: 13px; color: var(--lime); margin-bottom: 4px; }
+    .search-desc { font-size: 11px; color: var(--text-2); }
     .nav-right { display: flex; align-items: center; gap: 16px; }
     .nav-version { font-family: var(--font-mono); font-size: 11px; border: 1px solid var(--border); padding: 2px 8px; border-radius: 12px; color: var(--text-2); }
     
@@ -201,7 +215,7 @@
     .returns-label { font-family: var(--font-mono); font-size: 10px; color: var(--lime); text-transform: uppercase; margin-bottom: 8px; }
 
     .callout {
-      border-left: 3px solid var(--lime); background: rgba(232,255,71,0.03);
+      border-left: 3px solid var(--lime); background: rgba(176, 38, 255, 0.03);
       padding: 16px; margin: 24px 0;
     }
     .callout-label { font-family: var(--font-display); font-size: 14px; color: var(--lime); margin-bottom: 4px; letter-spacing: 0.5px; }
@@ -230,7 +244,7 @@
       width: 56px; height: 56px; border-radius: 28px;
       background: var(--lime); color: var(--bg);
       border: none; font-size: 24px; cursor: pointer;
-      z-index: 1000; box-shadow: 0 4px 12px rgba(232,255,71,0.3);
+      z-index: 1000; box-shadow: 0 4px 12px rgba(176, 38, 255, 0.3);
       align-items: center; justify-content: center;
     }
     .hamburger svg { width: 24px; height: 24px; }
@@ -269,6 +283,7 @@
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
       <input type="text" placeholder="Search docs...">
       <div class="nav-shortcut">⌘K</div>
+      <div class="search-dropdown" id="search-dropdown"></div>
     </div>
     
     <div class="nav-right">
@@ -308,18 +323,22 @@
         <div class="sidebar-section">
           <div class="sidebar-category">API REFERENCE</div>
           <a href="#api-overview" class="sidebar-link" onclick="navigate('api-overview')">Overview</a>
-          <a href="#api-withinradius" class="sidebar-link" onclick="navigate('api-withinradius')">withinRadius()</a>
-          <a href="#api-bycountry" class="sidebar-link" onclick="navigate('api-bycountry')">byCountry()</a>
-          <a href="#api-bycontinent" class="sidebar-link" onclick="navigate('api-bycontinent')">byContinent()</a>
-          <a href="#api-byadmin" class="sidebar-link" onclick="navigate('api-byadmin')">byAdmin()</a>
-          <a href="#api-bypopulation" class="sidebar-link" onclick="navigate('api-bypopulation')">byPopulation()</a>
+          <a href="#api-search" class="sidebar-link" onclick="navigate('api-search')">search()</a>
+          <a href="#api-fuzzySearch" class="sidebar-link" onclick="navigate('api-fuzzySearch')">fuzzySearch()</a>
+          <a href="#api-nearest" class="sidebar-link" onclick="navigate('api-nearest')">nearest()</a>
+          <a href="#api-distance" class="sidebar-link" onclick="navigate('api-distance')">distance()</a>
+          <a href="#api-withinRadius" class="sidebar-link" onclick="navigate('api-withinRadius')">withinRadius()</a>
+          <a href="#api-byCountry" class="sidebar-link" onclick="navigate('api-byCountry')">byCountry()</a>
+          <a href="#api-byContinent" class="sidebar-link" onclick="navigate('api-byContinent')">byContinent()</a>
+          <a href="#api-byAdmin" class="sidebar-link" onclick="navigate('api-byAdmin')">byAdmin()</a>
+          <a href="#api-byPopulation" class="sidebar-link" onclick="navigate('api-byPopulation')">byPopulation()</a>
           <a href="#api-capitals" class="sidebar-link" onclick="navigate('api-capitals')">capitals()</a>
-          <a href="#api-getcity" class="sidebar-link" onclick="navigate('api-getcity')">getCity()</a>
-          <a href="#api-getbyiso2" class="sidebar-link" onclick="navigate('api-getbyiso2')">getByIso2()</a>
-          <a href="#api-listcountries" class="sidebar-link" onclick="navigate('api-listcountries')">listCountries()</a>
+          <a href="#api-getCity" class="sidebar-link" onclick="navigate('api-getCity')">getCity()</a>
+          <a href="#api-getByIso2" class="sidebar-link" onclick="navigate('api-getByIso2')">getByIso2()</a>
+          <a href="#api-listCountries" class="sidebar-link" onclick="navigate('api-listCountries')">listCountries()</a>
           <a href="#api-random" class="sidebar-link" onclick="navigate('api-random')">random()</a>
           <a href="#api-stats" class="sidebar-link" onclick="navigate('api-stats')">stats()</a>
-          <a href="#api-getcontinentnames" class="sidebar-link" onclick="navigate('api-getcontinentnames')">getContinentNames()</a>
+          <a href="#api-getContinentNames" class="sidebar-link" onclick="navigate('api-getContinentNames')">getContinentNames()</a>
         </div>
 
         <div class="sidebar-section">
@@ -1225,6 +1244,89 @@ random({ continent: <span class="sh-string">'Europe'</span>, minPopulation: <spa
         navigate(hash);
         const activeSec = document.getElementById(hash);
         if (activeSec) buildTOC(activeSec);
+      }
+    });
+
+    // Search functionality
+    const searchContainer = document.querySelector('.nav-search');
+    const searchInput = document.querySelector('.nav-search input');
+    const searchDropdown = document.getElementById('search-dropdown');
+    
+    // Command+K / Ctrl+K shortcut
+    document.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        searchInput.focus();
+      }
+    });
+
+    const searchableSections = Array.from(document.querySelectorAll('.doc-section')).map(sec => {
+      const id = sec.id;
+      let title = '';
+      const breadcrumb = sec.querySelector('.breadcrumb');
+      if (breadcrumb) {
+        title = breadcrumb.textContent;
+      } else {
+        const h1 = sec.querySelector('h1');
+        const h2 = sec.querySelector('h2');
+        if (h1) title = h1.textContent;
+        else if (h2) title = h2.textContent;
+      }
+      const descEl = sec.querySelector('.page-subtitle, .doc-text');
+      const desc = descEl ? descEl.textContent.substring(0, 100) : '';
+      return { id, title, desc, text: sec.textContent.toLowerCase() };
+    });
+
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase().trim();
+      
+      // Sidebar filtering
+      const sidebarLinks = document.querySelectorAll('.sidebar-link');
+      sidebarLinks.forEach(link => {
+        const text = link.textContent.toLowerCase();
+        if (text.includes(query)) {
+          link.style.display = '';
+        } else {
+          link.style.display = 'none';
+        }
+      });
+      const sections = document.querySelectorAll('.sidebar-section');
+      sections.forEach(section => {
+        const links = Array.from(section.querySelectorAll('.sidebar-link'));
+        const visibleLinks = links.filter(link => link.style.display !== 'none');
+        section.style.display = visibleLinks.length > 0 ? '' : 'none';
+      });
+
+      // Dropdown search results
+      if (!query) {
+        searchContainer.classList.remove('active');
+        return;
+      }
+
+      const results = searchableSections.filter(sec => sec.text.includes(query)).slice(0, 8);
+      
+      if (results.length > 0) {
+        searchDropdown.innerHTML = results.map(r => `
+          <a href="#${r.id}" class="search-result-item" onclick="navigate('${r.id}'); document.querySelector('.nav-search').classList.remove('active')">
+            <div class="search-title">${r.title || r.id}</div>
+            <div class="search-desc">${r.desc}</div>
+          </a>
+        `).join('');
+      } else {
+        searchDropdown.innerHTML = '<div class="search-result-item"><div class="search-desc">No results found</div></div>';
+      }
+      searchContainer.classList.add('active');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!searchContainer.contains(e.target)) {
+        searchContainer.classList.remove('active');
+      }
+    });
+
+    searchInput.addEventListener('focus', () => {
+      if (searchInput.value.trim() !== '') {
+        searchContainer.classList.add('active');
       }
     });
   </script>

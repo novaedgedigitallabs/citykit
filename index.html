@@ -30,19 +30,19 @@
   <style>
     /* Design System Tokens (Recuvix Cosmic Aesthetic) */
     :root {
-      --bg: #050505;
+      --bg: #05000a;
       /* Cosmic extreme black */
-      --surface: #0d0d0d;
+      --surface: #0a0014;
       /* Card tile */
-      --surface-2: #121212;
+      --surface-2: #140028;
       /* Elevated tile */
       --border: rgba(255, 255, 255, 0.06);
       /* Thin dark border */
-      --border-glow: rgba(232, 255, 71, 0.4);
+      --border-glow: rgba(176, 38, 255, 0.4);
       /* Lime hover border */
-      --lime: #e8ff47;
+      --lime: #b026ff;
       /* Primary accent - Neon Yellow-Lime */
-      --lime-dim: rgba(232, 255, 71, 0.1);
+      --lime-dim: rgba(176, 38, 255, 0.1);
       /* Muted lime */
       --text-1: #ffffff;
       /* Pure white headers */
@@ -130,7 +130,7 @@
       width: 600px;
       height: 600px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(232, 255, 71, 0.04) 0%, rgba(232, 255, 71, 0) 70%);
+      background: radial-gradient(circle, rgba(176, 38, 255, 0.04) 0%, rgba(176, 38, 255, 0) 70%);
       filter: blur(80px);
       pointer-events: none;
       z-index: 0;
@@ -166,7 +166,7 @@
       height: 24px;
       border: 1px solid var(--lime);
       border-radius: 50%;
-      box-shadow: 0 0 10px rgba(232, 255, 71, 0.3);
+      box-shadow: 0 0 10px rgba(176, 38, 255, 0.3);
       position: relative;
     }
 
@@ -521,6 +521,7 @@
       .section-container {
         padding: 64px 20px;
       }
+
       .section-title {
         font-size: 28px;
         margin-bottom: 32px;
@@ -817,13 +818,17 @@
       .bento-grid {
         grid-template-columns: 1fr;
       }
+
       .bento-col-span-2 {
         grid-column: span 1;
       }
+
       .bento-row-span-2 {
         grid-row: span 1;
       }
-      .distance-wrapper, .slot-wrapper {
+
+      .distance-wrapper,
+      .slot-wrapper {
         flex-direction: column !important;
         align-items: stretch !important;
       }
@@ -858,7 +863,7 @@
 
     .bento-card:hover {
       border-color: var(--lime);
-      box-shadow: 0 0 20px rgba(232, 255, 71, 0.12);
+      box-shadow: 0 0 20px rgba(176, 38, 255, 0.12);
       transform: translateY(-2px);
     }
 
@@ -883,7 +888,7 @@
       color: var(--lime);
       padding: 2px 6px;
       border-radius: 4px;
-      border: 1px solid rgba(232, 255, 71, 0.2);
+      border: 1px solid rgba(176, 38, 255, 0.2);
     }
 
     .bento-card-desc {
@@ -916,7 +921,7 @@
 
     .bento-input:focus {
       border-color: var(--lime);
-      box-shadow: 0 0 8px rgba(232, 255, 71, 0.15);
+      box-shadow: 0 0 8px rgba(176, 38, 255, 0.15);
     }
 
     .bento-select {
@@ -930,7 +935,7 @@
       font-size: 12px;
       outline: none;
       appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23e8ff47' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23b026ff' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
       background-position: right 12px center;
       cursor: pointer;
@@ -1122,6 +1127,7 @@
 
     .bento-slider {
       -webkit-appearance: none;
+      appearance: none;
       width: 100%;
       height: 4px;
       border-radius: 2px;
@@ -1136,7 +1142,7 @@
       border-radius: 50%;
       background: var(--lime);
       cursor: pointer;
-      box-shadow: 0 0 6px rgba(232, 255, 71, 0.6);
+      box-shadow: 0 0 6px rgba(176, 38, 255, 0.6);
       transition: transform 0.1s;
     }
 
@@ -1241,7 +1247,7 @@
 
     @keyframes slot-flash {
       0% {
-        background: rgba(232, 255, 71, 0.2);
+        background: rgba(176, 38, 255, 0.2);
       }
 
       100% {
@@ -1267,7 +1273,7 @@
 
     .bento-btn-primary:hover {
       transform: translateY(-1px);
-      box-shadow: 0 0 15px rgba(232, 255, 71, 0.4);
+      box-shadow: 0 0 15px rgba(176, 38, 255, 0.4);
     }
 
     .bento-btn-primary:active {
@@ -1369,7 +1375,7 @@
     .roadmap-pill:hover {
       border-color: var(--lime);
       color: var(--lime);
-      box-shadow: 0 0 10px rgba(232, 255, 71, 0.08);
+      box-shadow: 0 0 10px rgba(176, 38, 255, 0.08);
     }
 
     /* Footer Section */
@@ -1457,7 +1463,7 @@
       transform: translate(-50%, 25%);
       font-family: var(--font-display);
       font-size: 18vw;
-      color: rgba(232, 255, 71, 0.012);
+      color: rgba(176, 38, 255, 0.012);
       pointer-events: none;
       user-select: none;
       white-space: nowrap;
@@ -1488,7 +1494,7 @@
 
     .nav-text-link:hover {
       color: var(--lime);
-      background: rgba(232, 255, 71, 0.05);
+      background: rgba(176, 38, 255, 0.05);
     }
 
     .nav-text-link.active {
@@ -1568,7 +1574,7 @@
       cursor: pointer;
       color: #000;
       font-size: 20px;
-      box-shadow: 0 4px 20px rgba(232, 255, 71, 0.4);
+      box-shadow: 0 4px 20px rgba(176, 38, 255, 0.4);
       align-items: center;
       justify-content: center;
       transition: transform 0.2s ease;
@@ -1660,13 +1666,13 @@
 
     .docs-sidebar-link:hover {
       color: var(--text-1);
-      background: rgba(232, 255, 71, 0.03);
+      background: rgba(176, 38, 255, 0.03);
     }
 
     .docs-sidebar-link.active {
       color: var(--lime);
       border-left-color: var(--lime);
-      background: rgba(232, 255, 71, 0.05);
+      background: rgba(176, 38, 255, 0.05);
     }
 
     .docs-sidebar-link .fn-badge {
@@ -1751,11 +1757,11 @@
     .docs-text code {
       font-family: var(--font-mono);
       font-size: 12px;
-      background: rgba(232, 255, 71, 0.06);
+      background: rgba(176, 38, 255, 0.06);
       color: var(--lime);
       padding: 2px 6px;
       border-radius: 3px;
-      border: 1px solid rgba(232, 255, 71, 0.1);
+      border: 1px solid rgba(176, 38, 255, 0.1);
     }
 
     .docs-code-block {
@@ -1966,13 +1972,13 @@
     }
 
     .sandbox-method {
-      background: rgba(232, 255, 71, 0.1);
+      background: rgba(176, 38, 255, 0.1);
       color: var(--lime);
       font-size: 10px;
       font-weight: 700;
       padding: 2px 8px;
       border-radius: 4px;
-      border: 1px solid rgba(232, 255, 71, 0.2);
+      border: 1px solid rgba(176, 38, 255, 0.2);
     }
 
     .sandbox-url {
@@ -2088,7 +2094,7 @@
 
     .sandbox-execute-btn:hover {
       transform: translateY(-1px);
-      box-shadow: 0 0 15px rgba(232, 255, 71, 0.4);
+      box-shadow: 0 0 15px rgba(176, 38, 255, 0.4);
     }
 
     .sandbox-execute-btn:active {
@@ -2177,8 +2183,8 @@
 
     /* Docs info callout */
     .docs-callout {
-      background: rgba(232, 255, 71, 0.03);
-      border: 1px solid rgba(232, 255, 71, 0.1);
+      background: rgba(176, 38, 255, 0.03);
+      border: 1px solid rgba(176, 38, 255, 0.1);
       border-left: 3px solid var(--lime);
       border-radius: 0 8px 8px 0;
       padding: 16px 20px;
@@ -2221,7 +2227,7 @@
 
     .docs-fn-card:hover {
       border-color: var(--lime);
-      box-shadow: 0 0 15px rgba(232, 255, 71, 0.08);
+      box-shadow: 0 0 15px rgba(176, 38, 255, 0.08);
       transform: translateY(-1px);
     }
 
@@ -2346,7 +2352,7 @@
         </div>
       </div>
 
-      <a href="#playground" class="scroll-indicator" aria-label="Scroll to Playground">&darr;</a>
+      <!-- <a href="#playground" class="scroll-indicator" aria-label="Scroll to Playground">&darr;</a> -->
     </header>
 
     <main>
@@ -2857,20 +2863,20 @@ import {
     const globeCanvas = document.getElementById('globe-canvas');
     const globeCtx = globeCanvas.getContext('2d');
 
-    let gWidth = globeCanvas.offsetWidth;
-    let gHeight = globeCanvas.offsetHeight;
+    let gWidth = globeCanvas.offsetWidth || window.innerWidth;
+    let gHeight = globeCanvas.offsetHeight || window.innerHeight;
     globeCanvas.width = gWidth;
     globeCanvas.height = gHeight;
+    let sphereR = Math.min(gWidth, gHeight) * 0.35; // Dynamic sphere radius
 
     window.addEventListener('resize', () => {
       if (!globeCanvas) return;
-      gWidth = globeCanvas.offsetWidth;
-      gHeight = globeCanvas.offsetHeight;
+      gWidth = globeCanvas.offsetWidth || window.innerWidth;
+      gHeight = globeCanvas.offsetHeight || window.innerHeight;
       globeCanvas.width = gWidth;
       globeCanvas.height = gHeight;
+      sphereR = Math.min(gWidth, gHeight) * 0.35;
     });
-
-    const sphereR = Math.min(gWidth, gHeight) * 0.32;
     let angleX = 0.2;
     let angleY = 0.0025;
     let currentAngleY = 0;
@@ -2944,17 +2950,17 @@ import {
       const cy = gHeight / 2;
 
       // Earth Glow
-      const glowGradient = globeCtx.createRadialGradient(cx, cy, sphereR * 0.6, cx, cy, sphereR * 1.4);
-      glowGradient.addColorStop(0, 'rgba(232, 255, 71, 0.01)');
-      glowGradient.addColorStop(0.7, 'rgba(232, 255, 71, 0.06)');
-      glowGradient.addColorStop(1, 'rgba(232, 255, 71, 0)');
-      
+      const glowGradient = globeCtx.createRadialGradient(cx, cy, sphereR * 0.4, cx, cy, sphereR * 1.6);
+      glowGradient.addColorStop(0, 'rgba(176, 38, 255, 0.15)');
+      glowGradient.addColorStop(0.5, 'rgba(176, 38, 255, 0.05)');
+      glowGradient.addColorStop(1, 'rgba(176, 38, 255, 0)');
+
       globeCtx.fillStyle = glowGradient;
       globeCtx.beginPath();
-      globeCtx.arc(cx, cy, sphereR * 1.4, 0, Math.PI * 2);
+      globeCtx.arc(cx, cy, sphereR * 1.6, 0, Math.PI * 2);
       globeCtx.fill();
 
-      globeCtx.strokeStyle = 'rgba(232, 255, 71, 0.035)';
+      globeCtx.strokeStyle = 'rgba(176, 38, 255, 0.15)';
       globeCtx.lineWidth = 1;
 
       const step = 15;
@@ -2968,7 +2974,7 @@ import {
           pt = rotate3DY(pt, finalAngleY);
           pt = rotate3DX(pt, angleX);
 
-          const focal = 600;
+          const focal = sphereR * 2.5;
           const scale = focal / (focal + pt.z);
           const sx = cx + pt.x * scale;
           const sy = cy - pt.y * scale;
@@ -2994,7 +3000,7 @@ import {
           pt = rotate3DY(pt, finalAngleY);
           pt = rotate3DX(pt, angleX);
 
-          const focal = 600;
+          const focal = sphereR * 2.5;
           const scale = focal / (focal + pt.z);
           const sx = cx + pt.x * scale;
           const sy = cy - pt.y * scale;
@@ -3018,14 +3024,14 @@ import {
         pt = rotate3DX(pt, angleX);
 
         if (pt.z > 0) {
-          const focal = 600;
+          const focal = sphereR * 2.5;
           const scale = focal / (focal + pt.z);
           const sx = cx + pt.x * scale;
           const sy = cy - pt.y * scale;
 
           globeCtx.shadowBlur = 8;
-          globeCtx.shadowColor = '#e8ff47';
-          globeCtx.fillStyle = '#e8ff47';
+          globeCtx.shadowColor = '#b026ff';
+          globeCtx.fillStyle = '#b026ff';
 
           globeCtx.beginPath();
           globeCtx.arc(sx, sy, 3.5 * scale, 0, Math.PI * 2);
@@ -3227,7 +3233,7 @@ import {
         if (nearestCity) {
           document.getElementById('radar-result').innerHTML = `
             <span class="result-label">Nearest:</span>
-            <span class="result-val" style="color: #e8ff47; font-weight:700;">${nearestCity.city}</span>
+            <span class="result-val" style="color: #b026ff; font-weight:700;">${nearestCity.city}</span>
             <div style="font-size:10px; color:#a3a3a3; margin-top:2px;">${minDist.toFixed(1)} km away (${nearestCity.country})</div>
           `;
 
@@ -3259,7 +3265,7 @@ import {
       const cy = radarHeight / 2;
 
       // Radar rings
-      radarCtx.strokeStyle = 'rgba(232, 255, 71, 0.08)';
+      radarCtx.strokeStyle = 'rgba(176, 38, 255, 0.08)';
       radarCtx.lineWidth = 1;
       for (let r = 25; r <= radarWidth / 2; r += 25) {
         radarCtx.beginPath();
@@ -3291,7 +3297,7 @@ import {
       const sx = cx + (radarWidth / 2) * Math.cos(rSweepAngle);
       const sy = cy + (radarHeight / 2) * Math.sin(rSweepAngle);
 
-      radarCtx.strokeStyle = 'rgba(232, 255, 71, 0.18)';
+      radarCtx.strokeStyle = 'rgba(176, 38, 255, 0.18)';
       radarCtx.beginPath();
       radarCtx.moveTo(cx, cy);
       radarCtx.lineTo(sx, sy);
@@ -3816,7 +3822,7 @@ import {
 
         animateCounter(citiesEl, 49992, 2200, '', '');
         animateCounter(countriesEl, 241, 2200, '', '+');
-        animateCounter(functionsEl, 13, 2200, '', '');
+        animateCounter(functionsEl, 16, 2200, '', '');
         animateCounter(queryEl, 2, 2200, '~', 'ms');
       }
 
