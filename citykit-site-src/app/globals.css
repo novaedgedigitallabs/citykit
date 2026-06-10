@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #050508;
+  --surface: #0E0E16;
+  --border: #1C1C2E;
+  --primary: #7C3AED;
+  --primary-glow: #9333EA;
+  --accent: #06B6D4;
+  --text: #F0EFF5;
+  --muted: #6B7280;
+  --code-bg: #0D0D1A;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-inter), sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Hero grid background */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(124,58,237,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124,58,237,0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* Glow border on hover */
+.glow-hover {
+  transition: all 0.2s ease;
+  border-color: var(--border);
+}
+
+.glow-hover:hover {
+  border-color: rgba(124, 58, 237, 0.5);
+  box-shadow: 0 0 20px rgba(124, 58, 237, 0.1);
+}
+
+.glow-shadow {
+  box-shadow: 0 0 40px rgba(124, 58, 237, 0.15);
+}

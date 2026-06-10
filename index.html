@@ -1,41 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CityKit — World Cities Search & Geo Utilities</title>
-  
+
   <!-- SEO Meta Tags -->
-  <meta name="description" content="A TypeScript-first utility library for searching, filtering, and calculating distances across global city data. Open-source with 49,992 cities and 241+ countries.">
-  <meta name="keywords" content="citykit, world cities database, geo utilities, haversine distance, city search npm, novaedge digital labs">
+  <meta name="description"
+    content="A TypeScript-first utility library for searching, filtering, and calculating distances across global city data. Open-source with 49,992 cities and 241+ countries.">
+  <meta name="keywords"
+    content="citykit, world cities database, geo utilities, haversine distance, city search npm, novaedge digital labs">
   <meta name="author" content="NovaEdge Digital Labs">
-  
+
   <!-- Open Graph -->
   <meta property="og:title" content="CityKit — World Cities Search & Geo Utilities">
-  <meta property="og:description" content="A TypeScript-first utility library for searching, filtering, and calculating distances across global city data.">
+  <meta property="og:description"
+    content="A TypeScript-first utility library for searching, filtering, and calculating distances across global city data.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://raw.githubusercontent.com/novaedgedigitallabs/citykit/main/banner.png">
-  
+
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
-  
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+    rel="stylesheet">
+
   <style>
     /* Design System Tokens (Recuvix Cosmic Aesthetic) */
     :root {
-      --bg:          #050505;   /* Cosmic extreme black */
-      --surface:     #0d0d0d;   /* Card tile */
-      --surface-2:   #121212;   /* Elevated tile */
-      --border:      rgba(255, 255, 255, 0.06);   /* Thin dark border */
-      --border-glow: rgba(232, 255, 71, 0.4);     /* Lime hover border */
-      --lime:        #e8ff47;   /* Primary accent - Neon Yellow-Lime */
-      --lime-dim:    rgba(232, 255, 71, 0.1);    /* Muted lime */
-      --text-1:      #ffffff;   /* Pure white headers */
-      --text-2:      #a3a3a3;   /* Slate/gray text */
-      --text-3:      #525252;   /* Muted gray text */
-      --green:       #10b981;   /* Success */
-      
+      --bg: #050505;
+      /* Cosmic extreme black */
+      --surface: #0d0d0d;
+      /* Card tile */
+      --surface-2: #121212;
+      /* Elevated tile */
+      --border: rgba(255, 255, 255, 0.06);
+      /* Thin dark border */
+      --border-glow: rgba(232, 255, 71, 0.4);
+      /* Lime hover border */
+      --lime: #e8ff47;
+      /* Primary accent - Neon Yellow-Lime */
+      --lime-dim: rgba(232, 255, 71, 0.1);
+      /* Muted lime */
+      --text-1: #ffffff;
+      /* Pure white headers */
+      --text-2: #a3a3a3;
+      /* Slate/gray text */
+      --text-3: #525252;
+      /* Muted gray text */
+      --green: #10b981;
+      /* Success */
+
       --font-display: 'Bebas Neue', sans-serif;
       --font-serif: 'Playfair Display', serif;
       --font-sans: 'DM Sans', sans-serif;
@@ -61,9 +78,11 @@
       font-size: 14px;
       line-height: 1.6;
       color: var(--text-2);
-      padding-top: 64px; /* Space for fixed navbar */
+      padding-top: 64px;
+      /* Space for fixed navbar */
       overflow-x: hidden;
-      cursor: crosshair; /* Geodesic pointer vibe */
+      cursor: crosshair;
+      /* Geodesic pointer vibe */
     }
 
     /* Scrollbars */
@@ -71,26 +90,37 @@
       width: 6px;
       height: 6px;
     }
+
     ::-webkit-scrollbar-track {
       background: var(--bg);
     }
+
     ::-webkit-scrollbar-thumb {
       background: var(--border);
       border-radius: 3px;
     }
+
     ::-webkit-scrollbar-thumb:hover {
       background: var(--lime-dim);
     }
 
     /* Typography Hierarchy */
-    h1, h2, h3, h4 {
+    h1,
+    h2,
+    h3,
+    h4 {
       font-family: var(--font-display);
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: var(--text-1);
     }
 
-    .mono, button, nav, footer, pre, code {
+    .mono,
+    button,
+    nav,
+    footer,
+    pre,
+    code {
       font-family: var(--font-mono);
     }
 
@@ -206,8 +236,15 @@
     }
 
     @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0;
+      }
     }
 
     .nav-actions {
@@ -435,9 +472,22 @@
     }
 
     @keyframes bounce {
-      0%, 20%, 50%, 80%, 100% { transform: translate(-50%, 0); }
-      40% { transform: translate(-50%, -10px); }
-      60% { transform: translate(-50%, -5px); }
+
+      0%,
+      20%,
+      50%,
+      80%,
+      100% {
+        transform: translate(-50%, 0);
+      }
+
+      40% {
+        transform: translate(-50%, -10px);
+      }
+
+      60% {
+        transform: translate(-50%, -5px);
+      }
     }
 
     /* Section layout */
@@ -604,9 +654,17 @@
       display: inline-block;
     }
 
-    .dot-red { background: #ff5f56; }
-    .dot-amber { background: #ffbd2e; }
-    .dot-green { background: #27c93f; }
+    .dot-red {
+      background: #ff5f56;
+    }
+
+    .dot-amber {
+      background: #ffbd2e;
+    }
+
+    .dot-green {
+      background: #27c93f;
+    }
 
     .terminal-title {
       font-family: var(--font-mono);
@@ -621,7 +679,8 @@
       background: var(--surface);
     }
 
-    .terminal-body pre, .terminal-output-body pre {
+    .terminal-body pre,
+    .terminal-output-body pre {
       margin: 0;
       font-family: var(--font-mono);
       font-size: 13px;
@@ -629,10 +688,23 @@
     }
 
     /* TS Syntax Highlight Colors */
-    .token-keyword { color: var(--lime); font-weight: 500; }
-    .token-string { color: #5ce6e6; }
-    .token-comment { color: var(--text-3); font-style: italic; }
-    .token-number { color: #fca5a5; }
+    .token-keyword {
+      color: var(--lime);
+      font-weight: 500;
+    }
+
+    .token-string {
+      color: #5ce6e6;
+    }
+
+    .token-comment {
+      color: var(--text-3);
+      font-style: italic;
+    }
+
+    .token-number {
+      color: #fca5a5;
+    }
 
     .terminal-output-header {
       display: flex;
@@ -663,9 +735,20 @@
     }
 
     @keyframes pulse {
-      0% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.3); opacity: 0.4; }
-      100% { transform: scale(1); opacity: 1; }
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      50% {
+        transform: scale(1.3);
+        opacity: 0.4;
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
     }
 
     .terminal-output-body {
@@ -677,11 +760,26 @@
     }
 
     /* JSON Syntax Highlight Colors */
-    .json-key { color: var(--lime); font-weight: 500; }
-    .json-string { color: #5ce6e6; }
-    .json-number { color: #fca5a5; }
-    .json-boolean { color: #60a5fa; }
-    .json-null { color: var(--text-3); }
+    .json-key {
+      color: var(--lime);
+      font-weight: 500;
+    }
+
+    .json-string {
+      color: #5ce6e6;
+    }
+
+    .json-number {
+      color: #fca5a5;
+    }
+
+    .json-boolean {
+      color: #60a5fa;
+    }
+
+    .json-null {
+      color: var(--text-3);
+    }
 
     /* Interactive Bento Grid styling */
     .bento-grid {
@@ -858,8 +956,15 @@
     }
 
     @keyframes slide-in {
-      from { transform: translateY(4px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
+      from {
+        transform: translateY(4px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
     }
 
     /* Radar radar-container */
@@ -1093,8 +1198,13 @@
     }
 
     @keyframes slot-flash {
-      0% { background: rgba(232, 255, 71, 0.2); }
-      100% { background: transparent; }
+      0% {
+        background: rgba(232, 255, 71, 0.2);
+      }
+
+      100% {
+        background: transparent;
+      }
     }
 
     .bento-btn-primary {
@@ -1373,6 +1483,7 @@
       #docs-view {
         grid-template-columns: 240px 1fr;
       }
+
       .docs-toc {
         display: none !important;
       }
@@ -1382,9 +1493,11 @@
       #docs-view {
         grid-template-columns: 1fr;
       }
+
       .docs-sidebar {
         display: none;
       }
+
       .docs-sidebar.mobile-open {
         display: block;
         position: fixed;
@@ -2091,6 +2204,7 @@
     }
   </style>
 </head>
+
 <body>
 
   <!-- Floating Glow elements -->
@@ -2113,11 +2227,20 @@
         <a href="docs.html#api-overview" class="nav-text-link" id="nav-api-link">API</a>
       </div>
       <span class="version-badge">v1.1.1</span>
-      <a href="https://github.com/novaedgedigitallabs/citykit" target="_blank" rel="noopener" class="nav-link" aria-label="GitHub Repository">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+      <a href="https://github.com/novaedgedigitallabs/citykit" target="_blank" rel="noopener" class="nav-link"
+        aria-label="GitHub Repository">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path
+            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+          </path>
+        </svg>
       </a>
-      <a href="https://www.npmjs.com/package/@novaedgedigitallabs/citykit" target="_blank" rel="noopener" class="nav-link" aria-label="npm Package">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M0 0v24h24V0H0zm18 18h-3V9h-3v9H3V6h15v12z"/></svg>
+      <a href="https://www.npmjs.com/package/@novaedgedigitallabs/citykit" target="_blank" rel="noopener"
+        class="nav-link" aria-label="npm Package">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M0 0v24h24V0H0zm18 18h-3V9h-3v9H3V6h15v12z" />
+        </svg>
       </a>
     </div>
   </nav>
@@ -2125,405 +2248,435 @@
   <!-- ================ LANDING VIEW ================ -->
   <div id="landing-view">
 
-  <!-- Hero Section -->
-  <header id="hero" class="reveal-section">
-    <!-- Rotating coordinate sphere backdrop -->
-    <canvas id="globe-canvas"></canvas>
+    <!-- Hero Section -->
+    <header id="hero" class="reveal-section">
+      <!-- Rotating coordinate sphere backdrop -->
+      <canvas id="globe-canvas"></canvas>
 
-    <!-- Centered Hero Content -->
-    <div class="hero-content">
-      <div class="hero-tagline-serif">49,992 cities · 241 countries · MIT license</div>
-      <h1 class="hero-title">
-        Cities data.<br>
-        Zero friction.
-      </h1>
-      <p class="hero-subtitle">
-        A TypeScript-first utility library for searching, filtering, and calculating distances across global city data.
-      </p>
-      
-      <div class="hero-actions">
-        <button class="terminal-cmd-btn" onclick="copyCommand(this)">
-          <span class="cmd-prefix">$</span>
-          <span class="cmd-text">npm install @novaedgedigitallabs/citykit</span>
-          <span class="copy-feedback">
-            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-            <span class="feedback-text">Copy</span>
-          </span>
-        </button>
-        <a href="https://github.com/novaedgedigitallabs/citykit" target="_blank" rel="noopener" class="btn-secondary">
-          View on GitHub &rarr;
-        </a>
-      </div>
+      <!-- Centered Hero Content -->
+      <div class="hero-content">
+        <div class="hero-tagline-serif">49,992 cities · 241 countries · MIT license</div>
+        <h1 class="hero-title">
+          Cities data.<br>
+          Zero friction.
+        </h1>
+        <p class="hero-subtitle">
+          A TypeScript-first utility library for searching, filtering, and calculating distances across global city
+          data.
+        </p>
 
-      <!-- Animated Stat Counters -->
-      <div class="hero-stats">
-        <div class="stat-item">
-          <div id="stat-cities" class="stat-number">0</div>
-          <div class="stat-label">Cities</div>
+        <div class="hero-actions">
+          <button class="terminal-cmd-btn" onclick="copyCommand(this)">
+            <span class="cmd-prefix">$</span>
+            <span class="cmd-text">npm install @novaedgedigitallabs/citykit</span>
+            <span class="copy-feedback">
+              <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span class="feedback-text">Copy</span>
+            </span>
+          </button>
+          <a href="https://github.com/novaedgedigitallabs/citykit" target="_blank" rel="noopener" class="btn-secondary">
+            View on GitHub &rarr;
+          </a>
         </div>
-        <div class="stat-item">
-          <div id="stat-countries" class="stat-number">0</div>
-          <div class="stat-label">Countries</div>
-        </div>
-        <div class="stat-item">
-          <div id="stat-functions" class="stat-number">0</div>
-          <div class="stat-label">Functions</div>
-        </div>
-        <div class="stat-item">
-          <div id="stat-query" class="stat-number">0</div>
-          <div class="stat-label">Query time</div>
-        </div>
-      </div>
-    </div>
-    
-    <a href="#playground" class="scroll-indicator" aria-label="Scroll to Playground">&darr;</a>
-  </header>
 
-  <main>
-    <!-- Code Playground Section (Typewriter Terminals Preserved) -->
-    <section id="playground" class="reveal-section section-container">
-      <span class="section-label">// try it live</span>
-      <h2 class="section-title">Interactive Playground</h2>
-      
-      <div class="playground-layout">
-        <!-- Function Tabs -->
-        <div class="playground-tabs-container">
-          <div class="playground-tabs">
-            <button class="playground-tab active" data-tab="search" onclick="showPlaygroundTab('search')">
-              <span class="func">search</span><span class="args">("Delhi")</span>
-            </button>
-            <button class="playground-tab" data-tab="fuzzySearch" onclick="showPlaygroundTab('fuzzySearch')">
-              <span class="func">fuzzySearch</span><span class="args">("Mumbi")</span>
-            </button>
-            <button class="playground-tab" data-tab="nearest" onclick="showPlaygroundTab('nearest')">
-              <span class="func">nearest</span><span class="args">(28.61, 77.20)</span>
-            </button>
-            <button class="playground-tab" data-tab="byContinent" onclick="showPlaygroundTab('byContinent')">
-              <span class="func">byContinent</span><span class="args">("Asia")</span>
-            </button>
-            <button class="playground-tab" data-tab="byPopulation" onclick="showPlaygroundTab('byPopulation')">
-              <span class="func">byPopulation</span><span class="args">({ min: 1000000 })</span>
-            </button>
-            <button class="playground-tab" data-tab="distance" onclick="showPlaygroundTab('distance')">
-              <span class="func">distance</span><span class="args">(DEL, NRT)</span>
-            </button>
-            <button class="playground-tab" data-tab="stats" onclick="showPlaygroundTab('stats')">
-              <span class="func">stats</span><span class="args">()</span>
-            </button>
-            <button class="playground-tab" data-tab="random" onclick="showPlaygroundTab('random')">
-              <span class="func">random</span><span class="args">()</span>
-            </button>
+        <!-- Animated Stat Counters -->
+        <div class="hero-stats">
+          <div class="stat-item">
+            <div id="stat-cities" class="stat-number">0</div>
+            <div class="stat-label">Cities</div>
+          </div>
+          <div class="stat-item">
+            <div id="stat-countries" class="stat-number">0</div>
+            <div class="stat-label">Countries</div>
+          </div>
+          <div class="stat-item">
+            <div id="stat-functions" class="stat-number">0</div>
+            <div class="stat-label">Functions</div>
+          </div>
+          <div class="stat-item">
+            <div id="stat-query" class="stat-number">0</div>
+            <div class="stat-label">Query time</div>
           </div>
         </div>
-        
-        <!-- Code & Output Terminal -->
-        <div class="playground-terminal">
-          <div class="terminal-header">
-            <div class="terminal-dots">
-              <span class="dot dot-red"></span>
-              <span class="dot dot-amber"></span>
-              <span class="dot dot-green"></span>
+      </div>
+
+      <a href="#playground" class="scroll-indicator" aria-label="Scroll to Playground">&darr;</a>
+    </header>
+
+    <main>
+      <!-- Code Playground Section (Typewriter Terminals Preserved) -->
+      <section id="playground" class="reveal-section section-container">
+        <span class="section-label">// try it live</span>
+        <h2 class="section-title">Interactive Playground</h2>
+
+        <div class="playground-layout">
+          <!-- Function Tabs -->
+          <div class="playground-tabs-container">
+            <div class="playground-tabs">
+              <button class="playground-tab active" data-tab="search" onclick="showPlaygroundTab('search')">
+                <span class="func">search</span><span class="args">("Delhi")</span>
+              </button>
+              <button class="playground-tab" data-tab="fuzzySearch" onclick="showPlaygroundTab('fuzzySearch')">
+                <span class="func">fuzzySearch</span><span class="args">("Mumbi")</span>
+              </button>
+              <button class="playground-tab" data-tab="nearest" onclick="showPlaygroundTab('nearest')">
+                <span class="func">nearest</span><span class="args">(28.61, 77.20)</span>
+              </button>
+              <button class="playground-tab" data-tab="byContinent" onclick="showPlaygroundTab('byContinent')">
+                <span class="func">byContinent</span><span class="args">("Asia")</span>
+              </button>
+              <button class="playground-tab" data-tab="byPopulation" onclick="showPlaygroundTab('byPopulation')">
+                <span class="func">byPopulation</span><span class="args">({ min: 1000000 })</span>
+              </button>
+              <button class="playground-tab" data-tab="distance" onclick="showPlaygroundTab('distance')">
+                <span class="func">distance</span><span class="args">(DEL, NRT)</span>
+              </button>
+              <button class="playground-tab" data-tab="stats" onclick="showPlaygroundTab('stats')">
+                <span class="func">stats</span><span class="args">()</span>
+              </button>
+              <button class="playground-tab" data-tab="random" onclick="showPlaygroundTab('random')">
+                <span class="func">random</span><span class="args">()</span>
+              </button>
             </div>
-            <span class="terminal-title">playground.ts</span>
           </div>
-          <div class="terminal-body">
-            <pre><code id="playground-code">import { search } from '@novaedgedigitallabs/citykit';
+
+          <!-- Code & Output Terminal -->
+          <div class="playground-terminal">
+            <div class="terminal-header">
+              <div class="terminal-dots">
+                <span class="dot dot-red"></span>
+                <span class="dot dot-amber"></span>
+                <span class="dot dot-green"></span>
+              </div>
+              <span class="terminal-title">playground.ts</span>
+            </div>
+            <div class="terminal-body">
+              <pre><code id="playground-code">import { search } from '@novaedgedigitallabs/citykit';
 
 const results = search("Delhi");
 // Returns matching cities instantly</code></pre>
-          </div>
-          
-          <div class="terminal-output-header">
-            <span class="output-label">
-              <span class="live-dot"></span>
-              &gt; output
-            </span>
-          </div>
-          <div class="terminal-output-body">
-            <pre><code id="playground-output"></code></pre>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Bento Grid Section (Replacing Static Features List) -->
-    <section id="features" class="reveal-section section-container">
-      <span class="section-label">// interactive bento grid</span>
-      <h2 class="section-title">Package Features</h2>
-      
-      <div class="bento-grid" id="bento-section">
-        <!-- search() (span 2) -->
-        <div class="bento-card" style="grid-column: span 2;">
-          <div class="bento-card-header">
-            <div class="bento-card-title">search()</div>
-            <span class="bento-card-badge">LIVE QUERY</span>
-          </div>
-          <div class="bento-card-desc">Name-based city search with partial matching and smart prefix/exact sorting.</div>
-          <div class="bento-card-content">
-            <div class="input-wrapper">
-              <input type="text" id="bento-search-input" class="bento-input" placeholder="Search city e.g., Tokyo, Delhi, London..." oninput="runBentoSearch(this.value)">
             </div>
-            <div class="bento-results-list" id="bento-search-results">
-              <div class="bento-placeholder">// Start typing to search...</div>
+
+            <div class="terminal-output-header">
+              <span class="output-label">
+                <span class="live-dot"></span>
+                &gt; output
+              </span>
+            </div>
+            <div class="terminal-output-body">
+              <pre><code id="playground-output"></code></pre>
             </div>
           </div>
         </div>
+      </section>
 
-        <!-- fuzzySearch() (span 1) -->
-        <div class="bento-card">
-          <div class="bento-card-header">
-            <div class="bento-card-title">fuzzySearch()</div>
-            <span class="bento-card-badge">TYPO TOLERANT</span>
-          </div>
-          <div class="bento-card-desc">Typo-tolerant matching using Levenshtein distance.</div>
-          <div class="bento-card-content">
-            <div class="input-wrapper">
-              <input type="text" id="bento-fuzzy-input" class="bento-input" placeholder="e.g. Nwe Yrok, Lndn" oninput="runBentoFuzzy(this.value)">
-            </div>
-            <div class="bento-results-list" id="bento-fuzzy-results">
-              <div class="bento-placeholder">// Enter typo to correct...</div>
-            </div>
-          </div>
-        </div>
+      <!-- Bento Grid Section (Replacing Static Features List) -->
+      <section id="features" class="reveal-section section-container">
+        <span class="section-label">// interactive bento grid</span>
+        <h2 class="section-title">Package Features</h2>
 
-        <!-- nearest() (span 1, row-span 2) -->
-        <div class="bento-card" style="grid-column: span 1; grid-row: span 2;">
-          <div class="bento-card-header">
-            <div class="bento-card-title">nearest()</div>
-            <span class="bento-card-badge">RADAR SCAN</span>
-          </div>
-          <div class="bento-card-desc">Find the closest city to any coordinate on Earth. Hover on radar below.</div>
-          <div class="bento-card-content" style="justify-content: flex-start; gap: 16px;">
-            <div class="radar-container">
-              <canvas id="bento-radar-canvas"></canvas>
+        <div class="bento-grid" id="bento-section">
+          <!-- search() (span 2) -->
+          <div class="bento-card" style="grid-column: span 2;">
+            <div class="bento-card-header">
+              <div class="bento-card-title">search()</div>
+              <span class="bento-card-badge">LIVE QUERY</span>
             </div>
-            <div class="radar-info">
-              <div class="radar-coords-display" id="radar-coords">// Move cursor above grid</div>
-              <div class="radar-city-result" id="radar-result">
-                <span class="result-label">Nearest:</span>
-                <span class="result-val">-</span>
+            <div class="bento-card-desc">Name-based city search with partial matching and smart prefix/exact sorting.
+            </div>
+            <div class="bento-card-content">
+              <div class="input-wrapper">
+                <input type="text" id="bento-search-input" class="bento-input"
+                  placeholder="Search city e.g., Tokyo, Delhi, London..." oninput="runBentoSearch(this.value)">
+              </div>
+              <div class="bento-results-list" id="bento-search-results">
+                <div class="bento-placeholder">// Start typing to search...</div>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- distance() (span 2) -->
-        <div class="bento-card" style="grid-column: span 2;">
-          <div class="bento-card-header">
-            <div class="bento-card-title">distance()</div>
-            <span class="bento-card-badge">GEODESIC PATH</span>
+          <!-- fuzzySearch() (span 1) -->
+          <div class="bento-card">
+            <div class="bento-card-header">
+              <div class="bento-card-title">fuzzySearch()</div>
+              <span class="bento-card-badge">TYPO TOLERANT</span>
+            </div>
+            <div class="bento-card-desc">Typo-tolerant matching using Levenshtein distance.</div>
+            <div class="bento-card-content">
+              <div class="input-wrapper">
+                <input type="text" id="bento-fuzzy-input" class="bento-input" placeholder="e.g. Nwe Yrok, Lndn"
+                  oninput="runBentoFuzzy(this.value)">
+              </div>
+              <div class="bento-results-list" id="bento-fuzzy-results">
+                <div class="bento-placeholder">// Enter typo to correct...</div>
+              </div>
+            </div>
           </div>
-          <div class="bento-card-desc">Calculate exact Haversine distance in both kilometers and miles.</div>
-          <div class="bento-card-content" style="flex-direction: row; gap: 20px; align-items: center; justify-content: space-between;">
-            <div style="flex: 1; display: flex; flex-direction: column; gap: 12px;">
-              <div style="display: flex; gap: 8px;">
-                <div style="flex:1;">
-                  <label style="font-size:10px; color:var(--text-3); text-transform:uppercase; font-family:var(--font-mono); display:block; margin-bottom:4px;">Origin</label>
-                  <select id="distance-city-1" class="bento-select" onchange="runBentoDistance()">
-                    <option value="London" selected>London (GB)</option>
-                    <option value="New York">New York (US)</option>
-                    <option value="Delhi">Delhi (IN)</option>
-                    <option value="Tokyo">Tokyo (JP)</option>
-                    <option value="Sydney">Sydney (AU)</option>
-                    <option value="Cairo">Cairo (EG)</option>
-                    <option value="Rio de Janeiro">Rio de Janeiro (BR)</option>
-                  </select>
-                </div>
-                <div style="flex:1;">
-                  <label style="font-size:10px; color:var(--text-3); text-transform:uppercase; font-family:var(--font-mono); display:block; margin-bottom:4px;">Destination</label>
-                  <select id="distance-city-2" class="bento-select" onchange="runBentoDistance()">
-                    <option value="London">London (GB)</option>
-                    <option value="New York">New York (US)</option>
-                    <option value="Delhi">Delhi (IN)</option>
-                    <option value="Tokyo" selected>Tokyo (JP)</option>
-                    <option value="Sydney">Sydney (AU)</option>
-                    <option value="Cairo">Cairo (EG)</option>
-                    <option value="Rio de Janeiro">Rio de Janeiro (BR)</option>
-                  </select>
+
+          <!-- nearest() (span 1, row-span 2) -->
+          <div class="bento-card" style="grid-column: span 1; grid-row: span 2;">
+            <div class="bento-card-header">
+              <div class="bento-card-title">nearest()</div>
+              <span class="bento-card-badge">RADAR SCAN</span>
+            </div>
+            <div class="bento-card-desc">Find the closest city to any coordinate on Earth. Hover on radar below.</div>
+            <div class="bento-card-content" style="justify-content: flex-start; gap: 16px;">
+              <div class="radar-container">
+                <canvas id="bento-radar-canvas"></canvas>
+              </div>
+              <div class="radar-info">
+                <div class="radar-coords-display" id="radar-coords">// Move cursor above grid</div>
+                <div class="radar-city-result" id="radar-result">
+                  <span class="result-label">Nearest:</span>
+                  <span class="result-val">-</span>
                 </div>
               </div>
-              
-              <div class="distance-result-box">
-                <div class="dist-val" id="dist-km">0.00 km</div>
-                <div class="dist-val-miles" id="dist-miles">0.00 miles</div>
-              </div>
-            </div>
-            
-            <div class="distance-canvas-container">
-              <canvas id="bento-distance-canvas" width="160" height="110"></canvas>
             </div>
           </div>
-        </div>
 
-        <!-- byContinent() (span 1) -->
-        <div class="bento-card">
-          <div class="bento-card-header">
-            <div class="bento-card-title">byContinent()</div>
-            <span class="bento-card-badge">TAB FILTER</span>
-          </div>
-          <div class="bento-card-desc">Filter cities across major continents.</div>
-          <div class="bento-card-content">
-            <div class="bento-tabs-row" id="continent-tabs">
-              <button class="bento-tab-mini active" onclick="runBentoContinent('Asia', this)">Asia</button>
-              <button class="bento-tab-mini" onclick="runBentoContinent('Europe', this)">Eur</button>
-              <button class="bento-tab-mini" onclick="runBentoContinent('Americas', this)">Amr</button>
-              <button class="bento-tab-mini" onclick="runBentoContinent('Africa', this)">Afr</button>
+          <!-- distance() (span 2) -->
+          <div class="bento-card" style="grid-column: span 2;">
+            <div class="bento-card-header">
+              <div class="bento-card-title">distance()</div>
+              <span class="bento-card-badge">GEODESIC PATH</span>
             </div>
-            <div class="bento-results-list" id="bento-continent-results" style="min-height: 80px;">
-              <!-- Loaded dynamically -->
-            </div>
-          </div>
-        </div>
+            <div class="bento-card-desc">Calculate exact Haversine distance in both kilometers and miles.</div>
+            <div class="bento-card-content"
+              style="flex-direction: row; gap: 20px; align-items: center; justify-content: space-between;">
+              <div style="flex: 1; display: flex; flex-direction: column; gap: 12px;">
+                <div style="display: flex; gap: 8px;">
+                  <div style="flex:1;">
+                    <label
+                      style="font-size:10px; color:var(--text-3); text-transform:uppercase; font-family:var(--font-mono); display:block; margin-bottom:4px;">Origin</label>
+                    <select id="distance-city-1" class="bento-select" onchange="runBentoDistance()">
+                      <option value="London" selected>London (GB)</option>
+                      <option value="New York">New York (US)</option>
+                      <option value="Delhi">Delhi (IN)</option>
+                      <option value="Tokyo">Tokyo (JP)</option>
+                      <option value="Sydney">Sydney (AU)</option>
+                      <option value="Cairo">Cairo (EG)</option>
+                      <option value="Rio de Janeiro">Rio de Janeiro (BR)</option>
+                    </select>
+                  </div>
+                  <div style="flex:1;">
+                    <label
+                      style="font-size:10px; color:var(--text-3); text-transform:uppercase; font-family:var(--font-mono); display:block; margin-bottom:4px;">Destination</label>
+                    <select id="distance-city-2" class="bento-select" onchange="runBentoDistance()">
+                      <option value="London">London (GB)</option>
+                      <option value="New York">New York (US)</option>
+                      <option value="Delhi">Delhi (IN)</option>
+                      <option value="Tokyo" selected>Tokyo (JP)</option>
+                      <option value="Sydney">Sydney (AU)</option>
+                      <option value="Cairo">Cairo (EG)</option>
+                      <option value="Rio de Janeiro">Rio de Janeiro (BR)</option>
+                    </select>
+                  </div>
+                </div>
 
-        <!-- byPopulation() (span 1) -->
-        <div class="bento-card">
-          <div class="bento-card-header">
-            <div class="bento-card-title">byPopulation()</div>
-            <span class="bento-card-badge">THRESHOLD</span>
-          </div>
-          <div class="bento-card-desc">Query cities matching a population threshold.</div>
-          <div class="bento-card-content">
-            <div class="slider-wrapper">
-              <input type="range" id="bento-pop-slider" min="1" max="35" value="10" class="bento-slider" oninput="runBentoPopulation(this.value)">
-              <div class="slider-val" id="pop-slider-val">> 10M pop</div>
-            </div>
-            <div class="bento-results-list" id="bento-pop-results" style="min-height: 80px;">
-              <!-- Loaded dynamically -->
-            </div>
-          </div>
-        </div>
+                <div class="distance-result-box">
+                  <div class="dist-val" id="dist-km">0.00 km</div>
+                  <div class="dist-val-miles" id="dist-miles">0.00 miles</div>
+                </div>
+              </div>
 
-        <!-- stats() (span 1) -->
-        <div class="bento-card">
-          <div class="bento-card-header">
-            <div class="bento-card-title">stats()</div>
-            <span class="bento-card-badge">METRICS</span>
-          </div>
-          <div class="bento-card-desc">Database metrics, global summaries.</div>
-          <div class="bento-card-content" style="justify-content: flex-start; gap: 12px;">
-            <div class="stats-mini-grid">
-              <div class="stats-mini-item">
-                <div class="stats-mini-val">49,992</div>
-                <div class="stats-mini-lbl">Cities</div>
-              </div>
-              <div class="stats-mini-item">
-                <div class="stats-mini-val">241</div>
-                <div class="stats-mini-lbl">Countries</div>
-              </div>
-            </div>
-            <div class="stats-progress-container">
-              <div style="font-size:10px; color:var(--text-3); font-family:var(--font-mono); margin-bottom:4px;">Continent Share</div>
-              <div class="progress-bar-stack">
-                <div class="progress-bar" style="width: 55%; background: var(--lime);" title="Asia (55%)"></div>
-                <div class="progress-bar" style="width: 25%; background: #ffffff;" title="Americas (25%)"></div>
-                <div class="progress-bar" style="width: 15%; background: var(--text-2);" title="Europe (15%)"></div>
-                <div class="progress-bar" style="width: 5%; background: var(--text-3);" title="Others (5%)"></div>
+              <div class="distance-canvas-container">
+                <canvas id="bento-distance-canvas" width="160" height="110"></canvas>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- random() (span 2) -->
-        <div class="bento-card" style="grid-column: span 2;">
-          <div class="bento-card-header">
-            <div class="bento-card-title">random()</div>
-            <span class="bento-card-badge">SLOT MACHINE</span>
-          </div>
-          <div class="bento-card-desc">Instantly extract a random city from the global database.</div>
-          <div class="bento-card-content" style="flex-direction: row; gap: 24px; align-items: center; justify-content: space-between;">
-            <div class="slot-display" id="slot-machine-display">
-              <div class="slot-number-box">
-                <span class="slot-txt" id="slot-city">Paris</span>
-                <span class="slot-sub" id="slot-details">France · FR · 11.0M pop</span>
+          <!-- byContinent() (span 1) -->
+          <div class="bento-card">
+            <div class="bento-card-header">
+              <div class="bento-card-title">byContinent()</div>
+              <span class="bento-card-badge">TAB FILTER</span>
+            </div>
+            <div class="bento-card-desc">Filter cities across major continents.</div>
+            <div class="bento-card-content">
+              <div class="bento-tabs-row" id="continent-tabs">
+                <button class="bento-tab-mini active" onclick="runBentoContinent('Asia', this)">Asia</button>
+                <button class="bento-tab-mini" onclick="runBentoContinent('Europe', this)">Eur</button>
+                <button class="bento-tab-mini" onclick="runBentoContinent('Americas', this)">Amr</button>
+                <button class="bento-tab-mini" onclick="runBentoContinent('Africa', this)">Afr</button>
+              </div>
+              <div class="bento-results-list" id="bento-continent-results" style="min-height: 80px;">
+                <!-- Loaded dynamically -->
               </div>
             </div>
-            <button class="bento-btn-primary" onclick="spinSlotMachine()">
-              <span>ROLL</span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-            </button>
+          </div>
+
+          <!-- byPopulation() (span 1) -->
+          <div class="bento-card">
+            <div class="bento-card-header">
+              <div class="bento-card-title">byPopulation()</div>
+              <span class="bento-card-badge">THRESHOLD</span>
+            </div>
+            <div class="bento-card-desc">Query cities matching a population threshold.</div>
+            <div class="bento-card-content">
+              <div class="slider-wrapper">
+                <input type="range" id="bento-pop-slider" min="1" max="35" value="10" class="bento-slider"
+                  oninput="runBentoPopulation(this.value)">
+                <div class="slider-val" id="pop-slider-val">> 10M pop</div>
+              </div>
+              <div class="bento-results-list" id="bento-pop-results" style="min-height: 80px;">
+                <!-- Loaded dynamically -->
+              </div>
+            </div>
+          </div>
+
+          <!-- stats() (span 1) -->
+          <div class="bento-card">
+            <div class="bento-card-header">
+              <div class="bento-card-title">stats()</div>
+              <span class="bento-card-badge">METRICS</span>
+            </div>
+            <div class="bento-card-desc">Database metrics, global summaries.</div>
+            <div class="bento-card-content" style="justify-content: flex-start; gap: 12px;">
+              <div class="stats-mini-grid">
+                <div class="stats-mini-item">
+                  <div class="stats-mini-val">49,992</div>
+                  <div class="stats-mini-lbl">Cities</div>
+                </div>
+                <div class="stats-mini-item">
+                  <div class="stats-mini-val">241</div>
+                  <div class="stats-mini-lbl">Countries</div>
+                </div>
+              </div>
+              <div class="stats-progress-container">
+                <div style="font-size:10px; color:var(--text-3); font-family:var(--font-mono); margin-bottom:4px;">
+                  Continent Share</div>
+                <div class="progress-bar-stack">
+                  <div class="progress-bar" style="width: 55%; background: var(--lime);" title="Asia (55%)"></div>
+                  <div class="progress-bar" style="width: 25%; background: #ffffff;" title="Americas (25%)"></div>
+                  <div class="progress-bar" style="width: 15%; background: var(--text-2);" title="Europe (15%)"></div>
+                  <div class="progress-bar" style="width: 5%; background: var(--text-3);" title="Others (5%)"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- random() (span 2) -->
+          <div class="bento-card" style="grid-column: span 2;">
+            <div class="bento-card-header">
+              <div class="bento-card-title">random()</div>
+              <span class="bento-card-badge">SLOT MACHINE</span>
+            </div>
+            <div class="bento-card-desc">Instantly extract a random city from the global database.</div>
+            <div class="bento-card-content"
+              style="flex-direction: row; gap: 24px; align-items: center; justify-content: space-between;">
+              <div class="slot-display" id="slot-machine-display">
+                <div class="slot-number-box">
+                  <span class="slot-txt" id="slot-city">Paris</span>
+                  <span class="slot-sub" id="slot-details">France · FR · 11.0M pop</span>
+                </div>
+              </div>
+              <button class="bento-btn-primary" onclick="spinSlotMachine()">
+                <span>ROLL</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Import Paths Section -->
-    <section id="import-paths" class="reveal-section section-container">
-      <span class="section-label">// two entry points</span>
-      <h2 class="section-title">Flexible Datasets</h2>
-      
-      <div class="imports-layout">
-        <!-- Full Dataset -->
-        <div class="import-block">
-          <div class="import-header">
-            <span class="import-title">Full Dataset (~49,992 cities)</span>
-            <button class="icon-btn-copy" onclick="copyImportBlock(this, 'import-full')">
-              <svg class="icon-copy-block" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-              <span class="copy-text-block">Copy</span>
-            </button>
-          </div>
-          <div class="import-body">
-            <pre><code id="import-full">// 49,992 cities worldwide
+      <!-- Import Paths Section -->
+      <section id="import-paths" class="reveal-section section-container">
+        <span class="section-label">// two entry points</span>
+        <h2 class="section-title">Flexible Datasets</h2>
+
+        <div class="imports-layout">
+          <!-- Full Dataset -->
+          <div class="import-block">
+            <div class="import-header">
+              <span class="import-title">Full Dataset (~49,992 cities)</span>
+              <button class="icon-btn-copy" onclick="copyImportBlock(this, 'import-full')">
+                <svg class="icon-copy-block" xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span class="copy-text-block">Copy</span>
+              </button>
+            </div>
+            <div class="import-body">
+              <pre><code id="import-full">// 49,992 cities worldwide
 import {
   search, nearest, distance,
   fuzzySearch, byContinent,
   byPopulation, stats, random
 } from '@novaedgedigitallabs/citykit';</code></pre>
+            </div>
           </div>
-        </div>
-        
-        <!-- Lite Dataset -->
-        <div class="import-block">
-          <div class="import-header">
-            <span class="import-title">Lite Dataset (~1,422 cities)</span>
-            <button class="icon-btn-copy" onclick="copyImportBlock(this, 'import-lite')">
-              <svg class="icon-copy-block" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-              <span class="copy-text-block">Copy</span>
-            </button>
-          </div>
-          <div class="import-body">
-            <pre><code id="import-lite">// 1,422 major cities — smaller bundle
+
+          <!-- Lite Dataset -->
+          <div class="import-block">
+            <div class="import-header">
+              <span class="import-title">Lite Dataset (~1,422 cities)</span>
+              <button class="icon-btn-copy" onclick="copyImportBlock(this, 'import-lite')">
+                <svg class="icon-copy-block" xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span class="copy-text-block">Copy</span>
+              </button>
+            </div>
+            <div class="import-body">
+              <pre><code id="import-lite">// 1,422 major cities — smaller bundle
 import {
   search, nearest, distance
 } from '@novaedgedigitallabs/citykit/lite';</code></pre>
+            </div>
           </div>
         </div>
+      </section>
+
+      <!-- Roadmap Section -->
+      <section id="roadmap" class="reveal-section section-container" style="text-align: center; border-bottom: none;">
+        <span class="section-label">// what's coming</span>
+        <h2 class="section-title" style="margin-bottom: 24px;">Project Roadmap</h2>
+
+        <div class="roadmap-pills">
+          <span class="roadmap-pill">withinRadius()</span>
+          <span class="roadmap-pill">nearestMany()</span>
+          <span class="roadmap-pill">autocomplete()</span>
+          <span class="roadmap-pill">countryStats()</span>
+          <span class="roadmap-pill">continentStats()</span>
+          <span class="roadmap-pill">timezone utilities</span>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <!-- Watermark Behind Columns -->
+      <div class="footer-watermark">CITYKIT</div>
+
+      <div class="footer-left">
+        <span class="footer-logo">citykit</span>
+        <span class="footer-by">by <a href="https://www.novaedgedigitallabs.in" target="_blank" rel="noopener"
+            class="footer-link">NovaEdge Digital Labs</a></span>
       </div>
-    </section>
-
-    <!-- Roadmap Section -->
-    <section id="roadmap" class="reveal-section section-container" style="text-align: center; border-bottom: none;">
-      <span class="section-label">// what's coming</span>
-      <h2 class="section-title" style="margin-bottom: 24px;">Project Roadmap</h2>
-      
-      <div class="roadmap-pills">
-        <span class="roadmap-pill">withinRadius()</span>
-        <span class="roadmap-pill">nearestMany()</span>
-        <span class="roadmap-pill">autocomplete()</span>
-        <span class="roadmap-pill">countryStats()</span>
-        <span class="roadmap-pill">continentStats()</span>
-        <span class="roadmap-pill">timezone utilities</span>
+      <div class="footer-center">
+        MIT License &middot; v1.1.1
       </div>
-    </section>
-  </main>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <!-- Watermark Behind Columns -->
-    <div class="footer-watermark">CITYKIT</div>
-
-    <div class="footer-left">
-      <span class="footer-logo">citykit</span>
-      <span class="footer-by">by NovaEdge Digital Labs</span>
-    </div>
-    <div class="footer-center">
-      MIT License &middot; v1.1.1
-    </div>
-    <div class="footer-right">
-      <a href="https://github.com/novaedgedigitallabs/citykit" target="_blank" rel="noopener" class="footer-link">GitHub</a>
-      <span class="footer-dot">&middot;</span>
-      <a href="https://www.npmjs.com/package/@novaedgedigitallabs/citykit" target="_blank" rel="noopener" class="footer-link">npm</a>
-    </div>
-  </footer>
+      <div class="footer-right">
+        <a href="https://github.com/novaedgedigitallabs/citykit" target="_blank" rel="noopener"
+          class="footer-link">GitHub</a>
+        <span class="footer-dot">&middot;</span>
+        <a href="https://www.npmjs.com/package/@novaedgedigitallabs/citykit" target="_blank" rel="noopener"
+          class="footer-link">npm</a>
+      </div>
+    </footer>
 
   </div><!-- /landing-view -->
 
@@ -2538,33 +2691,52 @@ import {
 
       <div class="docs-sidebar-section">
         <div class="docs-sidebar-category">Getting Started</div>
-        <a href="#docs" class="docs-sidebar-link" data-doc="docs" onclick="navigateTo('docs');return false;">Introduction</a>
-        <a href="#installation" class="docs-sidebar-link" data-doc="installation" onclick="navigateTo('installation');return false;">Installation</a>
-        <a href="#quickstart" class="docs-sidebar-link" data-doc="quickstart" onclick="navigateTo('quickstart');return false;">Quick Start</a>
+        <a href="#docs" class="docs-sidebar-link" data-doc="docs"
+          onclick="navigateTo('docs');return false;">Introduction</a>
+        <a href="#installation" class="docs-sidebar-link" data-doc="installation"
+          onclick="navigateTo('installation');return false;">Installation</a>
+        <a href="#quickstart" class="docs-sidebar-link" data-doc="quickstart"
+          onclick="navigateTo('quickstart');return false;">Quick Start</a>
       </div>
 
       <div class="docs-sidebar-section">
         <div class="docs-sidebar-category">Core Concepts</div>
-        <a href="#city-object" class="docs-sidebar-link" data-doc="city-object" onclick="navigateTo('city-object');return false;">City Object</a>
-        <a href="#search-options" class="docs-sidebar-link" data-doc="search-options" onclick="navigateTo('search-options');return false;">Search Options</a>
+        <a href="#city-object" class="docs-sidebar-link" data-doc="city-object"
+          onclick="navigateTo('city-object');return false;">City Object</a>
+        <a href="#search-options" class="docs-sidebar-link" data-doc="search-options"
+          onclick="navigateTo('search-options');return false;">Search Options</a>
       </div>
 
       <div class="docs-sidebar-section">
         <div class="docs-sidebar-category">API Reference</div>
-        <a href="#api-overview" class="docs-sidebar-link" data-doc="api-overview" onclick="navigateTo('api-overview');return false;">Overview</a>
-        <a href="#api-search" class="docs-sidebar-link" data-doc="api-search" onclick="navigateTo('api-search');return false;">search() <span class="fn-badge">fn</span></a>
-        <a href="#api-getCity" class="docs-sidebar-link" data-doc="api-getCity" onclick="navigateTo('api-getCity');return false;">getCity() <span class="fn-badge">fn</span></a>
-        <a href="#api-byCountry" class="docs-sidebar-link" data-doc="api-byCountry" onclick="navigateTo('api-byCountry');return false;">byCountry() <span class="fn-badge">fn</span></a>
-        <a href="#api-capitals" class="docs-sidebar-link" data-doc="api-capitals" onclick="navigateTo('api-capitals');return false;">capitals() <span class="fn-badge">fn</span></a>
-        <a href="#api-nearest" class="docs-sidebar-link" data-doc="api-nearest" onclick="navigateTo('api-nearest');return false;">nearest() <span class="fn-badge">fn</span></a>
-        <a href="#api-distance" class="docs-sidebar-link" data-doc="api-distance" onclick="navigateTo('api-distance');return false;">distance() <span class="fn-badge">fn</span></a>
-        <a href="#api-byPopulation" class="docs-sidebar-link" data-doc="api-byPopulation" onclick="navigateTo('api-byPopulation');return false;">byPopulation() <span class="fn-badge">fn</span></a>
-        <a href="#api-byContinent" class="docs-sidebar-link" data-doc="api-byContinent" onclick="navigateTo('api-byContinent');return false;">byContinent() <span class="fn-badge">fn</span></a>
-        <a href="#api-fuzzySearch" class="docs-sidebar-link" data-doc="api-fuzzySearch" onclick="navigateTo('api-fuzzySearch');return false;">fuzzySearch() <span class="fn-badge">fn</span></a>
-        <a href="#api-random" class="docs-sidebar-link" data-doc="api-random" onclick="navigateTo('api-random');return false;">random() <span class="fn-badge">fn</span></a>
-        <a href="#api-listCountries" class="docs-sidebar-link" data-doc="api-listCountries" onclick="navigateTo('api-listCountries');return false;">listCountries() <span class="fn-badge">fn</span></a>
-        <a href="#api-getByIso2" class="docs-sidebar-link" data-doc="api-getByIso2" onclick="navigateTo('api-getByIso2');return false;">getByIso2() <span class="fn-badge">fn</span></a>
-        <a href="#api-stats" class="docs-sidebar-link" data-doc="api-stats" onclick="navigateTo('api-stats');return false;">stats() <span class="fn-badge">fn</span></a>
+        <a href="#api-overview" class="docs-sidebar-link" data-doc="api-overview"
+          onclick="navigateTo('api-overview');return false;">Overview</a>
+        <a href="#api-search" class="docs-sidebar-link" data-doc="api-search"
+          onclick="navigateTo('api-search');return false;">search() <span class="fn-badge">fn</span></a>
+        <a href="#api-getCity" class="docs-sidebar-link" data-doc="api-getCity"
+          onclick="navigateTo('api-getCity');return false;">getCity() <span class="fn-badge">fn</span></a>
+        <a href="#api-byCountry" class="docs-sidebar-link" data-doc="api-byCountry"
+          onclick="navigateTo('api-byCountry');return false;">byCountry() <span class="fn-badge">fn</span></a>
+        <a href="#api-capitals" class="docs-sidebar-link" data-doc="api-capitals"
+          onclick="navigateTo('api-capitals');return false;">capitals() <span class="fn-badge">fn</span></a>
+        <a href="#api-nearest" class="docs-sidebar-link" data-doc="api-nearest"
+          onclick="navigateTo('api-nearest');return false;">nearest() <span class="fn-badge">fn</span></a>
+        <a href="#api-distance" class="docs-sidebar-link" data-doc="api-distance"
+          onclick="navigateTo('api-distance');return false;">distance() <span class="fn-badge">fn</span></a>
+        <a href="#api-byPopulation" class="docs-sidebar-link" data-doc="api-byPopulation"
+          onclick="navigateTo('api-byPopulation');return false;">byPopulation() <span class="fn-badge">fn</span></a>
+        <a href="#api-byContinent" class="docs-sidebar-link" data-doc="api-byContinent"
+          onclick="navigateTo('api-byContinent');return false;">byContinent() <span class="fn-badge">fn</span></a>
+        <a href="#api-fuzzySearch" class="docs-sidebar-link" data-doc="api-fuzzySearch"
+          onclick="navigateTo('api-fuzzySearch');return false;">fuzzySearch() <span class="fn-badge">fn</span></a>
+        <a href="#api-random" class="docs-sidebar-link" data-doc="api-random"
+          onclick="navigateTo('api-random');return false;">random() <span class="fn-badge">fn</span></a>
+        <a href="#api-listCountries" class="docs-sidebar-link" data-doc="api-listCountries"
+          onclick="navigateTo('api-listCountries');return false;">listCountries() <span class="fn-badge">fn</span></a>
+        <a href="#api-getByIso2" class="docs-sidebar-link" data-doc="api-getByIso2"
+          onclick="navigateTo('api-getByIso2');return false;">getByIso2() <span class="fn-badge">fn</span></a>
+        <a href="#api-stats" class="docs-sidebar-link" data-doc="api-stats"
+          onclick="navigateTo('api-stats');return false;">stats() <span class="fn-badge">fn</span></a>
       </div>
     </aside>
 
@@ -2581,7 +2753,8 @@ import {
   </div><!-- /docs-view -->
 
   <!-- Mobile sidebar toggle -->
-  <button class="docs-mobile-toggle" id="docs-mobile-toggle" onclick="toggleDocsSidebar()" aria-label="Toggle docs menu">☰</button>
+  <button class="docs-mobile-toggle" id="docs-mobile-toggle" onclick="toggleDocsSidebar()"
+    aria-label="Toggle docs menu">☰</button>
 
 
   <script>
@@ -2651,8 +2824,8 @@ import {
     });
 
     const sphereR = Math.min(gWidth, gHeight) * 0.32;
-    let angleX = 0.2; 
-    let angleY = 0.0025; 
+    let angleX = 0.2;
+    let angleY = 0.0025;
     let currentAngleY = 0;
     let targetAngleX = 0.2;
     let targetAngleYOffset = 0;
@@ -2715,19 +2888,19 @@ import {
 
     function drawGlobe() {
       globeCtx.clearRect(0, 0, gWidth, gHeight);
-      
+
       currentAngleY += angleY;
       const finalAngleY = currentAngleY + targetAngleYOffset;
       angleX += (targetAngleX - angleX) * 0.05;
-      
+
       const cx = gWidth / 2;
       const cy = gHeight / 2;
-      
+
       globeCtx.strokeStyle = 'rgba(232, 255, 71, 0.035)';
       globeCtx.lineWidth = 1;
-      
+
       const step = 15;
-      
+
       // Latitude grid lines
       for (let lat = -90; lat <= 90; lat += step) {
         globeCtx.beginPath();
@@ -2736,12 +2909,12 @@ import {
           let pt = project3D(lat, lng, sphereR);
           pt = rotate3DY(pt, finalAngleY);
           pt = rotate3DX(pt, angleX);
-          
+
           const focal = 600;
           const scale = focal / (focal + pt.z);
           const sx = cx + pt.x * scale;
           const sy = cy - pt.y * scale;
-          
+
           if (pt.z > -sphereR * 0.2) {
             if (first) {
               globeCtx.moveTo(sx, sy);
@@ -2753,7 +2926,7 @@ import {
         }
         globeCtx.stroke();
       }
-      
+
       // Longitude grid lines
       for (let lng = -180; lng < 180; lng += step) {
         globeCtx.beginPath();
@@ -2762,12 +2935,12 @@ import {
           let pt = project3D(lat, lng, sphereR);
           pt = rotate3DY(pt, finalAngleY);
           pt = rotate3DX(pt, angleX);
-          
+
           const focal = 600;
           const scale = focal / (focal + pt.z);
           const sx = cx + pt.x * scale;
           const sy = cy - pt.y * scale;
-          
+
           if (pt.z > -sphereR * 0.2) {
             if (first) {
               globeCtx.moveTo(sx, sy);
@@ -2779,34 +2952,34 @@ import {
         }
         globeCtx.stroke();
       }
-      
+
       // Glow city nodes
       globeNodes.forEach(node => {
         let pt = project3D(node.lat, node.lng, sphereR);
         pt = rotate3DY(pt, finalAngleY);
         pt = rotate3DX(pt, angleX);
-        
+
         if (pt.z > 0) {
           const focal = 600;
           const scale = focal / (focal + pt.z);
           const sx = cx + pt.x * scale;
           const sy = cy - pt.y * scale;
-          
+
           globeCtx.shadowBlur = 8;
           globeCtx.shadowColor = '#e8ff47';
           globeCtx.fillStyle = '#e8ff47';
-          
+
           globeCtx.beginPath();
           globeCtx.arc(sx, sy, 3.5 * scale, 0, Math.PI * 2);
           globeCtx.fill();
-          
+
           globeCtx.shadowBlur = 0;
           globeCtx.fillStyle = 'rgba(255, 255, 255, 0.65)';
           globeCtx.font = `9px "JetBrains Mono", monospace`;
           globeCtx.fillText(node.name, sx + 8, sy + 3);
         }
       });
-      
+
       requestAnimationFrame(drawGlobe);
     }
     drawGlobe();
@@ -2821,10 +2994,10 @@ import {
     window.addEventListener('mousemove', (e) => {
       mX = e.clientX;
       mY = e.clientY;
-      
+
       const lat = (0.5 - (e.clientY / window.innerHeight)) * 180;
       const lng = ((e.clientX / window.innerWidth) - 0.5) * 360;
-      
+
       const coordsText = cursorFollower.querySelector('.follower-coords');
       if (coordsText) coordsText.textContent = `[LAT: ${lat.toFixed(2)}, LNG: ${lng.toFixed(2)}]`;
     });
@@ -2856,8 +3029,8 @@ import {
       const dLat = (lat2 - lat1) * Math.PI / 180;
       const dLon = (lon2 - lon1) * Math.PI / 180;
       const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
       const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
       return R * c;
     }
@@ -2886,7 +3059,7 @@ import {
     // -------------------------------------------------------------
     // Bento Grid Interactive Functions
     // -------------------------------------------------------------
-    
+
     // search()
     function runBentoSearch(val) {
       const container = document.getElementById('bento-search-results');
@@ -2894,7 +3067,7 @@ import {
         container.innerHTML = '<div class="bento-placeholder">// Start typing to search...</div>';
         return;
       }
-      
+
       const query = val.toLowerCase().trim();
       const results = citiesDatabase
         .filter(c => c.ascii.toLowerCase().includes(query))
@@ -2908,12 +3081,12 @@ import {
           return b.population - a.population;
         })
         .slice(0, 3);
-        
+
       if (results.length === 0) {
         container.innerHTML = '<div class="bento-placeholder">// No cities found</div>';
         return;
       }
-      
+
       container.innerHTML = results.map(c => `
         <div class="bento-result-item">
           <div>
@@ -2932,23 +3105,23 @@ import {
         container.innerHTML = '<div class="bento-placeholder">// Enter typo to correct...</div>';
         return;
       }
-      
+
       const query = val.toLowerCase().trim();
       const scored = citiesDatabase.map(c => {
         const dist = getLevenshteinDistance(query, c.ascii.toLowerCase());
         return { city: c, dist };
       });
-      
+
       const results = scored
         .filter(item => item.dist <= 3)
         .sort((a, b) => a.dist - b.dist)
         .slice(0, 3);
-        
+
       if (results.length === 0) {
         container.innerHTML = '<div class="bento-placeholder">// No match found (dist > 3)</div>';
         return;
       }
-      
+
       container.innerHTML = results.map(r => `
         <div class="bento-result-item">
           <div>
@@ -2972,17 +3145,17 @@ import {
       radarHeight = radarCanvas.offsetHeight;
       radarCanvas.width = radarWidth;
       radarCanvas.height = radarHeight;
-      
+
       radarCanvas.addEventListener('mousemove', (e) => {
         const rect = radarCanvas.getBoundingClientRect();
         const mx = e.clientX - rect.left;
         const my = e.clientY - rect.top;
-        
+
         const lng = ((mx / radarWidth) - 0.5) * 360;
         const lat = (0.5 - (my / radarHeight)) * 180;
-        
+
         document.getElementById('radar-coords').textContent = `${lat.toFixed(2)}°N, ${lng.toFixed(2)}°E`;
-        
+
         let nearestCity = null;
         let minDist = Infinity;
         citiesDatabase.forEach(c => {
@@ -2992,21 +3165,21 @@ import {
             nearestCity = c;
           }
         });
-        
+
         if (nearestCity) {
           document.getElementById('radar-result').innerHTML = `
             <span class="result-label">Nearest:</span>
             <span class="result-val" style="color: #e8ff47; font-weight:700;">${nearestCity.city}</span>
             <div style="font-size:10px; color:#a3a3a3; margin-top:2px;">${minDist.toFixed(1)} km away (${nearestCity.country})</div>
           `;
-          
+
           radarCanvas.dataset.hoverLng = lng;
           radarCanvas.dataset.hoverLat = lat;
           radarCanvas.dataset.nearestLng = nearestCity.lng;
           radarCanvas.dataset.nearestLat = nearestCity.lat;
         }
       });
-      
+
       radarCanvas.addEventListener('mouseleave', () => {
         document.getElementById('radar-coords').textContent = `// Move cursor above grid`;
         document.getElementById('radar-result').innerHTML = `
@@ -3016,17 +3189,17 @@ import {
         delete radarCanvas.dataset.hoverLng;
         delete radarCanvas.dataset.hoverLat;
       });
-      
+
       animateRadar();
     }
 
     function animateRadar() {
       if (!radarCtx) return;
       radarCtx.clearRect(0, 0, radarWidth, radarHeight);
-      
+
       const cx = radarWidth / 2;
       const cy = radarHeight / 2;
-      
+
       // Radar rings
       radarCtx.strokeStyle = 'rgba(232, 255, 71, 0.08)';
       radarCtx.lineWidth = 1;
@@ -3035,7 +3208,7 @@ import {
         radarCtx.arc(cx, cy, r, 0, Math.PI * 2);
         radarCtx.stroke();
       }
-      
+
       // Crosshairs
       radarCtx.beginPath();
       radarCtx.moveTo(0, cy);
@@ -3044,7 +3217,7 @@ import {
       radarCtx.lineTo(cx, radarHeight);
       globeCtx.shadowBlur = 0;
       radarCtx.stroke();
-      
+
       // Dots
       citiesDatabase.forEach(c => {
         const dotX = ((c.lng / 360) + 0.5) * radarWidth;
@@ -3054,29 +3227,29 @@ import {
         radarCtx.arc(dotX, dotY, 2, 0, Math.PI * 2);
         radarCtx.fill();
       });
-      
+
       // Sweep
       rSweepAngle += 0.015;
       const sx = cx + (radarWidth / 2) * Math.cos(rSweepAngle);
       const sy = cy + (radarHeight / 2) * Math.sin(rSweepAngle);
-      
+
       radarCtx.strokeStyle = 'rgba(232, 255, 71, 0.18)';
       radarCtx.beginPath();
       radarCtx.moveTo(cx, cy);
       radarCtx.lineTo(sx, sy);
       radarCtx.stroke();
-      
+
       if (radarCanvas.dataset.hoverLng !== undefined) {
         const hl = parseFloat(radarCanvas.dataset.hoverLng);
         const ht = parseFloat(radarCanvas.dataset.hoverLat);
         const nl = parseFloat(radarCanvas.dataset.nearestLng);
         const nt = parseFloat(radarCanvas.dataset.nearestLat);
-        
+
         const hx = ((hl / 360) + 0.5) * radarWidth;
         const hy = (0.5 - (ht / 180)) * radarHeight;
         const nx = ((nl / 360) + 0.5) * radarWidth;
         const ny = (0.5 - (nt / 180)) * radarHeight;
-        
+
         radarCtx.strokeStyle = 'var(--lime)';
         radarCtx.lineWidth = 1;
         radarCtx.setLineDash([2, 3]);
@@ -3085,12 +3258,12 @@ import {
         radarCtx.lineTo(nx, ny);
         radarCtx.stroke();
         radarCtx.setLineDash([]);
-        
+
         radarCtx.fillStyle = '#ffffff';
         radarCtx.beginPath();
         radarCtx.arc(hx, hy, 4, 0, Math.PI * 2);
         radarCtx.fill();
-        
+
         radarCtx.fillStyle = 'var(--lime)';
         radarCtx.shadowBlur = 8;
         radarCtx.shadowColor = 'var(--lime)';
@@ -3099,7 +3272,7 @@ import {
         radarCtx.fill();
         radarCtx.shadowBlur = 0;
       }
-      
+
       requestAnimationFrame(animateRadar);
     }
 
@@ -3107,18 +3280,18 @@ import {
     function runBentoDistance() {
       const c1Name = document.getElementById('distance-city-1').value;
       const c2Name = document.getElementById('distance-city-2').value;
-      
+
       const c1 = citiesDatabase.find(c => c.city === c1Name);
       const c2 = citiesDatabase.find(c => c.city === c2Name);
-      
+
       if (!c1 || !c2) return;
-      
+
       const distKm = haversine(c1.lat, c1.lng, c2.lat, c2.lng);
       const distMiles = distKm * 0.621371;
-      
+
       document.getElementById('dist-km').textContent = `${distKm.toFixed(2)} km`;
       document.getElementById('dist-miles').textContent = `${distMiles.toFixed(2)} miles`;
-      
+
       drawDistancePath(c1, c2);
     }
 
@@ -3127,9 +3300,9 @@ import {
       const ctx = canvas.getContext('2d');
       const w = canvas.width;
       const h = canvas.height;
-      
+
       ctx.clearRect(0, 0, w, h);
-      
+
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
       ctx.lineWidth = 1;
       for (let x = 0; x < w; x += 20) {
@@ -3138,37 +3311,37 @@ import {
       for (let y = 0; y < h; y += 20) {
         ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
       }
-      
+
       const getX = (lng) => 10 + ((lng + 180) / 360) * (w - 20);
       const getY = (lat) => 10 + ((90 - lat) / 180) * (h - 20);
-      
+
       const x1 = getX(c1.lng); const y1 = getY(c1.lat);
       const x2 = getX(c2.lng); const y2 = getY(c2.lat);
-      
+
       citiesDatabase.forEach(c => {
         ctx.fillStyle = 'rgba(255,255,255,0.06)';
         ctx.beginPath();
         ctx.arc(getX(c.lng), getY(c.lat), 1.5, 0, Math.PI * 2);
         ctx.fill();
       });
-      
+
       ctx.strokeStyle = 'var(--lime)';
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.moveTo(x1, y1);
-      
+
       const cx = (x1 + x2) / 2;
       const cy = (y1 + y2) / 2 - 25;
       ctx.quadraticCurveTo(cx, cy, x2, y2);
       ctx.stroke();
-      
+
       ctx.fillStyle = 'var(--lime)';
       ctx.shadowBlur = 6;
       ctx.shadowColor = 'var(--lime)';
       ctx.beginPath(); ctx.arc(x1, y1, 3, 0, Math.PI * 2); ctx.fill();
       ctx.beginPath(); ctx.arc(x2, y2, 3, 0, Math.PI * 2); ctx.fill();
       ctx.shadowBlur = 0;
-      
+
       ctx.fillStyle = '#ffffff';
       ctx.font = '8px "JetBrains Mono", monospace';
       ctx.fillText(c1.iso2, x1 + 5, y1 - 2);
@@ -3180,13 +3353,13 @@ import {
       const tabs = document.querySelectorAll('#continent-tabs .bento-tab-mini');
       tabs.forEach(t => t.classList.remove('active'));
       btn.classList.add('active');
-      
+
       const container = document.getElementById('bento-continent-results');
       const results = citiesDatabase
         .filter(c => c.continent === cont)
         .sort((a, b) => b.population - a.population)
         .slice(0, 3);
-        
+
       container.innerHTML = results.map(c => `
         <div class="bento-result-item">
           <div>
@@ -3202,17 +3375,17 @@ import {
     function runBentoPopulation(val) {
       const minPop = parseInt(val) * 1000000;
       document.getElementById('pop-slider-val').textContent = `> ${val}M pop`;
-      
+
       const container = document.getElementById('bento-pop-results');
       const results = citiesDatabase
         .filter(c => c.population >= minPop)
         .sort((a, b) => b.population - a.population);
-        
+
       if (results.length === 0) {
         container.innerHTML = '<div class="bento-placeholder">// No cities match</div>';
         return;
       }
-      
+
       container.innerHTML = `
         <div class="pop-count-badge">// ${results.length} cities match</div>
         ${results.slice(0, 2).map(c => `
@@ -3232,13 +3405,13 @@ import {
     function spinSlotMachine() {
       if (isBentoSpinning) return;
       isBentoSpinning = true;
-      
+
       const cityEl = document.getElementById('slot-city');
       const detailsEl = document.getElementById('slot-details');
       const displayEl = document.getElementById('slot-machine-display');
-      
+
       displayEl.classList.add('spinning');
-      
+
       let count = 0;
       const maxSpins = 12;
       const interval = setInterval(() => {
@@ -3247,14 +3420,14 @@ import {
         cityEl.textContent = c.city;
         detailsEl.textContent = `${c.country} · ${c.iso2} · ${(c.population / 1000000).toFixed(1)}M pop`;
         count++;
-        
+
         if (count >= maxSpins) {
           clearInterval(interval);
           displayEl.classList.remove('spinning');
           isBentoSpinning = false;
-          
+
           displayEl.style.animation = 'none';
-          displayEl.offsetHeight; 
+          displayEl.offsetHeight;
           displayEl.style.animation = 'slot-flash 0.5s ease-out';
         }
       }, 75);
@@ -3409,7 +3582,7 @@ import {
         } else if (/null/.test(match)) {
           cls = 'null';
         }
-        
+
         if (cls === 'key') {
           return `<span class="json-key">${match.replace(/:$/, '')}</span>:`;
         } else {
@@ -3423,13 +3596,13 @@ import {
       el.innerHTML = '';
       let i = 0;
       let currentHTML = '';
-      
+
       function step() {
         if (i >= htmlString.length) {
           if (callback) callback();
           return;
         }
-        
+
         if (htmlString[i] === '<') {
           let tag = '';
           while (i < htmlString.length && htmlString[i] !== '>') {
@@ -3467,7 +3640,7 @@ import {
 
     function showPlaygroundTab(tab) {
       if (typewriterTimeout) clearTimeout(typewriterTimeout);
-      
+
       document.querySelectorAll('.playground-tab').forEach(btn => {
         if (btn.getAttribute('data-tab') === tab) {
           btn.classList.add('active');
@@ -3475,10 +3648,10 @@ import {
           btn.classList.remove('active');
         }
       });
-      
+
       const codeEl = document.getElementById('playground-code');
       codeEl.innerHTML = playgroundData[tab].code;
-      
+
       let jsonValue;
       if (tab === 'random') {
         const randomIndex = Math.floor(Math.random() * randomCitiesList.length);
@@ -3486,10 +3659,10 @@ import {
       } else {
         jsonValue = playgroundData[tab].output;
       }
-      
+
       const formattedJSON = JSON.stringify(jsonValue, null, 2);
       const highlightedJSON = syntaxHighlight(formattedJSON);
-      
+
       const outputEl = document.getElementById('playground-output');
       typewriteHTML(outputEl, highlightedJSON, 8);
     }
@@ -3516,12 +3689,12 @@ import {
       navigator.clipboard.writeText(textToCopy).then(() => {
         const feedbackText = btn.querySelector('.feedback-text');
         const icon = btn.querySelector('.icon-copy');
-        
+
         feedbackText.textContent = "Copied!";
         btn.classList.add('copied');
-        
+
         icon.innerHTML = '<polyline points="20 6 9 17 4 12"></polyline>';
-        
+
         setTimeout(() => {
           feedbackText.textContent = "Copy";
           btn.classList.remove('copied');
@@ -3534,15 +3707,15 @@ import {
       const codeEl = document.getElementById(elementId);
       if (!codeEl) return;
       const textToCopy = codeEl.textContent;
-      
+
       navigator.clipboard.writeText(textToCopy).then(() => {
         const icon = btn.querySelector('.icon-copy-block');
         const textSpan = btn.querySelector('.copy-text-block');
-        
+
         if (textSpan) textSpan.textContent = "Copied!";
         btn.style.color = "var(--lime)";
         icon.innerHTML = '<polyline points="20 6 9 17 4 12"></polyline>';
-        
+
         setTimeout(() => {
           if (textSpan) textSpan.textContent = "Copy";
           btn.style.color = "";
@@ -3572,23 +3745,23 @@ import {
         root: null,
         threshold: 0.1
       };
-      
+
       let countersTriggered = false;
       function triggerCounters() {
         if (countersTriggered) return;
         countersTriggered = true;
-        
+
         const citiesEl = document.getElementById('stat-cities');
         const countriesEl = document.getElementById('stat-countries');
         const functionsEl = document.getElementById('stat-functions');
         const queryEl = document.getElementById('stat-query');
-        
+
         animateCounter(citiesEl, 49992, 2200, '', '');
         animateCounter(countriesEl, 241, 2200, '', '+');
         animateCounter(functionsEl, 13, 2200, '', '');
         animateCounter(queryEl, 2, 2200, '~', 'ms');
       }
-      
+
       const sectionObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
@@ -3600,11 +3773,12 @@ import {
           }
         });
       }, observerOptions);
-      
+
       revealSections.forEach(section => {
         sectionObserver.observe(section);
       });
     });
   </script>
 </body>
+
 </html>

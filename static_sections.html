@@ -1,0 +1,770 @@
+      <section id="introduction" class="doc-section">
+        <div class="breadcrumb">Docs › Getting Started › Introduction</div>
+        <h1 class="page-title">INTRODUCTION</h1>
+        <div class="page-subtitle">CityKit is a zero-dependency TypeScript utility library for working with world city data.</div>
+
+          <h2 class="section-title">What is CityKit</h2>
+          <p>CityKit provides a unified, fast, and dependency-free way to query, filter, and calculate distances between nearly 50,000 cities worldwide. It is designed to be lightweight enough for browser bundles while remaining powerful enough for backend geospatial workflows.</p>
+          <p>Unlike massive geo-databases, CityKit bundles a heavily optimized, compressed dataset directly into the npm package. This allows synchronous, in-memory lookups with zero network requests or database configuration.</p>
+          
+          <h2 class="section-title">Key Features</h2>
+          <ul>
+            <li><strong>15 utility functions</strong> — Searching, distances, radiuses, nearest neighbors, and filtering.</li>
+            <li><strong>49,992 cities</strong> — Coverage across 242 countries.</li>
+            <li><strong>TypeScript-first</strong> — Comprehensive types for all objects and parameters.</li>
+            <li><strong>ESM + CJS</strong> — Supports modern and legacy module systems.</li>
+            <li><strong>Zero dependencies</strong> — Keeps your node_modules lean and secure.</li>
+            <li><strong>Browser compatible</strong> — Works in Next.js, React, Vue, and vanilla JS.</li>
+          </ul>
+
+          <h2 class="section-title">Data Source</h2>
+          <p>The city data is sourced from the open-source <a href="https://simplemaps.com/data/world-cities" target="_blank" style="color: var(--lime); text-decoration: underline;">SimpleMaps World Cities Database</a>. It includes latitude, longitude, population estimates, country codes, and administrative divisions.</p>
+        
+      </section>
+      <section id="installation" class="doc-section" style="display: none;">
+        <div class="breadcrumb">Docs › Getting Started › Installation</div>
+        <h1 class="page-title">INSTALLATION</h1>
+
+          <h2 class="section-title">npm install</h2>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Bash</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-body">npm install @novaedgedigitallabs/citykit</div>
+          </div>
+          
+          <h2 class="section-title">Yarn / pnpm alternatives</h2>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Bash</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-body">yarn add @novaedgedigitallabs/citykit
+pnpm add @novaedgedigitallabs/citykit</div>
+          </div>
+
+          <h2 class="section-title">Import (Full dataset)</h2>
+          <p>For Node.js backends or applications where bundle size is less critical:</p>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">TypeScript</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-body"><span class="sh-keyword">import</span> { search, distance } <span class="sh-keyword">from</span> <span class="sh-string">'@novaedgedigitallabs/citykit'</span></div>
+          </div>
+
+          <h2 class="section-title">Import (Lite dataset)</h2>
+          <p>For browser bundles and frontend applications:</p>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">TypeScript</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-body"><span class="sh-keyword">import</span> { search } <span class="sh-keyword">from</span> <span class="sh-string">'@novaedgedigitallabs/citykit/lite'</span></div>
+          </div>
+
+          <div class="callout">
+            <div class="callout-label">NOTE</div>
+            <p>Lite version includes only cities with population ≥ 500,000 (1,422 cities). Ideal for browser bundles and mobile apps. See <a href="#full-vs-lite" style="color:var(--lime)">Full vs Lite</a> for details.</p>
+          </div>
+        
+      </section>
+      <section id="quick-start" class="doc-section" style="display: none;">
+        <div class="breadcrumb">Docs › Getting Started › Quick Start</div>
+        <h1 class="page-title">QUICK START</h1>
+
+          <h2 class="section-title">Basic Search</h2>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">TypeScript</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-body"><span class="sh-keyword">import</span> { search } <span class="sh-keyword">from</span> <span class="sh-string">'@novaedgedigitallabs/citykit'</span>
+
+<span class="sh-keyword">const</span> cities = search(<span class="sh-string">'delhi'</span>, { country: <span class="sh-string">'IN'</span>, limit: <span class="sh-number">1</span> })
+<span class="sh-comment">// → [{ city: 'Delhi', country: 'India', population: 32226000, ... }]</span></div>
+          </div>
+
+          <h2 class="section-title">Calculating Distance</h2>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">TypeScript</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-body"><span class="sh-keyword">import</span> { distance } <span class="sh-keyword">from</span> <span class="sh-string">'@novaedgedigitallabs/citykit'</span>
+
+distance(<span class="sh-string">'Mumbai'</span>, <span class="sh-string">'Delhi'</span>)
+<span class="sh-comment">// → { km: 1153.64, miles: 716.84 }</span></div>
+          </div>
+
+          <h2 class="section-title">Finding Nearest City</h2>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">TypeScript</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-body"><span class="sh-keyword">import</span> { nearest } <span class="sh-keyword">from</span> <span class="sh-string">'@novaedgedigitallabs/citykit'</span>
+
+nearest({ lat: <span class="sh-number">48.8584</span>, lng: <span class="sh-number">2.2945</span> })
+<span class="sh-comment">// → [{ city: 'Paris', country: 'France', ... }]</span></div>
+          </div>
+
+          <h2 class="section-title">Typo-Tolerant Search</h2>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">TypeScript</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-body"><span class="sh-keyword">import</span> { fuzzySearch } <span class="sh-keyword">from</span> <span class="sh-string">'@novaedgedigitallabs/citykit'</span>
+
+fuzzySearch(<span class="sh-string">'bangalor'</span>)
+<span class="sh-comment">// → [{ city: 'Bangalore', country: 'India', ... }]</span></div>
+          </div>
+        
+      </section>
+      <section id="typescript-support" class="doc-section" style="display: none;">
+        <div class="breadcrumb">Docs › Getting Started › TypeScript Support</div>
+        <h1 class="page-title">TYPESCRIPT SUPPORT</h1>
+
+          <h2 class="section-title">Core Interfaces</h2>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">TypeScript</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-body"><span class="sh-keyword">export interface</span> City {
+  city: <span class="sh-keyword">string</span>;
+  city_ascii: <span class="sh-keyword">string</span>;
+  lat: <span class="sh-keyword">number</span>;
+  lng: <span class="sh-keyword">number</span>;
+  country: <span class="sh-keyword">string</span>;
+  iso2: <span class="sh-keyword">string</span>;
+  iso3: <span class="sh-keyword">string</span>;
+  admin_name: <span class="sh-keyword">string</span>;
+  capital: <span class="sh-string">'primary' | 'admin' | 'minor'</span> | <span class="sh-keyword">null</span>;
+  population: <span class="sh-keyword">number</span> | <span class="sh-keyword">null</span>;
+  id: <span class="sh-keyword">number</span>;
+}
+
+<span class="sh-keyword">export interface</span> DistanceResult {
+  km: <span class="sh-keyword">number</span>;
+  miles: <span class="sh-keyword">number</span>;
+}
+
+<span class="sh-keyword">export interface</span> CountryInfo {
+  country: <span class="sh-keyword">string</span>;
+  iso2: <span class="sh-keyword">string</span>;
+  iso3: <span class="sh-keyword">string</span>;
+  cities: City[];
+}
+
+<span class="sh-keyword">export interface</span> CountryListItem {
+  country: <span class="sh-keyword">string</span>;
+  iso2: <span class="sh-keyword">string</span>;
+  iso3: <span class="sh-keyword">string</span>;
+  count: <span class="sh-keyword">number</span>;
+}
+
+<span class="sh-keyword">export interface</span> DatasetStats {
+  totalCities: <span class="sh-keyword">number</span>;
+  totalCountries: <span class="sh-keyword">number</span>;
+  totalCapitals: <span class="sh-keyword">number</span>;
+  largestCity: City | <span class="sh-keyword">null</span>;
+  smallestCity: City | <span class="sh-keyword">null</span>;
+  averagePopulation: <span class="sh-keyword">number</span>;
+  totalPopulation: <span class="sh-keyword">number</span>;
+}</div>
+          </div>
+
+          <h2 class="section-title">Options Interfaces</h2>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">TypeScript</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-body"><span class="sh-keyword">export interface</span> SearchOptions {
+  limit?: <span class="sh-keyword">number</span>;
+  country?: <span class="sh-keyword">string</span>;
+  exact?: <span class="sh-keyword">boolean</span>;
+}
+
+<span class="sh-keyword">export interface</span> FuzzySearchOptions {
+  limit?: <span class="sh-keyword">number</span>;
+  country?: <span class="sh-keyword">string</span>;
+  threshold?: <span class="sh-keyword">number</span>;
+}
+
+<span class="sh-keyword">export interface</span> NearestOptions {
+  limit?: <span class="sh-keyword">number</span>;
+  country?: <span class="sh-keyword">string</span>;
+}
+
+<span class="sh-keyword">export interface</span> WithinRadiusOptions {
+  limit?: <span class="sh-keyword">number</span>;
+  country?: <span class="sh-keyword">string</span>;
+}
+
+<span class="sh-keyword">export interface</span> PopulationOptions {
+  min?: <span class="sh-keyword">number</span>;
+  max?: <span class="sh-keyword">number</span>;
+  limit?: <span class="sh-keyword">number</span>;
+}
+
+<span class="sh-keyword">export interface</span> RandomOptions {
+  country?: <span class="sh-keyword">string</span>;
+  continent?: <span class="sh-keyword">string</span>;
+  minPopulation?: <span class="sh-keyword">number</span>;
+}</div>
+          </div>
+        
+      </section>
+      <section id="city-object" class="doc-section" style="display: none;">
+        <div class="breadcrumb">Docs › Core Concepts › City Object</div>
+        <h1 class="page-title">CITY OBJECT</h1>
+
+          <h2 class="section-title">The City Interface</h2>
+          <p>The <span class="inline-code">City</span> object is the core data structure returned by almost all functions in CityKit.</p>
+          
+          <table class="param-table">
+            <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+            <tr><td class="param-name">city</td><td><span class="param-type">string</span></td><td>Native display name (e.g. "Москва")</td></tr>
+            <tr><td class="param-name">city_ascii</td><td><span class="param-type">string</span></td><td>ASCII-safe name used for search (e.g. "Moskva")</td></tr>
+            <tr><td class="param-name">lat</td><td><span class="param-type">number</span></td><td>Latitude in decimal degrees</td></tr>
+            <tr><td class="param-name">lng</td><td><span class="param-type">number</span></td><td>Longitude in decimal degrees</td></tr>
+            <tr><td class="param-name">country</td><td><span class="param-type">string</span></td><td>Full country name</td></tr>
+            <tr><td class="param-name">iso2</td><td><span class="param-type">string</span></td><td>ISO 3166-1 alpha-2 code (e.g. "IN")</td></tr>
+            <tr><td class="param-name">iso3</td><td><span class="param-type">string</span></td><td>ISO 3166-1 alpha-3 code (e.g. "IND")</td></tr>
+            <tr><td class="param-name">admin_name</td><td><span class="param-type">string</span></td><td>State or province name</td></tr>
+            <tr><td class="param-name">capital</td><td><span class="param-type">"primary" | "admin" | "minor" | null</span></td><td>Capital status</td></tr>
+            <tr><td class="param-name">population</td><td><span class="param-type">number | null</span></td><td>Population (null if unknown)</td></tr>
+            <tr><td class="param-name">id</td><td><span class="param-type">number</span></td><td>Unique city identifier</td></tr>
+          </table>
+
+          <h2 class="section-title">Example Object</h2>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">JSON</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-body">{
+  <span class="sh-string">"city"</span>: <span class="sh-string">"Tokyo"</span>,
+  <span class="sh-string">"city_ascii"</span>: <span class="sh-string">"Tokyo"</span>,
+  <span class="sh-string">"lat"</span>: <span class="sh-number">35.6897</span>,
+  <span class="sh-string">"lng"</span>: <span class="sh-number">139.6922</span>,
+  <span class="sh-string">"country"</span>: <span class="sh-string">"Japan"</span>,
+  <span class="sh-string">"iso2"</span>: <span class="sh-string">"JP"</span>,
+  <span class="sh-string">"iso3"</span>: <span class="sh-string">"JPN"</span>,
+  <span class="sh-string">"admin_name"</span>: <span class="sh-string">"Tōkyō"</span>,
+  <span class="sh-string">"capital"</span>: <span class="sh-string">"primary"</span>,
+  <span class="sh-string">"population"</span>: <span class="sh-number">37785000</span>,
+  <span class="sh-string">"id"</span>: <span class="sh-number">1392685764</span>
+}</div>
+          </div>
+        
+      </section>
+      <section id="full-vs-lite" class="doc-section" style="display: none;">
+        <div class="breadcrumb">Docs › Core Concepts › Full vs Lite Dataset</div>
+        <h1 class="page-title">FULL VS LITE DATASET</h1>
+
+          <h2 class="section-title">Comparison</h2>
+          <table class="param-table">
+            <tr><th></th><th>Full</th><th>Lite</th></tr>
+            <tr><td class="param-name">Import</td><td><span class="inline-code">@novaedgedigitallabs/citykit</span></td><td><span class="inline-code">@novaedgedigitallabs/citykit/lite</span></td></tr>
+            <tr><td class="param-name">Cities</td><td>49,992</td><td>1,422</td></tr>
+            <tr><td class="param-name">Countries</td><td>241</td><td>141</td></tr>
+            <tr><td class="param-name">Size</td><td>~4.8 MB</td><td>~137 KB</td></tr>
+            <tr><td class="param-name">Filter</td><td>All cities</td><td>Population ≥ 500,000</td></tr>
+            <tr><td class="param-name">API</td><td>Identical</td><td>Identical</td></tr>
+          </table>
+
+          <div class="callout">
+            <div class="callout-label">NOTE</div>
+            <p>All 15 functions work identically in both versions. The lite version simply operates on a reduced in-memory array.</p>
+          </div>
+        
+      </section>
+      <section id="api-overview" class="doc-section" style="display: none;">
+        <div class="breadcrumb">Docs › API Reference › Overview</div>
+        <h1 class="page-title">API REFERENCE</h1>
+        <div class="page-subtitle">15 utility functions for searching, filtering, and calculating distances.</div>
+
+          <div class="api-grid">
+            <div class="api-card" onclick="location.hash='api-search'">
+              <div class="api-card-title">search()</div>
+              <div class="api-card-desc">Substring search with smart ranking.</div>
+            </div>
+            <div class="api-card" onclick="location.hash='api-fuzzySearch'">
+              <div class="api-card-title">fuzzySearch()</div>
+              <div class="api-card-desc">Typo-tolerant search with Levenshtein.</div>
+            </div>
+            <div class="api-card" onclick="location.hash='api-nearest'">
+              <div class="api-card-title">nearest()</div>
+              <div class="api-card-desc">Closest city to any coordinates.</div>
+            </div>
+            <div class="api-card" onclick="location.hash='api-distance'">
+              <div class="api-card-title">distance()</div>
+              <div class="api-card-desc">km & miles between any two cities.</div>
+            </div>
+            <div class="api-card" onclick="location.hash='api-withinRadius'">
+              <div class="api-card-title">withinRadius()</div>
+              <div class="api-card-desc">All cities within X km of a point.</div>
+            </div>
+            <div class="api-card" onclick="location.hash='api-byCountry'">
+              <div class="api-card-title">byCountry()</div>
+              <div class="api-card-desc">Every city in a country by ISO2.</div>
+            </div>
+            <div class="api-card" onclick="location.hash='api-byContinent'">
+              <div class="api-card-title">byContinent()</div>
+              <div class="api-card-desc">Filter cities by continent.</div>
+            </div>
+            <div class="api-card" onclick="location.hash='api-byAdmin'">
+              <div class="api-card-title">byAdmin()</div>
+              <div class="api-card-desc">Filter by state or province.</div>
+            </div>
+            <div class="api-card" onclick="location.hash='api-byPopulation'">
+              <div class="api-card-title">byPopulation()</div>
+              <div class="api-card-desc">Filter by population range.</div>
+            </div>
+            <div class="api-card" onclick="location.hash='api-capitals'">
+              <div class="api-card-title">capitals()</div>
+              <div class="api-card-desc">National and state capitals.</div>
+            </div>
+            <div class="api-card" onclick="location.hash='api-getCity'">
+              <div class="api-card-title">getCity()</div>
+              <div class="api-card-desc">Single city exact lookup.</div>
+            </div>
+            <div class="api-card" onclick="location.hash='api-getByIso2'">
+              <div class="api-card-title">getByIso2()</div>
+              <div class="api-card-desc">Country info and all its cities.</div>
+            </div>
+            <div class="api-card" onclick="location.hash='api-listCountries'">
+              <div class="api-card-title">listCountries()</div>
+              <div class="api-card-desc">All 242 countries with city counts.</div>
+            </div>
+            <div class="api-card" onclick="location.hash='api-random'">
+              <div class="api-card-title">random()</div>
+              <div class="api-card-desc">Random city with optional filters.</div>
+            </div>
+            <div class="api-card" onclick="location.hash='api-stats'">
+              <div class="api-card-title">stats()</div>
+              <div class="api-card-desc">Full dataset statistics.</div>
+            </div>
+            <div class="api-card" onclick="location.hash='api-getContinentNames'">
+              <div class="api-card-title">getContinentNames()</div>
+              <div class="api-card-desc">List all continent names.</div>
+            </div>
+          </div>
+        
+      </section>
+      <section id="api-search" class="doc-section" style="display: none;">
+        <div class="breadcrumb">Docs › API Reference › search()</div>
+        <h1 class="page-title">SEARCH()</h1>
+        <div class="page-subtitle">Substring search with smart ranking.</div>
+
+          <div class="code-block" style="margin-top: 0;">
+            <div class="code-body">search(query: <span class="sh-keyword">string</span>, options?: <span class="param-type">SearchOptions</span>): <span class="param-type">City[]</span></div>
+          </div>
+          <table class="param-table">
+            <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+            <tr><td class="param-name">query</td><td><span class="param-type">string</span></td><td><span class="badge-req">required</span></td><td>Search string</td></tr>
+            <tr><td class="param-name">options.country</td><td><span class="param-type">string</span></td><td><span class="badge-opt">optional</span></td><td>ISO2 country filter</td></tr>
+            <tr><td class="param-name">options.limit</td><td><span class="param-type">number</span></td><td><span class="badge-opt">optional</span></td><td>Max results (default: 10)</td></tr>
+            <tr><td class="param-name">options.exact</td><td><span class="param-type">boolean</span></td><td><span class="badge-opt">optional</span></td><td>Require exact match (default: false)</td></tr>
+          </table>
+          <div class="returns-block">
+            <div class="returns-label">RETURNS</div>
+            <span class="param-type">City[]</span> sorted by relevance (exact → starts-with → contains) and population.
+          </div>
+          <h2 class="section-title">Example</h2>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">TypeScript</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-body"><span class="sh-keyword">import</span> { search } <span class="sh-keyword">from</span> <span class="sh-string">'@novaedgedigitallabs/citykit'</span>
+
+search(<span class="sh-string">'delhi'</span>, { country: <span class="sh-string">'IN'</span>, limit: <span class="sh-number">3</span> })
+<span class="sh-comment">// → [{ city: 'Delhi', population: 32226000, ... }]</span>
+
+search(<span class="sh-string">'Tokyo'</span>, { exact: <span class="sh-keyword">true</span> })
+<span class="sh-comment">// → [{ city: 'Tokyo', country: 'Japan', ... }]</span></div>
+          </div>
+          <h2 class="section-title">Edge cases</h2>
+          <ul>
+            <li>Empty string returns <span class="inline-code">[]</span>.</li>
+            <li>Country filter is case-insensitive.</li>
+          </ul>
+        
+      </section>
+      <section id="api-fuzzySearch" class="doc-section" style="display: none;">
+        <div class="breadcrumb">Docs › API Reference › fuzzySearch()</div>
+        <h1 class="page-title">FUZZYSEARCH()</h1>
+        <div class="page-subtitle">Typo-tolerant search with Levenshtein distance.</div>
+
+          <div class="code-block" style="margin-top: 0;">
+            <div class="code-body">fuzzySearch(query: <span class="sh-keyword">string</span>, options?: <span class="param-type">FuzzySearchOptions</span>): <span class="param-type">City[]</span></div>
+          </div>
+          <table class="param-table">
+            <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+            <tr><td class="param-name">query</td><td><span class="param-type">string</span></td><td><span class="badge-req">required</span></td><td>Search string with possible typos</td></tr>
+            <tr><td class="param-name">options.country</td><td><span class="param-type">string</span></td><td><span class="badge-opt">optional</span></td><td>ISO2 country filter</td></tr>
+            <tr><td class="param-name">options.limit</td><td><span class="param-type">number</span></td><td><span class="badge-opt">optional</span></td><td>Max results (default: 10)</td></tr>
+            <tr><td class="param-name">options.threshold</td><td><span class="param-type">number</span></td><td><span class="badge-opt">optional</span></td><td>Max edit distance (default: 3)</td></tr>
+          </table>
+          <div class="returns-block">
+            <div class="returns-label">RETURNS</div>
+            <span class="param-type">City[]</span> sorted by edit distance ascending, then population descending.
+          </div>
+          <h2 class="section-title">Example</h2>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">TypeScript</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-body">fuzzySearch(<span class="sh-string">'bangalor'</span>)
+<span class="sh-comment">// → [{ city: 'Bangalore', country: 'India', ... }]</span>
+
+fuzzySearch(<span class="sh-string">'Nwe Yrok'</span>, { limit: <span class="sh-number">1</span> })
+<span class="sh-comment">// → [{ city: 'New York', ... }]</span></div>
+          </div>
+          <h2 class="section-title">Edge cases</h2>
+          <ul>
+            <li>Empty query returns <span class="inline-code">[]</span>.</li>
+            <li>Threshold controls tolerance — lower threshold means stricter matching.</li>
+          </ul>
+        
+      </section>
+      <section id="api-nearest" class="doc-section" style="display: none;">
+        <div class="breadcrumb">Docs › API Reference › nearest()</div>
+        <h1 class="page-title">NEAREST()</h1>
+        <div class="page-subtitle">Find the closest city to any coordinates.</div>
+
+          <div class="code-block" style="margin-top: 0;">
+            <div class="code-body">nearest(coords: { lat: <span class="sh-keyword">number</span>; lng: <span class="sh-keyword">number</span> }, options?: <span class="param-type">NearestOptions</span>): <span class="param-type">City[]</span></div>
+          </div>
+          <table class="param-table">
+            <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+            <tr><td class="param-name">coords.lat</td><td><span class="param-type">number</span></td><td><span class="badge-req">required</span></td><td>Latitude in decimal degrees</td></tr>
+            <tr><td class="param-name">coords.lng</td><td><span class="param-type">number</span></td><td><span class="badge-req">required</span></td><td>Longitude in decimal degrees</td></tr>
+            <tr><td class="param-name">options.limit</td><td><span class="param-type">number</span></td><td><span class="badge-opt">optional</span></td><td>Number of nearest cities to return (default: 1)</td></tr>
+            <tr><td class="param-name">options.country</td><td><span class="param-type">string</span></td><td><span class="badge-opt">optional</span></td><td>Restrict search to specific country (ISO2)</td></tr>
+          </table>
+          <div class="returns-block">
+            <div class="returns-label">RETURNS</div>
+            <span class="param-type">City[]</span> sorted by distance ascending.
+          </div>
+          <h2 class="section-title">Example</h2>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">TypeScript</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-body">nearest({ lat: <span class="sh-number">48.8584</span>, lng: <span class="sh-number">2.2945</span> })
+<span class="sh-comment">// → [{ city: 'Paris', country: 'France', ... }]</span>
+
+nearest({ lat: <span class="sh-number">22.7196</span>, lng: <span class="sh-number">75.8577</span> }, { limit: <span class="sh-number">3</span>, country: <span class="sh-string">'IN'</span> })
+<span class="sh-comment">// → 3 nearest Indian cities to Indore</span></div>
+          </div>
+          <h2 class="section-title">Edge cases</h2>
+          <ul>
+            <li>O(n) complexity — computes haversine distance for all cities.</li>
+            <li>Use the lite version if executing in performance-critical paths on the client side.</li>
+          </ul>
+        
+      </section>
+      <section id="api-distance" class="doc-section" style="display: none;">
+        <div class="breadcrumb">Docs › API Reference › distance()</div>
+        <h1 class="page-title">DISTANCE()</h1>
+        <div class="page-subtitle">Calculates the great-circle distance between two cities.</div>
+
+          <div class="code-block" style="margin-top: 0;">
+            <div class="code-body">distance(from: <span class="sh-keyword">string</span> | { lat: <span class="sh-keyword">number</span>; lng: <span class="sh-keyword">number</span> }, to: <span class="sh-keyword">string</span> | { lat: <span class="sh-keyword">number</span>; lng: <span class="sh-keyword">number</span> }): <span class="param-type">DistanceResult | null</span></div>
+          </div>
+          <table class="param-table">
+            <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+            <tr><td class="param-name">from</td><td><span class="param-type">string | object</span></td><td><span class="badge-req">required</span></td><td>City name string or coordinate object</td></tr>
+            <tr><td class="param-name">to</td><td><span class="param-type">string | object</span></td><td><span class="badge-req">required</span></td><td>City name string or coordinate object</td></tr>
+          </table>
+          <div class="returns-block">
+            <div class="returns-label">RETURNS</div>
+            <span class="param-type">{ km: number, miles: number } | null</span>
+          </div>
+          <h2 class="section-title">Example</h2>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">TypeScript</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-body">distance(<span class="sh-string">'Mumbai'</span>, <span class="sh-string">'Delhi'</span>)
+<span class="sh-comment">// → { km: 1153.64, miles: 716.84 }</span>
+
+distance(<span class="sh-string">'Tokyo'</span>, { lat: <span class="sh-number">40.7128</span>, lng: <span class="sh-number">-74.006</span> })
+<span class="sh-comment">// → { km: 10846.97, miles: 6739.99 }</span>
+
+distance(<span class="sh-string">'NonExistent'</span>, <span class="sh-string">'Paris'</span>)
+<span class="sh-comment">// → null</span></div>
+          </div>
+          <h2 class="section-title">Edge cases</h2>
+          <ul>
+            <li>String names resolve to the highest-population match on collision.</li>
+            <li>Returns null if either city string cannot be found in the dataset.</li>
+          </ul>
+        
+      </section>
+      <section id="api-withinRadius" class="doc-section" style="display: none;">
+        <div class="breadcrumb">Docs › API Reference › withinRadius()</div>
+        <h1 class="page-title">WITHINRADIUS()</h1>
+        <div class="page-subtitle">Find all cities within a certain radius of coordinates.</div>
+
+          <div class="code-block" style="margin-top: 0;">
+            <div class="code-body">withinRadius(coords: { lat: <span class="sh-keyword">number</span>; lng: <span class="sh-keyword">number</span> }, radiusKm: <span class="sh-keyword">number</span>, options?: <span class="param-type">WithinRadiusOptions</span>): <span class="param-type">City[]</span></div>
+          </div>
+          <table class="param-table">
+            <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+            <tr><td class="param-name">coords</td><td><span class="param-type">object</span></td><td><span class="badge-req">required</span></td><td>Origin coordinates {lat, lng}</td></tr>
+            <tr><td class="param-name">radiusKm</td><td><span class="param-type">number</span></td><td><span class="badge-req">required</span></td><td>Radius in kilometers</td></tr>
+            <tr><td class="param-name">options.country</td><td><span class="param-type">string</span></td><td><span class="badge-opt">optional</span></td><td>ISO2 country filter</td></tr>
+            <tr><td class="param-name">options.limit</td><td><span class="param-type">number</span></td><td><span class="badge-opt">optional</span></td><td>Max results</td></tr>
+          </table>
+          <div class="returns-block">
+            <div class="returns-label">RETURNS</div>
+            <span class="param-type">City[]</span> within radius, sorted by distance ascending.
+          </div>
+          <h2 class="section-title">Example</h2>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">TypeScript</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-body">withinRadius({ lat: <span class="sh-number">22.7196</span>, lng: <span class="sh-number">75.8577</span> }, <span class="sh-number">100</span>)
+<span class="sh-comment">// → All cities within 100km of Indore</span>
+
+withinRadius({ lat: <span class="sh-number">51.5074</span>, lng: <span class="sh-number">-0.1278</span> }, <span class="sh-number">50</span>, { country: <span class="sh-string">'GB'</span> })
+<span class="sh-comment">// → UK cities within 50km of London</span></div>
+          </div>
+        
+      </section>
+      <section id="api-byCountry" class="doc-section" style="display: none;">
+        <div class="breadcrumb">Docs › API Reference › byCountry()</div>
+        <h1 class="page-title">BYCOUNTRY()</h1>
+        <div class="page-subtitle">Get all cities for a specific country.</div>
+
+          <div class="code-block" style="margin-top: 0;">
+            <div class="code-body">byCountry(iso2: <span class="sh-keyword">string</span>): <span class="param-type">City[]</span></div>
+          </div>
+          <table class="param-table">
+            <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+            <tr><td class="param-name">iso2</td><td><span class="param-type">string</span></td><td><span class="badge-req">required</span></td><td>ISO 3166-1 alpha-2 country code</td></tr>
+          </table>
+          <h2 class="section-title">Example</h2>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">TypeScript</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-body">byCountry(<span class="sh-string">'JP'</span>) <span class="sh-comment">// → 1,370+ cities in Japan</span>
+byCountry(<span class="sh-string">'in'</span>) <span class="sh-comment">// → case-insensitive, works</span></div>
+          </div>
+        
+      </section>
+      <section id="api-byContinent" class="doc-section" style="display: none;">
+        <div class="breadcrumb">Docs › API Reference › byContinent()</div>
+        <h1 class="page-title">BYCONTINENT()</h1>
+        <div class="page-subtitle">Filter all cities by continent.</div>
+
+          <div class="code-block" style="margin-top: 0;">
+            <div class="code-body">byContinent(continent: <span class="sh-keyword">string</span>): <span class="param-type">City[]</span></div>
+          </div>
+          <table class="param-table">
+            <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+            <tr><td class="param-name">continent</td><td><span class="param-type">string</span></td><td><span class="badge-req">required</span></td><td>Continent name string</td></tr>
+          </table>
+          <p>Valid values: <span class="inline-code">"Africa"</span>, <span class="inline-code">"Asia"</span>, <span class="inline-code">"Europe"</span>, <span class="inline-code">"North America"</span>, <span class="inline-code">"South America"</span>, <span class="inline-code">"Oceania"</span>, <span class="inline-code">"Antarctica"</span></p>
+          <h2 class="section-title">Example</h2>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">TypeScript</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-body">byContinent(<span class="sh-string">'Asia'</span>) <span class="sh-comment">// → 18,000+ cities</span>
+byContinent(<span class="sh-string">'north america'</span>) <span class="sh-comment">// → case-insensitive</span></div>
+          </div>
+        
+      </section>
+      <section id="api-byAdmin" class="doc-section" style="display: none;">
+        <div class="breadcrumb">Docs › API Reference › byAdmin()</div>
+        <h1 class="page-title">BYADMIN()</h1>
+        <div class="page-subtitle">Filter cities by state or province.</div>
+
+          <div class="code-block" style="margin-top: 0;">
+            <div class="code-body">byAdmin(adminName: <span class="sh-keyword">string</span>, iso2?: <span class="sh-keyword">string</span>): <span class="param-type">City[]</span></div>
+          </div>
+          <table class="param-table">
+            <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+            <tr><td class="param-name">adminName</td><td><span class="param-type">string</span></td><td><span class="badge-req">required</span></td><td>State or province name</td></tr>
+            <tr><td class="param-name">iso2</td><td><span class="param-type">string</span></td><td><span class="badge-opt">optional</span></td><td>Restrict to a specific country</td></tr>
+          </table>
+          <h2 class="section-title">Example</h2>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">TypeScript</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-body">byAdmin(<span class="sh-string">'Maharashtra'</span>, <span class="sh-string">'IN'</span>) <span class="sh-comment">// → 201 cities</span>
+byAdmin(<span class="sh-string">'California'</span>) <span class="sh-comment">// → all California cities</span></div>
+          </div>
+          <h2 class="section-title">Edge cases</h2>
+          <ul>
+            <li>The <span class="inline-code">admin_name</span> field uses native characters. Both 'Mahārāshtra' and 'Maharashtra' match due to substring matching.</li>
+          </ul>
+        
+      </section>
+      <section id="api-byPopulation" class="doc-section" style="display: none;">
+        <div class="breadcrumb">Docs › API Reference › byPopulation()</div>
+        <h1 class="page-title">BYPOPULATION()</h1>
+        <div class="page-subtitle">Filter and limit cities by population.</div>
+
+          <div class="code-block" style="margin-top: 0;">
+            <div class="code-body">byPopulation(options: <span class="param-type">PopulationOptions</span>): <span class="param-type">City[]</span></div>
+          </div>
+          <table class="param-table">
+            <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+            <tr><td class="param-name">options.min</td><td><span class="param-type">number</span></td><td><span class="badge-opt">optional</span></td><td>Minimum population</td></tr>
+            <tr><td class="param-name">options.max</td><td><span class="param-type">number</span></td><td><span class="badge-opt">optional</span></td><td>Maximum population</td></tr>
+            <tr><td class="param-name">options.limit</td><td><span class="param-type">number</span></td><td><span class="badge-opt">optional</span></td><td>Max results to return</td></tr>
+          </table>
+          <h2 class="section-title">Example</h2>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">TypeScript</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-body">byPopulation({ min: <span class="sh-number">10000000</span> })
+<span class="sh-comment">// → Cities with 10M+ population, sorted desc</span>
+
+byPopulation({ min: <span class="sh-number">1000000</span>, max: <span class="sh-number">5000000</span>, limit: <span class="sh-number">10</span> })
+<span class="sh-comment">// → Top 10 cities between 1M-5M</span></div>
+          </div>
+          <h2 class="section-title">Edge cases</h2>
+          <ul>
+            <li>Cities with <span class="inline-code">null</span> population are excluded.</li>
+          </ul>
+        
+      </section>
+      <section id="api-capitals" class="doc-section" style="display: none;">
+        <div class="breadcrumb">Docs › API Reference › capitals()</div>
+        <h1 class="page-title">CAPITALS()</h1>
+        <div class="page-subtitle">Get all national and state capitals.</div>
+
+          <div class="code-block" style="margin-top: 0;">
+            <div class="code-body">capitals(iso2?: <span class="sh-keyword">string</span>): <span class="param-type">City[]</span></div>
+          </div>
+          <table class="param-table">
+            <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+            <tr><td class="param-name">iso2</td><td><span class="param-type">string</span></td><td><span class="badge-opt">optional</span></td><td>Restrict to a specific country</td></tr>
+          </table>
+          <h2 class="section-title">Example</h2>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">TypeScript</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-body">capitals() <span class="sh-comment">// → 242 national capitals</span>
+capitals(<span class="sh-string">'IN'</span>) <span class="sh-comment">// → India's national + state capitals</span></div>
+          </div>
+        
+      </section>
+      <section id="api-getCity" class="doc-section" style="display: none;">
+        <div class="breadcrumb">Docs › API Reference › getCity()</div>
+        <h1 class="page-title">GETCITY()</h1>
+        <div class="page-subtitle">Find an exact city match.</div>
+
+          <div class="code-block" style="margin-top: 0;">
+            <div class="code-body">getCity(name: <span class="sh-keyword">string</span>, iso2?: <span class="sh-keyword">string</span>): <span class="param-type">City | null</span></div>
+          </div>
+          <table class="param-table">
+            <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+            <tr><td class="param-name">name</td><td><span class="param-type">string</span></td><td><span class="badge-req">required</span></td><td>Exact name of the city</td></tr>
+            <tr><td class="param-name">iso2</td><td><span class="param-type">string</span></td><td><span class="badge-opt">optional</span></td><td>Restrict to a specific country to avoid collisions</td></tr>
+          </table>
+          <h2 class="section-title">Example</h2>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">TypeScript</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-body">getCity(<span class="sh-string">'Paris'</span>) <span class="sh-comment">// → Paris, France</span>
+getCity(<span class="sh-string">'Paris'</span>, <span class="sh-string">'US'</span>) <span class="sh-comment">// → Paris, Texas, United States</span></div>
+          </div>
+        
+      </section>
+      <section id="api-getByIso2" class="doc-section" style="display: none;">
+        <div class="breadcrumb">Docs › API Reference › getByIso2()</div>
+        <h1 class="page-title">GETBYISO2()</h1>
+        <div class="page-subtitle">Get aggregated country info and all associated cities.</div>
+
+          <div class="code-block" style="margin-top: 0;">
+            <div class="code-body">getByIso2(iso2: <span class="sh-keyword">string</span>): <span class="param-type">CountryInfo | null</span></div>
+          </div>
+          <table class="param-table">
+            <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+            <tr><td class="param-name">iso2</td><td><span class="param-type">string</span></td><td><span class="badge-req">required</span></td><td>ISO 3166-1 alpha-2 code</td></tr>
+          </table>
+          <div class="returns-block">
+            <div class="returns-label">RETURNS</div>
+            <span class="param-type">{ country, iso2, iso3, cities }</span>
+          </div>
+          <h2 class="section-title">Example</h2>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">TypeScript</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-body">getByIso2(<span class="sh-string">'DE'</span>)
+<span class="sh-comment">// → { country: 'Germany', iso2: 'DE', iso3: 'DEU', cities: [...] }</span></div>
+          </div>
+        
+      </section>
+      <section id="api-listCountries" class="doc-section" style="display: none;">
+        <div class="breadcrumb">Docs › API Reference › listCountries()</div>
+        <h1 class="page-title">LISTCOUNTRIES()</h1>
+        <div class="page-subtitle">List all countries in the dataset with their city counts.</div>
+
+          <div class="code-block" style="margin-top: 0;">
+            <div class="code-body">listCountries(): <span class="param-type">CountryListItem[]</span></div>
+          </div>
+          <div class="returns-block">
+            <div class="returns-label">RETURNS</div>
+            <span class="param-type">{ country, iso2, iso3, count }[]</span> sorted alphabetically by country name.
+          </div>
+          <h2 class="section-title">Example</h2>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">TypeScript</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-body">listCountries()
+<span class="sh-comment">// → [{ country: 'Afghanistan', iso2: 'AF', iso3: 'AFG', count: 73 }, ...]</span></div>
+          </div>
+        
+      </section>
+      <section id="api-random" class="doc-section" style="display: none;">
+        <div class="breadcrumb">Docs › API Reference › random()</div>
+        <h1 class="page-title">RANDOM()</h1>
+        <div class="page-subtitle">Get a random city, optionally filtered.</div>
+
+          <div class="code-block" style="margin-top: 0;">
+            <div class="code-body">random(options?: <span class="param-type">RandomOptions</span>): <span class="param-type">City | null</span></div>
+          </div>
+          <table class="param-table">
+            <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+            <tr><td class="param-name">options.country</td><td><span class="param-type">string</span></td><td><span class="badge-opt">optional</span></td><td>Restrict to specific country</td></tr>
+            <tr><td class="param-name">options.continent</td><td><span class="param-type">string</span></td><td><span class="badge-opt">optional</span></td><td>Restrict to specific continent</td></tr>
+            <tr><td class="param-name">options.minPopulation</td><td><span class="param-type">number</span></td><td><span class="badge-opt">optional</span></td><td>Minimum population filter</td></tr>
+          </table>
+          <h2 class="section-title">Example</h2>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">TypeScript</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-body">random() <span class="sh-comment">// → any random city</span>
+random({ country: <span class="sh-string">'IN'</span> }) <span class="sh-comment">// → random Indian city</span>
+random({ continent: <span class="sh-string">'Europe'</span>, minPopulation: <span class="sh-number">1000000</span> }) <span class="sh-comment">// → random European city with 1M+ pop</span></div>
+          </div>
+        
+      </section>
+      <section id="api-stats" class="doc-section" style="display: none;">
+        <div class="breadcrumb">Docs › API Reference › stats()</div>
+        <h1 class="page-title">STATS()</h1>
+        <div class="page-subtitle">Get statistics about the dataset.</div>
+
+          <div class="code-block" style="margin-top: 0;">
+            <div class="code-body">stats(): <span class="param-type">DatasetStats</span></div>
+          </div>
+          <div class="returns-block">
+            <div class="returns-label">RETURNS</div>
+            <span class="param-type">{ totalCities, totalCountries, totalCapitals, largestCity, smallestCity, averagePopulation, totalPopulation }</span>
+          </div>
+          <h2 class="section-title">Example</h2>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">TypeScript</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-body">stats()
+<span class="sh-comment">// → {</span>
+<span class="sh-comment">//     totalCities: 49992,</span>
+<span class="sh-comment">//     totalCountries: 241,</span>
+<span class="sh-comment">//     largestCity: { city: 'Tokyo', population: 37785000, ... },</span>
+<span class="sh-comment">//     totalPopulation: 5258389250</span>
+<span class="sh-comment">//   }</span></div>
+          </div>
+        
+      </section>
+      <section id="api-getContinentNames" class="doc-section" style="display: none;">
+        <div class="breadcrumb">Docs › API Reference › getContinentNames()</div>
+        <h1 class="page-title">GETCONTINENTNAMES()</h1>
+        <div class="page-subtitle">Get a list of all supported continents.</div>
+
+          <div class="code-block" style="margin-top: 0;">
+            <div class="code-body">getContinentNames(): <span class="param-type">string[]</span></div>
+          </div>
+          <div class="returns-block">
+            <div class="returns-label">RETURNS</div>
+            <span class="param-type">['Africa', 'Asia', 'Europe', 'North America', 'South America', 'Oceania', 'Antarctica']</span>
+          </div>
+        
+      </section>
+      <section id="changelog" class="doc-section" style="display: none;">
+        <div class="breadcrumb">Docs › Changelog</div>
+        <h1 class="page-title">CHANGELOG</h1>
+
+          <h2 class="section-title">v1.2.0</h2>
+          <ul>
+            <li><strong>Added:</strong> Lite dataset optimized for browser bundles (<span class="inline-code">@novaedgedigitallabs/citykit/lite</span>).</li>
+            <li><strong>Added:</strong> <span class="inline-code">withinRadius</span> now supports country filtering.</li>
+            <li><strong>Changed:</strong> Improved fuzzy search algorithm performance.</li>
+          </ul>
+
+          <h2 class="section-title">v1.1.1</h2>
+          <ul>
+            <li><strong>Fixed:</strong> Handling of null population when sorting cities.</li>
+            <li><strong>Fixed:</strong> Minor typing issues in <span class="inline-code">City</span> interface.</li>
+          </ul>
+
+          <h2 class="section-title">v1.0.1</h2>
+          <ul>
+            <li><strong>Fixed:</strong> Build missing type definitions issue.</li>
+          </ul>
+
+          <h2 class="section-title">v1.0.0</h2>
+          <ul>
+            <li><strong>Added:</strong> Initial release with 15 core utility functions.</li>
+            <li><strong>Added:</strong> 49,992 cities across 242 countries.</li>
+          </ul>
+        
+      </section>
