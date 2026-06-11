@@ -13,6 +13,7 @@ import type {
   RandomOptions,
   DatasetStats,
   WithinRadiusOptions,
+  AutocompleteOptions,
 } from './types.js';
 
 /**
@@ -462,5 +463,24 @@ export function createByAdmin(getCitiesFn: () => City[]) {
     });
 
     return filtered;
+  };
+}
+
+/**
+ * Factory: autocomplete for form inputs.
+ * Thin wrapper over search() with a minChars guard — returns [] if query is
+ * shorter than the threshold, preventing unnecessary processing on first keystrokes.
+ * Results sorted: exact → starts-with → contains (same as search()).
+ */
+export function createAutocomplete(getCitiesFn: () => City[]) {
+  const searchFn = createSearch(getCitiesFn);
+
+  return function autocomplete(query: string, options: AutocompleteOptions = {}): City[] {
+    const { minChars = 1, country, limit = 10 } = options;
+    const trimmed = query.trim();
+
+    if (trimmed.length < minChars) return [];
+
+    return searchFn(trimmed, { country, limit });
   };
 }

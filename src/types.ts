@@ -10,6 +10,16 @@ export interface City {
   capital: 'primary' | 'admin' | 'minor' | null;
   population: number | null;
   id: number;
+  /** true if the city is any type of capital (primary, admin, or minor) */
+  isCapital: boolean;
+  /** Continent name, e.g. "Asia", "Europe", "North America" */
+  continent: string;
+  /** Primary UTC timezone offset in hours (e.g. 5.5 for India, -5 for US EST) */
+  timezone: number;
+  /** ISO 4217 currency code (e.g. "INR", "USD", "EUR") */
+  currency: string;
+  /** International dialing prefix (e.g. "+91", "+1", "+44") */
+  callingCode: string;
 }
 
 export interface SearchOptions {
@@ -113,4 +123,23 @@ export interface ColumnMap {
   capital: number;
   population: number;
   id: number;
+}
+
+export interface AutocompleteOptions {
+  /** ISO2 country code filter */
+  country?: string;
+  /** Maximum results to return (default: 10) */
+  limit?: number;
+  /** Minimum characters before returning results (default: 1) */
+  minChars?: number;
+}
+
+/** India city tier classification based on population */
+export type IndianCityTier = 'Tier 1' | 'Tier 2' | 'Tier 3';
+
+/** City with computed distance in km (nearest/radius results) */
+export interface CityWithDistance {
+  city: City;
+  /** Distance in kilometers from the query point */
+  distanceKm: number;
 }

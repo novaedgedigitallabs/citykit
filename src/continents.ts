@@ -56,3 +56,35 @@ export function getContinentNames(): string[] {
     k.split(' ').map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
   );
 }
+
+// Lazy-built reverse lookup: ISO2 → continent display name
+let _iso2ToContinentMap: Map<string, string> | null = null;
+
+function buildReverseMap(): Map<string, string> {
+  const map = new Map<string, string>();
+  for (const [key, codes] of Object.entries(CONTINENT_MAP)) {
+    const displayName = key
+      .split(' ')
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(' ');
+    for (const iso2 of codes) {
+      map.set(iso2.toUpperCase(), displayName);
+    }
+  }
+  return map;
+}
+
+/**
+ * Get the continent name for a given ISO2 country code.
+ * Returns an empty string if the code is not in the continent map.
+ *
+ * @example getCountryContinent('IN') // → 'Asia'
+ * @example getCountryContinent('DE') // → 'Europe'
+ */
+export function getCountryContinent(iso2: string): string {
+  if (!_iso2ToContinentMap) {
+    _iso2ToContinentMap = buildReverseMap();
+  }
+  return _iso2ToContinentMap.get(iso2.toUpperCase()) ?? '';
+}
+

@@ -15,6 +15,7 @@ import {
   createStats,
   createWithinRadius,
   createByAdmin,
+  createAutocomplete,
 } from './core.js';
 import type {
   City,
@@ -28,6 +29,9 @@ import type {
   RandomOptions,
   DatasetStats,
   WithinRadiusOptions,
+  AutocompleteOptions,
+  IndianCityTier,
+  CityWithDistance,
 } from './types.js';
 
 // Re-export types for consumers
@@ -43,10 +47,28 @@ export type {
   RandomOptions,
   DatasetStats,
   WithinRadiusOptions,
+  AutocompleteOptions,
+  IndianCityTier,
+  CityWithDistance,
 };
 
-// Re-export getContinentNames for consumers
-export { getContinentNames } from './continents.js';
+// Re-export utilities
+export { getContinentNames, getCountryContinent } from './continents.js';
+export { haversine } from './haversine.js';
+export { levenshtein } from './levenshtein.js';
+export { getBoundingBox } from './geo.js';
+export type { BoundingBox } from './geo.js';
+export { getCountryMeta } from './country-meta.js';
+export type { CountryMeta } from './country-meta.js';
+
+// Re-export India-specific utilities
+export {
+  getIndianCities,
+  getCitiesByState,
+  getCityTier,
+  getIndianStates,
+  getTierThresholds,
+} from './india.js';
 
 // ── Bind all factory functions to the full dataset ──
 
@@ -94,3 +116,10 @@ export const withinRadius = createWithinRadius(getCities);
 
 /** Filter cities by admin_name (state/province). Case-insensitive substring match. */
 export const byAdmin = createByAdmin(getCities);
+
+/**
+ * Autocomplete for form inputs. Returns [] when query is shorter than minChars (default: 1).
+ * Results sorted: exact → starts-with → contains.
+ */
+export const autocomplete = createAutocomplete(getCities);
+

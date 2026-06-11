@@ -1,7 +1,7 @@
 {
   "name": "@novaedgedigitallabs/citykit",
-  "version": "1.2.0",
-  "description": "World cities search, distance, and geo utilities — 49,992 cities across 242 countries",
+  "version": "1.3.0",
+  "description": "World cities search, distance, geo utilities & India-specific tools — 49,992 cities, enriched with timezone, currency, calling code, continent & more",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -37,7 +37,12 @@
     "coordinates",
     "countries",
     "geocoding",
-    "haversine"
+    "haversine",
+    "autocomplete",
+    "timezone",
+    "currency",
+    "india",
+    "bounding-box"
   ],
   "author": "NovaEdge Digital Labs",
   "license": "MIT",

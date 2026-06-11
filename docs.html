@@ -289,7 +289,7 @@
     </div>
     
     <div class="nav-right">
-      <div class="nav-version">v1.2.0</div>
+      <div class="nav-version">v1.3.0</div>
       <a href="#" style="color: var(--text-2);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
     </div>
   </nav>
@@ -302,7 +302,7 @@
         <div class="sidebar-title">CityKit Docs</div>
         <div class="sidebar-status">
           <div class="status-dot"></div>
-          v1.2.0 — Stable
+          v1.3.0 — Stable
         </div>
       </div>
       
@@ -341,6 +341,17 @@
           <a href="#api-random" class="sidebar-link" onclick="navigate('api-random')">random()</a>
           <a href="#api-stats" class="sidebar-link" onclick="navigate('api-stats')">stats()</a>
           <a href="#api-getContinentNames" class="sidebar-link" onclick="navigate('api-getContinentNames')">getContinentNames()</a>
+          <a href="#api-autocomplete" class="sidebar-link" onclick="navigate('api-autocomplete')">autocomplete()</a>
+          <a href="#api-getBoundingBox" class="sidebar-link" onclick="navigate('api-getBoundingBox')">getBoundingBox()</a>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-category">INDIA UTILITIES</div>
+          <a href="#api-getIndianCities" class="sidebar-link" onclick="navigate('api-getIndianCities')">getIndianCities()</a>
+          <a href="#api-getCitiesByState" class="sidebar-link" onclick="navigate('api-getCitiesByState')">getCitiesByState()</a>
+          <a href="#api-getCityTier" class="sidebar-link" onclick="navigate('api-getCityTier')">getCityTier()</a>
+          <a href="#api-getIndianStates" class="sidebar-link" onclick="navigate('api-getIndianStates')">getIndianStates()</a>
+          <a href="#api-getTierThresholds" class="sidebar-link" onclick="navigate('api-getTierThresholds')">getTierThresholds()</a>
         </div>
 
         <div class="sidebar-section">
@@ -563,6 +574,9 @@ fuzzySearch(<span class="sh-string">'bangalor'</span>)
             <tr><td class="param-name">capital</td><td><span class="param-type">"primary" | "admin" | "minor" | null</span></td><td>Capital status</td></tr>
             <tr><td class="param-name">population</td><td><span class="param-type">number | null</span></td><td>Population (null if unknown)</td></tr>
             <tr><td class="param-name">id</td><td><span class="param-type">number</span></td><td>Unique city identifier</td></tr>
+            <tr><td class="param-name">state_code</td><td><span class="param-type">string | null</span></td><td>State ISO code (e.g. "MH")</td></tr>
+            <tr><td class="param-name">state_name</td><td><span class="param-type">string | null</span></td><td>Normalized state name</td></tr>
+            <tr><td class="param-name">tier</td><td><span class="param-type">1 | 2 | 3 | null</span></td><td>City tier (India only)</td></tr>
           </table>
 
           <h2 class="section-title">Example Object</h2>
@@ -579,7 +593,10 @@ fuzzySearch(<span class="sh-string">'bangalor'</span>)
   <span class="sh-string">"admin_name"</span>: <span class="sh-string">"Tōkyō"</span>,
   <span class="sh-string">"capital"</span>: <span class="sh-string">"primary"</span>,
   <span class="sh-string">"population"</span>: <span class="sh-number">37785000</span>,
-  <span class="sh-string">"id"</span>: <span class="sh-number">1392685764</span>
+  <span class="sh-string">"id"</span>: <span class="sh-number">1392685764</span>,
+  <span class="sh-string">"state_code"</span>: <span class="sh-string">null</span>,
+  <span class="sh-string">"state_name"</span>: <span class="sh-string">null</span>,
+  <span class="sh-string">"tier"</span>: <span class="sh-string">null</span>
 }</div>
           </div>
         
@@ -1093,9 +1110,106 @@ random({ continent: <span class="sh-string">'Europe'</span>, minPopulation: <spa
           </div>
         
       </section>
+
+      <!-- NEW API SECTIONS -->
+      <section id="api-autocomplete" class="doc-section">
+        <div class="breadcrumb">Docs › API Reference › autocomplete()</div>
+        <h1 class="page-title">AUTOCOMPLETE()</h1>
+        <div class="page-subtitle">Fast prefix-match autocomplete for search inputs.</div>
+
+          <div class="code-block" style="margin-top: 0;">
+            <div class="code-body">autocomplete(query: <span class="param-type">string</span>, options?: <span class="param-type">AutocompleteOptions</span>): <span class="param-type">City[]</span></div>
+          </div>
+
+          <h2 class="section-title">Parameters</h2>
+          <table class="param-table">
+            <tr><th>Name</th><th>Type</th><th>Description</th></tr>
+            <tr><td class="param-name">query</td><td><span class="param-type">string</span></td><td>Prefix to search for</td></tr>
+            <tr><td class="param-name">options.limit</td><td><span class="param-type">number</span></td><td>Default 10</td></tr>
+            <tr><td class="param-name">options.minChars</td><td><span class="param-type">number</span></td><td>Minimum chars to trigger search (Default: 1)</td></tr>
+          </table>
+
+          <div class="returns-block">
+            <div class="returns-label">RETURNS</div>
+            <span class="param-type">City[]</span>
+          </div>
+      </section>
+
+      <section id="api-getBoundingBox" class="doc-section">
+        <div class="breadcrumb">Docs › API Reference › getBoundingBox()</div>
+        <h1 class="page-title">GETBOUNDINGBOX()</h1>
+        <div class="page-subtitle">Returns a coordinate bounding box for a given center point and radius.</div>
+
+          <div class="code-block" style="margin-top: 0;">
+            <div class="code-body">getBoundingBox(lat: <span class="param-type">number</span>, lng: <span class="param-type">number</span>, radiusKm: <span class="param-type">number</span>): <span class="param-type">BoundingBox</span></div>
+          </div>
+
+          <div class="returns-block">
+            <div class="returns-label">RETURNS</div>
+            <span class="param-type">{ minLat, maxLat, minLng, maxLng }</span>
+          </div>
+      </section>
+
+      <section id="api-getIndianCities" class="doc-section">
+        <div class="breadcrumb">Docs › India Utilities › getIndianCities()</div>
+        <h1 class="page-title">GETINDIANCITIES()</h1>
+        <div class="page-subtitle">Returns the full array of Indian city objects.</div>
+
+          <div class="code-block" style="margin-top: 0;">
+            <div class="code-body">getIndianCities(): <span class="param-type">City[]</span></div>
+          </div>
+      </section>
+
+      <section id="api-getCitiesByState" class="doc-section">
+        <div class="breadcrumb">Docs › India Utilities › getCitiesByState()</div>
+        <h1 class="page-title">GETCITIESBYSTATE()</h1>
+        <div class="page-subtitle">Filter Indian cities by state name. Automatically normalizes Unicode diacritics.</div>
+
+          <div class="code-block" style="margin-top: 0;">
+            <div class="code-body">getCitiesByState(stateName: <span class="param-type">string</span>): <span class="param-type">City[]</span></div>
+          </div>
+      </section>
+
+      <section id="api-getCityTier" class="doc-section">
+        <div class="breadcrumb">Docs › India Utilities › getCityTier()</div>
+        <h1 class="page-title">GETCITYTIER()</h1>
+        <div class="page-subtitle">Returns the tier classification (1, 2, or 3) for an Indian city.</div>
+
+          <div class="code-block" style="margin-top: 0;">
+            <div class="code-body">getCityTier(cityName: <span class="param-type">string</span>): <span class="param-type">1 | 2 | 3 | null</span></div>
+          </div>
+      </section>
+
+      <section id="api-getIndianStates" class="doc-section">
+        <div class="breadcrumb">Docs › India Utilities › getIndianStates()</div>
+        <h1 class="page-title">GETINDIANSTATES()</h1>
+        <div class="page-subtitle">Returns a deduplicated, sorted list of all unique Indian state names.</div>
+
+          <div class="code-block" style="margin-top: 0;">
+            <div class="code-body">getIndianStates(): <span class="param-type">string[]</span></div>
+          </div>
+      </section>
+
+      <section id="api-getTierThresholds" class="doc-section">
+        <div class="breadcrumb">Docs › India Utilities › getTierThresholds()</div>
+        <h1 class="page-title">GETTIERTHRESHOLDS()</h1>
+        <div class="page-subtitle">Returns the population cutoff values used for tier classification.</div>
+
+          <div class="code-block" style="margin-top: 0;">
+            <div class="code-body">getTierThresholds(): <span class="param-type">{ tier1: number, tier2: number }</span></div>
+          </div>
+      </section>
       <section id="changelog" class="doc-section">
         <div class="breadcrumb">Docs › Changelog</div>
         <h1 class="page-title">CHANGELOG</h1>
+
+          <h2 class="section-title">v1.3.0</h2>
+          <ul>
+            <li><strong>Added:</strong> India utility functions (<span class="inline-code">getIndianCities</span>, <span class="inline-code">getCitiesByState</span>, <span class="inline-code">getCityTier</span>, <span class="inline-code">getIndianStates</span>, <span class="inline-code">getTierThresholds</span>).</li>
+            <li><strong>Added:</strong> <span class="inline-code">autocomplete</span> API for fast prefix-matching.</li>
+            <li><strong>Added:</strong> <span class="inline-code">getBoundingBox</span> API to generate coordinate bounding boxes.</li>
+            <li><strong>Enhanced:</strong> The City object now returns more fields (state_code, state_name, tier).</li>
+          </ul>
 
           <h2 class="section-title">v1.2.0</h2>
           <ul>

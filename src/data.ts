@@ -2,6 +2,8 @@ import { readFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import type { City, ColumnMap } from './types.js';
+import { getCountryMeta } from './country-meta.js';
+import { getCountryContinent } from './continents.js';
 
 // Column index map
 const COLUMNS: ColumnMap = {
@@ -40,6 +42,7 @@ function resolveDataPath(filename: string): string {
 
 /**
  * Parse a raw array-format row into a City object.
+ * Enriches with derived fields: isCapital, continent, timezone, currency, callingCode.
  */
 function parseRow(row: unknown[]): City {
   const capitalVal = row[COLUMNS.capital] as string | null | undefined;
@@ -51,18 +54,27 @@ function parseRow(row: unknown[]): City {
   const popVal = row[COLUMNS.population];
   const population = popVal != null && popVal !== '' ? Number(popVal) : null;
 
+  const iso2 = String(row[COLUMNS.iso2] ?? '');
+  const meta = getCountryMeta(iso2);
+
   return {
     city: String(row[COLUMNS.city] ?? ''),
     city_ascii: String(row[COLUMNS.city_ascii] ?? ''),
     lat: Number(row[COLUMNS.lat]),
     lng: Number(row[COLUMNS.lng]),
     country: String(row[COLUMNS.country] ?? ''),
-    iso2: String(row[COLUMNS.iso2] ?? ''),
+    iso2,
     iso3: String(row[COLUMNS.iso3] ?? ''),
     admin_name: String(row[COLUMNS.admin_name] ?? ''),
     capital,
     population,
     id: Number(row[COLUMNS.id]),
+    // ── Enriched fields (v1.3) ──
+    isCapital: capital === 'primary',
+    continent: getCountryContinent(iso2),
+    timezone: meta?.timezone ?? 0,
+    currency: meta?.currency ?? '',
+    callingCode: meta?.callingCode ?? '',
   };
 }
 
